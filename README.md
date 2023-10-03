@@ -2,6 +2,7 @@
 
 ## Integrantes de cada grupo
 Mateo Gonzalez Alonso
+
 Victor Acevedo Hernandez
 
 ## Idea de trabajo
