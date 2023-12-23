@@ -2,7 +2,7 @@ package VetTrack;
 
 /**
  * Clase que representa una Cita en el sistema de VetTrack.
- */
+ */ 
 public class Cita {
 
     private Fecha fechaCita;      // Fecha de la cita.
