@@ -17,14 +17,6 @@ DROP TABLE IF EXISTS Cita;
 
 -- Creacion de tablas
 
-CREATE TABLE Usuario(
-    IDUsuario int AUTO_INCREMENT,
-    user varchar(20) not null unique,
-    passwd text not null,
-    rol enum('Administrador', 'Cliente'),
-    PRIMARY KEY(IDUsuario),
-);
-
 CREATE TABLE Articulo(
     IDArticulo int AUTO_INCREMENT,
     nombre varchar(50) not null,
@@ -40,21 +32,28 @@ CREATE TABLE Venta(
     PRIMARY KEY (IDVenta)
 );
 
+CREATE TABLE Usuario(
+    IDUsuario int AUTO_INCREMENT,
+    dni varchar(9) not null unique,
+    telefono varchar(9) not null unique,
+    nombreCompleto varchar(50) not null,
+    user varchar(20) not null unique,
+    passwd text not null,
+    rol enum('Administrador', 'Cliente'),
+    PRIMARY KEY(IDUsuario),
+);
+
 CREATE TABLE Cliente(
     IDUsuario int,
     FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario),
     numMascotas int not null,
-    --
-    dni varchar(9) not null unique,
-    telefono varchar(9) not null unique,
-    nombreCompleto varchar(50) not null,
-    --
     PRIMARY KEY(IDUsuario)
 );
 
+-- Mirar esto
 CREATE TABLE Mascota(
-    numPassport numeric(15) not null unique, --Ejemplo: 985121004808821
-    PRIMARY KEY (numPassport),
+    -- numPassport 
+    -- PRIMARY KEY (numPassport),
     nombre varchar(20) not null,
     especie varchar(30) not null,
     raza varchar(30) not null,

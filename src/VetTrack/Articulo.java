@@ -9,8 +9,19 @@ public class Articulo {
 	private String nombre;         // Nombre del artículo.
 	private String descripcion;    // Descripción del artículo.
 	private String marca;          // Marca del artículo.
-	
+
 	//=========================================================================
+
+	public Articulo(int idArticulo, String nombre, String descripcion, String marca) {
+		this.setidArticulo(idArticulo);
+		this.setNombre(nombre);
+		this.setDescripcion(descripcion);
+		this.setMarca(marca);
+	}
+	
+	public Articulo() {
+		
+	}
 
 	public int getIdArticulo() { return idArticulo;  }
 	public void setidArticulo(int idArticulo) { this.idArticulo = idArticulo; }
@@ -22,6 +33,6 @@ public class Articulo {
 	public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
 	public String getMarca() { return marca; }
-	public void setRaza(String marca) { this.marca = marca; }
+	public void setMarca(String marca) { this.marca = marca; }
 
 }
