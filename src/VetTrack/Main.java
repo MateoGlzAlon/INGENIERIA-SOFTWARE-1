@@ -8,7 +8,9 @@ public class Main {
         try {
             // Crear instancia de ArticuloDAO
             ArticuloDAO articuloDAO = new ArticuloDAO();
-
+            
+            System.out.println(articuloDAO.obtenerArticulo(1).getDescripcion());
+            
             // Listar todos los artículos
             List<Articulo> listaArticulos = articuloDAO.listar();
 
