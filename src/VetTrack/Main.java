@@ -1,12 +1,26 @@
 package VetTrack;
 
 import java.util.List;
+import java.awt.EventQueue;
 
 public class Main {
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Interfaz window = new Interfaz();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	// Nota para Mateo: no se si te has equivocado o algo, pero tienes en la funcion super que le envias a la clase padre (Usuario) "super(idUsuario, NombreCompleto, DNI);"
 	// 					de la clase Administrador, no dberia de ser idUsuario, nombre de usuario y contraseña?
-	
+	/*
     public static void main(String[] args) {
         try {
             // Crear instancia de ArticuloDAO
@@ -29,7 +43,7 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage()); // Cuidado luego con poner esto porque nos dijo el de practicas que no le gusta los exception genericos
         }
-    }
+    }*/
     
     //Ignorar (login)
     //Aqui tenemos que coger el usuario que el user ha puesto + la passwd
@@ -56,23 +70,6 @@ public class Main {
     
     
     
-    //Esto es lo que tenemos que poner para que desde el Main se inicialice la ventana 
-    /*
-    import java.awt.EventQueue;
-    
-    public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Interfaz window = new Interfaz();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-     */
-    
+    //Esto es lo que tenemos que poner para que desde el Main se inicialice la ventana  
     
 }
