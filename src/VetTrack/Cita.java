@@ -11,6 +11,16 @@ public class Cita {
     private int pasaporteMascota; // Número de pasaporte de la mascota asociada a la cita.
 
     //=========================================================================
+    
+    public Cita(Fecha fecha, Hora hora, int idC, int passport) {
+    	
+    	setFechaCita(fecha);
+    	setHoraCita(hora);
+    	setIdCliente(idC);
+    	setPasaporteMascota(passport);
+
+    }
+    
 
     public Fecha getFechaCita() { return fechaCita; }
     public void setFechaCita(Fecha fechaCita) { this.fechaCita = fechaCita; }

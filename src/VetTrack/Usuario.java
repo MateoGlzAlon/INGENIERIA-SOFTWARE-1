@@ -9,6 +9,8 @@ public class Usuario {
 	
 	private String nombreUsuario;  // Nombre de usuario para iniciar sesión.
 	private String contrasena;     // Contraseña del usuario para iniciar sesión.
+	
+	private String rolUsuario; // Puede ser tanto "Administrador" como "Cliente"
 
 	//=========================================================================
 
@@ -29,4 +31,9 @@ public class Usuario {
 
 	public String getContrasena() { return contrasena; }
 	public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+
+	
+	public String getRol() { return this.rolUsuario; }
+	public void setRol(String rol) { this.rolUsuario = rol; }
+	
 }

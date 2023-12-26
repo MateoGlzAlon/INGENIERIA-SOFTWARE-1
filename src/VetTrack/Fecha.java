@@ -19,6 +19,23 @@ public class Fecha {
 		this.dia = dia;
 
 	}
+	
+	//El siguiente formato es el que tenemos que hacer: YYYY-MM-DD
+	public Fecha(String cadena) {
+		String[] cadenaLimpia = cadena.split("-");
+		
+		if (cadenaLimpia.length == 3) {
+			this.dia = Integer.parseInt(cadenaLimpia[2]);
+			this.mes = Integer.parseInt(cadenaLimpia[1]);
+			this.ano = Integer.parseInt(cadenaLimpia[0]);
+		}else {
+			//Si no es el formato ponemos una fecha generica
+			this.dia = 1;
+			this.mes = 1;
+			this.ano = 2024;
+		}
+		
+	}
 
 	public int getDia() { return dia; }
 	public void setDia(int dia) throws Exception {
@@ -100,6 +117,10 @@ public class Fecha {
 	
 	public boolean esFechaIgual(Fecha otraFecha) {
 	    return this.getAno() == otraFecha.getAno() && this.getMes() == otraFecha.getMes() && this.getDia() == otraFecha.getDia();
+	}
+	
+	public String toString() {
+		return this.ano + "-" + this.mes + "-" + this.dia;
 	}
 
 }
