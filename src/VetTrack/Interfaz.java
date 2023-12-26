@@ -25,6 +25,9 @@ import javax.swing.JPasswordField;
 
 public class Interfaz {
 
+	//Para saber que id estamos
+	private int IDUsuario;
+	
 	public JFrame frame;
 	private JFrame preguntaExit;
 	private JTextField textUser;
@@ -124,18 +127,12 @@ public class Interfaz {
 		
 		JButton botonAccept = new JButton("Aceptar");
 		
-		//esqueleto boton aceptar
-//		closeButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                confirmarSalir(frame);
-//            }
-//        });
-		
+		//Esqueleto boton "aceptar"
 		botonAccept.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Hello World!!!11!!1");
+				//JOptionPane.showMessageDialog(null, "Hello World!!!11!!1");
+				comprobarUsuario(textUser.getText(), textPasswd.getText(), frame);
 			}
 		});
 		
@@ -148,9 +145,31 @@ public class Interfaz {
 		
 		
 	}
+	
+	//Aqui falta todavia la comprobacion de usuario/contraseña
+	private void comprobarUsuario(String usuario, String passwd, JFrame frame) {
+		
+		if(usuario != "" && passwd != "") {
+			JOptionPane.showMessageDialog(null, "Usuario: " + usuario + "\nPassword: " + passwd);
+			
+			boolean compr = false; //esto es provisional
+			
+			if (!compr) {
+				
+				frame.setVisible(false);
+				
+				InterfazImportante frameImp = new InterfazImportante();
+				
+				frameImp.frame.setVisible(true);
+				
+			}
+		}
+		
+		
+	}
 
 	//Esta funcion es para poder manejar si salir o no de la aplicacion
-	private static void confirmarSalir(JFrame frame) {
+	private void confirmarSalir(JFrame frame) {
         int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar", JOptionPane.YES_NO_OPTION);
 
         //Para comprobar si dice que si o si no
@@ -160,6 +179,5 @@ public class Interfaz {
             System.exit(0); //es parecido al exit(1) de C
             
         }
-        // Si el usuario elige "No", simplemente ocultar la ventana emergente
     }
 }
