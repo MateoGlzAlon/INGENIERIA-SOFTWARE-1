@@ -13,6 +13,13 @@ public class Venta {
 
     //=========================================================================
     
+    //Constructor
+    public Venta(int id, int idUsuario, ArrayList<Integer> articulosV) {
+    	setIdVenta(id);
+    	setIdUsuario(idUsuario);
+    	setArticulosVendidos(articulosV);
+    }
+    
     public int getIdVenta() { return idVenta; }
     public void setIdVenta(int idVenta) { this.idVenta = idVenta; }
 

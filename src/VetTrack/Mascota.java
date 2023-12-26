@@ -34,7 +34,5 @@ public class Mascota {
     public Cliente getDueño() { return dueño; }
     public void setDueño(Cliente dueño) { this.dueño = dueño; }
     
-    
-    
-    
+     
 }
