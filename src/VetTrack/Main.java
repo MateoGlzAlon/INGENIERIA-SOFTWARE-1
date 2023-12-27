@@ -45,31 +45,4 @@ public class Main {
         }
     }*/
     
-    //Ignorar (login)
-    //Aqui tenemos que coger el usuario que el user ha puesto + la passwd
-    public static boolean logon(String user, String passwd) {
-    	
-    	boolean log = false;
-    	/*
-    	//Falta la forma de sacar la List<Usuario>
-    	List<Usuario> user;
-    	
-    	for (Usuario usuario : listaUsuarios){
-    	
-    		//Comprueba si el usuario y la contraseña son las mismas
-    		if(user == listaUsuarios.getNombreUsuario() && passwd == listaUsuarios.getContrasena()){
-    			log = true;
-    			break; //Si a eva no le gusta esto podemos hacer otra cosa, pero asi evitamos mirar mas usuarios (mas rapido)
-    		}
-    	
-    	}
-    	
-    	*/
-    	return log; //Luego en la interfaz si no es lo esperado se da un mensaje de que esta mal o algo
-    }
-    
-    
-    
-    //Esto es lo que tenemos que poner para que desde el Main se inicialice la ventana  
-    
 }
