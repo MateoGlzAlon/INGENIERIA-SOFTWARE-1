@@ -151,7 +151,7 @@ public class Interfaz {
 		
 		if(usuario.intern() != "" && passwd.intern() != "") {
 			
-			user = new Usuario(1, "admin", "1234"); //Esto lo hago por ahora para probar cosas
+			user = new Usuario(1, "admin", "1234", "Administrador"); //Esto lo hago por ahora para probar cosas
 			
 			/*
 			 * Aqui falta comprobar si los campos pertenece a un usuario de la db

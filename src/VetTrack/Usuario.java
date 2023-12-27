@@ -3,6 +3,9 @@ package VetTrack;
 /**
  * Clase que representa a un Usuario en el sistema de 	VetTrack.
  */
+
+
+
 public class Usuario {
 
 	private int idUsuario;         // Identificador único del usuario. LATER: PODEMOS QUITAR ESTO Y USAR SOLO EL NOMBRE DE USUARIO
@@ -13,13 +16,13 @@ public class Usuario {
 	private String rolUsuario; // Puede ser tanto "Administrador" como "Cliente"
 
 	//=========================================================================
-
 	
 	//Constructor
-	public Usuario(int idUsuario, String nombreUsuario, String contrasena) {
+	public Usuario(int idUsuario, String nombreUsuario, String contrasena, String rol) {
 		setIdUsuario(idUsuario);
 		setNombreUsuario(nombreUsuario);
 		setContrasena(contrasena);
+		setRol(rol);
 	}
 	
 
@@ -34,6 +37,6 @@ public class Usuario {
 
 	
 	public String getRol() { return this.rolUsuario; }
-	public void setRol(String rol) { this.rolUsuario = rol; }
+	public void setRol(String rol) {this.rolUsuario = rol;}
 	
 }

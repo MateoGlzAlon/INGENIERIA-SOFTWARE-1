@@ -17,10 +17,11 @@ public class Cliente extends Usuario {
 
     // Constructor que utiliza los setters de la clase base (Usuario) para inicializar los campos.
     public Cliente(int idUsuario, String NombreCompleto, String DNI, String telefono, String nombreUsuario, String contrasena, ArrayList<Venta> historialCompras) {
-        super(idUsuario, NombreCompleto, DNI);
+        super(idUsuario, nombreUsuario, contrasena, "Cliente");
         
         setNombreCompleto(NombreCompleto);
-              
+        setTelefono(telefono);
+        setDNI(DNI);
         setHistorialCompras(historialCompras);
     }
     
