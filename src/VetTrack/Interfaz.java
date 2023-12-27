@@ -25,8 +25,8 @@ import javax.swing.JPasswordField;
 
 public class Interfaz {
 
-	//Para saber que id estamos
-	private int IDUsuario;
+	//usuario
+	private Usuario user; //Para hacer un singleton
 	
 	public JFrame frame;
 	private JFrame preguntaExit;
@@ -132,7 +132,7 @@ public class Interfaz {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//JOptionPane.showMessageDialog(null, "Hello World!!!11!!1");
-				comprobarUsuario(textUser.getText(), textPasswd.getText(), frame);
+				comprobarUsuario(textUser.getText(), new String(textPasswd.getPassword()), frame);
 			}
 		});
 		
@@ -149,20 +149,30 @@ public class Interfaz {
 	//Aqui falta todavia la comprobacion de usuario/contraseña
 	private void comprobarUsuario(String usuario, String passwd, JFrame frame) {
 		
-		if(usuario != "" && passwd != "") {
-			JOptionPane.showMessageDialog(null, "Usuario: " + usuario + "\nPassword: " + passwd);
+		if(usuario.intern() != "" && passwd.intern() != "") {
 			
-			boolean compr = false; //esto es provisional
+			user = new Usuario(1, "admin", "1234"); //Esto lo hago por ahora para probar cosas
+			
+			/*
+			 * Aqui falta comprobar si los campos pertenece a un usuario de la db
+			 */
+			
+			boolean compr = false;
 			
 			if (!compr) {
 				
 				frame.setVisible(false);
 				
-				InterfazImportante frameImp = new InterfazImportante();
-				
+				//Aqui tendremos que seguramente enviar tambien el usuario con todos los datos como parametro al constructor
+				InterfazImportante frameImp = new InterfazImportante(this);
 				frameImp.frame.setVisible(true);
 				
+			} else {
+				JOptionPane.showMessageDialog(null, "Las credenciales enviadas no son validas.");
 			}
+			
+		} else {
+			JOptionPane.showMessageDialog(null, "Las credenciales enviadas no son validas.");
 		}
 		
 		
@@ -174,10 +184,22 @@ public class Interfaz {
 
         //Para comprobar si dice que si o si no
         if (confirmacion == JOptionPane.YES_OPTION) {
+        	
         	//Esto es para cerrar la aplicacion
         	frame.dispose(); //Cierra el frame
             System.exit(0); //es parecido al exit(1) de C
             
         }
     }
+	
+	//Limpia los campos
+	public void setText() {
+		textPasswd.setText(null);
+		textUser.setText(null);
+	}
+	
+	public Usuario verDatosUsuarioActivo() {
+		return this.user;
+	}
+	
 }
