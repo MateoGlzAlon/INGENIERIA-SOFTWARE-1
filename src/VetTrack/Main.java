@@ -25,9 +25,44 @@ public class Main {
 				String instruccionSql = sqlScanner.next().trim();
 				if (!instruccionSql.isEmpty()) {
 					sentencia.execute(instruccionSql);
-					System.out.println("Sentencia ejecutada: " + instruccionSql);
+					//System.out.println("Sentencia ejecutada: " + instruccionSql);
 				}
 			}
+			
+			
+			
+			//ZONA DE PRUEBAS
+			//================================================================================================================================
+			
+			System.out.println(conexion.listar("Articulo").toString());
+			
+			System.out.println("El dato es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 1));
+			
+			conexion.eliminarFilaDeTabla("Articulo", "idArticulo", 1);
+			
+			System.out.println("El dato 2 es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 1));
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//================================================================================================================================
+			
+			
+			
 			sentencia.close();
 
 		} catch (FileNotFoundException e) {
