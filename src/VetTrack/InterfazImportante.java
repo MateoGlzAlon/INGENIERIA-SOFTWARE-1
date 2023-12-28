@@ -25,13 +25,24 @@ public class InterfazImportante {
 	 */
 	public InterfazImportante(Interfaz interfaz) {
 		this.interfaz = interfaz;
-		initialize();
+		
+		if (this.interfaz.verDatosUsuarioActivo().getRol()=="Administrador") {
+			initialize_admin();
+		}else {
+			initialize_cliente();
+		}
+		
+		
+	}
+	
+	private void initialize_cliente() {
+		//Aqui interfaz admin
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize_admin() {
 		frame = new JFrame();
 		frame.setTitle("Panel de control de " + this.interfaz.verDatosUsuarioActivo().getNombreUsuario());
 		frame.setBounds(300, 300, 1200, 900);

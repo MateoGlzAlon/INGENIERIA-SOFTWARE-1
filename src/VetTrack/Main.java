@@ -18,8 +18,6 @@ public class Main {
 		});
 	}
 
-	// Nota para Mateo: no se si te has equivocado o algo, pero tienes en la funcion super que le envias a la clase padre (Usuario) "super(idUsuario, NombreCompleto, DNI);"
-	// 					de la clase Administrador, no dberia de ser idUsuario, nombre de usuario y contraseña?
 	/*
     public static void main(String[] args) {
         try {
