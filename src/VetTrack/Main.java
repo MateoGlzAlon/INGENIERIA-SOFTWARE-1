@@ -1,46 +1,63 @@
 package VetTrack;
 
-import java.util.List;
 import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
 
 public class Main {
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Interfaz window = new Interfaz();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+
+	private ConexionBD conexion;
+
+	private void setUpDatabase() throws Exception {
+		
+		conexion = ConexionBD.getInstance();
+
+		try (Scanner sqlScanner = new Scanner(new File("src/VetTrack/BaseDeDatos/VetTrack.sql"))) {
+			Statement sentencia = conexion.getConexion().createStatement();
+
+			sqlScanner.useDelimiter(";");
+
+			// Ejecutar cada sentencia SQL del archivo
+			while (sqlScanner.hasNext()) {
+				String instruccionSql = sqlScanner.next().trim();
+				if (!instruccionSql.isEmpty()) {
+					sentencia.execute(instruccionSql);
+					System.out.println("Sentencia ejecutada: " + instruccionSql);
 				}
 			}
-		});
+			sentencia.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("Archivo no encontrado: " + e.getMessage());
+		} catch (SQLException e) {
+			System.out.println("Error de SQL: " + e.getMessage());
+		}
 	}
 
-	/*
-    public static void main(String[] args) {
-        try {
-            // Crear instancia de ArticuloDAO
-            ArticuloDAO articuloDAO = new ArticuloDAO();
-            
-            System.out.println(articuloDAO.obtenerArticulo(1).getDescripcion());
-            
-            // Listar todos los artículos
-            List<Articulo> listaArticulos = articuloDAO.listar();
+	public static void main(String[] args) throws Exception {
+	    ConexionBD.getInstance().abrirConexion();
 
-            // Mostrar los artículos en la consola
-            for (Articulo articulo : listaArticulos) {
-                System.out.println("ID: " + articulo.getIdArticulo());
-                System.out.println("Nombre: " + articulo.getNombre());
-                System.out.println("Descripción: " + articulo.getDescripcion());
-                System.out.println("Marca: " + articulo.getMarca());
-                System.out.println("=============================");
-            }
+	    EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	                Main main = new Main();
+	                main.setUpDatabase(); // Llamar al método para configurar la base de datos
+	                Interfaz window = new Interfaz();
+	                window.frame.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            } finally {
+	                try {
+	                    ConexionBD.getInstance().cerrarConexion();
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+	    });
+	}
 
-        } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage()); // Cuidado luego con poner esto porque nos dijo el de practicas que no le gusta los exception genericos
-        }
-    }*/
-    
 }

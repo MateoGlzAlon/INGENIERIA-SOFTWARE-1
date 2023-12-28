@@ -5,23 +5,27 @@ import java.sql.DriverManager;
 
 public class ConexionBD {
 
+    private static ConexionBD instancia; // Instancia única para el Singleton
     private String dataBaseURL;
     private String driverName;
     private String user;
     private String pass;
     private Connection conexion;
 
-    public String getDataBaseURL() {
-        return dataBaseURL;
-    }
-
-    // Agrega otros getters & setters para los parámetros de la clase
-
-    public ConexionBD() {
+    // Constructor privado para evitar instanciación directa
+    private ConexionBD() {
         this.dataBaseURL = "jdbc:mysql://viaduct.proxy.rlwy.net:18593/railway?autoReconnect=true&useSSL=true";
         this.driverName = "com.mysql.cj.jdbc.Driver";
         this.user = "root";
         this.pass = "cc3BCfgdba-B3-hGA5EgGHCDHdBd-aC-";
+    }
+
+    // Método estático para obtener la única instancia del Singleton
+    public static ConexionBD getInstance() {
+        if (instancia == null) {
+            instancia = new ConexionBD();
+        }
+        return instancia;
     }
 
     public void abrirConexion() throws Exception {

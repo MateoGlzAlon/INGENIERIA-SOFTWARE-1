@@ -1,89 +1,77 @@
--- Esto lo usamos por si ya exidte la tabla
-DROP DATABASE IF EXISTS VetTrack;
+-- Eliminar tablas si existen
+-- DROP TABLE IF EXISTS Usuario, Articulo, Venta, Cliente, Mascota, Administrador, HistorialCompra, Cita;
 
---Creamos la base de datos
-CREATE DATABASE VetTrack;
-USE VetTrack;
-
--- ESto se hace para borrar todas las tablas para volver a hacerlas
-DROP TABLE IF EXISTS Articulo;
-DROP TABLE IF EXISTS Venta;
-DROP TABLE IF EXISTS Usuario;
-DROP TABLE IF EXISTS Cliente;
-DROP TABLE IF EXISTS Mascota;
-DROP TABLE IF EXISTS Administrador;
-DROP TABLE IF EXISTS HistorialCompra;
-DROP TABLE IF EXISTS Cita;
-
--- Creacion de tablas
-
-CREATE TABLE Articulo(
-    IDArticulo int AUTO_INCREMENT,
-    nombre varchar(50) not null,
-    descrip_a varchar(200),
-    PRIMARY KEY(IDArticulo)
+-- Crear la tabla Usuario
+CREATE TABLE IF NOT EXISTS Usuario (
+    idUsuario INT AUTO_INCREMENT,
+    dni VARCHAR(9) NOT NULL UNIQUE,
+    telefono VARCHAR(9) NOT NULL,
+    nombre VARCHAR(20) NOT NULL,
+    apellidos VARCHAR(30) NOT NULL,
+    nombreUsuario VARCHAR(20) NOT NULL,
+    contraseña TEXT NOT NULL,
+    rol ENUM('Administrador', 'Cliente'),
+    PRIMARY KEY (idUsuario)
 );
 
-CREATE TABLE Venta(
-    IDVenta int AUTO_INCREMENT,
-    IDUsuario numeric(5) not null,
-    descrip_v varchar(200),
-    FOREIGN KEY(IDUsuario) REFERENCES Usuario(IDUsuario),
-    PRIMARY KEY (IDVenta)
+-- Crear la tabla Articulo
+CREATE TABLE IF NOT EXISTS Articulo (
+    idArticulo INT AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    descripcionArticulo VARCHAR(200),
+    PRIMARY KEY (idArticulo)
 );
 
-CREATE TABLE Usuario(
-    IDUsuario int AUTO_INCREMENT,
-    dni varchar(9) not null unique,
-    telefono varchar(9) not null unique,
-    nombreCompleto varchar(50) not null,
-    user varchar(20) not null unique,
-    passwd text not null,
-    rol enum('Administrador', 'Cliente'),
-    PRIMARY KEY(IDUsuario),
+-- Crear la tabla Venta
+CREATE TABLE IF NOT EXISTS Venta (
+    idVenta INT AUTO_INCREMENT,
+    idUsuario INT NOT NULL,
+    descripcionVenta VARCHAR(200),
+    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
+    PRIMARY KEY (idVenta)
 );
 
-CREATE TABLE Cliente(
-    IDUsuario int,
-    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario),
-    numMascotas int not null,
-    PRIMARY KEY(IDUsuario)
+-- Crear la tabla Cliente
+CREATE TABLE IF NOT EXISTS Cliente (
+    idUsuario INT,
+    numMascotas INT NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
+    PRIMARY KEY (idUsuario)
 );
 
--- Mirar esto
-CREATE TABLE Mascota(
-    -- numPassport 
-    -- PRIMARY KEY (numPassport),
-    nombre varchar(20) not null,
-    especie varchar(30) not null,
-    raza varchar(30) not null,
-    fechaNacimiento DATE not null, -- Ejemplo para poner fecha: "2023-12-25" (YYYY-MM-DD)
-    IDUsuario int,
-    FOREIGN KEY (IDUsuario) REFERENCES Cliente(IDUsuario),
-    ON DELETE cascade -- Para eliminar todas las mascotas del usuario si se borra
+-- Crear la tabla Mascota
+CREATE TABLE IF NOT EXISTS Mascota (
+    idMascota INT AUTO_INCREMENT,
+    nombre VARCHAR(20) NOT NULL,
+    especie VARCHAR(30) NOT NULL,
+    raza VARCHAR(30) NOT NULL,
+    fechaNacimiento DATE NOT NULL,
+    idUsuario INT,
+    FOREIGN KEY (idUsuario) REFERENCES Cliente (idUsuario) ON DELETE CASCADE,
+    PRIMARY KEY (idMascota)
 );
 
-CREATE TABLE Administrador(
-    IDUsuario int,
-    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario),
-    PRIMARY KEY(IDUsuario),
-    cadenaInicioSesion varchar(20) not null unique
+-- Crear la tabla Administrador
+CREATE TABLE IF NOT EXISTS Administrador (
+    idUsuario INT,
+    cadenaInicioSesion VARCHAR(20) NOT NULL UNIQUE,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
+    PRIMARY KEY (idUsuario)
 );
 
-CREATE TABLE HistorialCompra(
-    IDUsuario int,
-    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario),
-    PRIMARY KEY(IDUsuario),
-    nombreArticulo varchar(30) not null,
-    ON DELETE cascade
+-- Crear la tabla HistorialCompra
+CREATE TABLE IF NOT EXISTS HistorialCompra (
+    idUsuario INT,
+    nombreArticulo VARCHAR(30) NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario) ON DELETE CASCADE,
+    PRIMARY KEY (idUsuario)
 );
 
-CREATE TABLE Cita(
-    IDUsuario int,
-    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario),
-    PRIMARY KEY(IDUsuario),
-    fechaCita DATE not null,
-    horaCita TIME not null -- El formato es 12:30:00
+-- Crear la tabla Cita
+CREATE TABLE IF NOT EXISTS Cita (
+    idUsuario INT,
+    fechaCita DATE NOT NULL,
+    horaCita TIME NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
+    PRIMARY KEY (idUsuario)
 );
-
--- Quedan hacer un par de inserts
