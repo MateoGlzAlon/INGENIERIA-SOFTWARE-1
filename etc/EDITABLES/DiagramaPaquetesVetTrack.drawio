@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" modified="2023-12-26T11:44:29.796Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="_9i4bG64jsy-g5hi652z" version="22.1.11" type="device">
+  <diagram name="Page-1" id="5f0bae14-7c28-e335-631c-24af17079c00">
+    <mxGraphModel dx="1434" dy="768" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-2" value="Base de datos&lt;br&gt;(MySQL)" style="shape=folder;fontStyle=1;tabWidth=80;tabHeight=30;tabPosition=left;html=1;boundedLbl=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="770" y="487.5" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-3" value="Capa de Logica del Negocio" style="shape=folder;fontStyle=1;tabWidth=110;tabHeight=30;tabPosition=left;html=1;boundedLbl=1;labelInHeader=1;container=1;collapsible=0;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="70" y="360" width="510" height="315" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-4" value="" style="html=1;strokeColor=none;resizeWidth=1;resizeHeight=1;fillColor=none;part=1;connectable=0;allowArrows=0;deletable=0;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry width="510" height="220.5" relative="1" as="geometry">
+            <mxPoint y="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-17" value="Creacion de citas" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="30" y="65" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-18" value="Historial de compras" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="140" y="65" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-23" value="Historial de ventas" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="250" y="65" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-24" value="Administracion de mascotas" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="370" y="65" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-25" value="package" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="30" y="150" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-26" value="Administracion de usuarios" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="370" y="150" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-27" value="Venta de productos" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="140" y="150" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-28" value="Listar mascotas" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="260" y="150" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-29" value="Listar articulo" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="100" y="240" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-30" value="Manejar articulos" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="340" y="240" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-31" value="Asignacion de mascotas" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry x="215" y="240" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-6" value="Capa de presentacion" style="shape=folder;fontStyle=1;tabWidth=110;tabHeight=30;tabPosition=left;html=1;boundedLbl=1;labelInHeader=1;container=1;collapsible=0;whiteSpace=wrap;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="30" width="220" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-7" value="" style="html=1;strokeColor=none;resizeWidth=1;resizeHeight=1;fillColor=none;part=1;connectable=0;allowArrows=0;deletable=0;whiteSpace=wrap;movable=0;resizable=0;rotatable=0;editable=0;locked=1;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-6">
+          <mxGeometry width="150" height="70" relative="1" as="geometry">
+            <mxPoint y="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-32" value="Interfaz global" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-6">
+          <mxGeometry x="65" y="50" width="90" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-10" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.465;entryY=0.213;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="q9Qqi3tiQLsLJ-X7Rm1v-6" target="q9Qqi3tiQLsLJ-X7Rm1v-12">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="170" y="210" as="sourcePoint" />
+            <mxPoint x="500" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-11" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0;exitY=0;exitDx=0;exitDy=37.5;exitPerimeter=0;entryX=1.004;entryY=0.521;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="q9Qqi3tiQLsLJ-X7Rm1v-2" target="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="680" y="280" as="sourcePoint" />
+            <mxPoint x="840" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-12" value="Capa de interfaz individual" style="shape=folder;fontStyle=1;tabWidth=110;tabHeight=30;tabPosition=left;html=1;boundedLbl=1;labelInHeader=1;container=1;collapsible=0;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="120" y="180" width="340" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-13" value="" style="html=1;strokeColor=none;resizeWidth=1;resizeHeight=1;fillColor=none;part=1;connectable=0;allowArrows=0;deletable=0;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-12">
+          <mxGeometry width="340" height="105" relative="1" as="geometry">
+            <mxPoint y="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-14" value="Interfaz Cliente" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-12">
+          <mxGeometry x="30" y="60" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-15" value="Interfaz Admin" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;" vertex="1" parent="q9Qqi3tiQLsLJ-X7Rm1v-12">
+          <mxGeometry x="190" y="60" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9Qqi3tiQLsLJ-X7Rm1v-16" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.392;entryY=0.102;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="q9Qqi3tiQLsLJ-X7Rm1v-3">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="272" y="330" as="sourcePoint" />
+            <mxPoint x="270" y="382" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
