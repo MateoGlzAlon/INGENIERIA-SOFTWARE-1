@@ -145,98 +145,88 @@ public class Interfaz {
 	}
 
 	private boolean comprobarUsuarioYContraseña(String usuario, String passwd, JFrame frame) {
-		try {
-			
-			/* <----
-			
-			//======================================================
-			//GUIA DE COMO PODEMOS SABER EL USUARIO + ROL QUE TIENE
-			//======================================================
-			
-			//NOTA: aun queda por optimizar las cosas, lo he hecho deprisa
-			
-			List<List<Object>> userList = conexion.listar("Usuario");
-			
-			//JOptionPane.showMessageDialog(null, "Lista:\n"+userList.toString());
-			
-			int idUsuarioEncontrado = -1;
-			
-			
-			for(int i = 0; i<userList.size(); i++) {
-				if (userList.get(i).get(1)==usuario && userList.get(i).get(2)==passwd) {
-					idUsuarioEncontrado = (int) userList.get(i).get(0);
-				}
-			}
-			
-			//Si ha encontrado el usuario entra, sino el else es un mensaje de error que no lo ha encontrado
-			if (idUsuarioEncontrado != -1) {
-				//Aqui tendriamos que hacer lo que monté antes, de llamar a la clase, poner visible etc etc etc
-			}else {
-				JOptionPane.showMessageDialog(null, "Las credenciales son incorrectas");
-			}
-			
-			
-			
-			
-			//Lo siguiente es separado, pero lo pongo aqui para que lo veas
-			
-			//Ahora con el id encontrado de la tabla usuarios, podemos buscar en la tabla correspondiente usando la cuarta columna de la tabla usuarios 
-			//       que contiene el rol
-			userList = conexion.listar(userList.get(idUsuarioEncontrado).get(3).toString());
-			
-			//Como el idUsuario esta puesto en la primera columna, lo buscamos en la tabla correspondiente para saber exactamente que posicion de 
-			//		 la lista esta para recoger mas tarde los datos si los necesitamos
-			
-			int posTablaDatos = 0; //Posicion para la tabla de cliente o de administrador
-			
-			for(int i = 0; i<userList.size(); i++) {
-				if (userList.get(i).get(0).toString().intern()==idUsuarioEncontrado+"".intern()) {
-					posTablaDatos = i;
-				}
-			}
-			
-			//Y ahora con estos datos podemos si quiero dumpear los datos de esa columna
-			System.out.println(userList.get(posTablaDatos).toString());
-			
-			
-			
-			 ---> */ 
-			
-			
-			
-			
-			// =================================================================================
-			
+	    try {
+	        // Obtener lista de usuarios
+	        List<List<Object>> userList = conexion.listar("Usuario");
 
-			if (conexion.existeEnLaTabla("Administrador", "nombreUsuario", usuario)) {
+	        System.out.println("user = " + usuario);
+	        System.out.println("pass = " + passwd);
+	        System.out.println(userList.toString());
 
-				JOptionPane.showMessageDialog(null, "Has entrado como administrador");
-			} else if (conexion.existeEnLaTabla("Cliente", "nombreUsuario", usuario)) {
-					
-				JOptionPane.showMessageDialog(null, "Has entrado como cliente");
-			}
+	        int idUsuarioEncontrado = -1;
 
-			String contrasenaCorrecta = conexion.obtenerDatoDeTabla("Usuario", "contraseña", "nombreUsuario",  usuario);
+	        // Buscar el usuario por usuario y contraseña
+	        for (List<Object> user : userList) {
+	            if (user.get(1).toString().equals(usuario) && user.get(2).toString().equals(passwd)) {
+	                idUsuarioEncontrado = (int) user.get(0);
+	                System.out.println("Usuario encontrado");
+	                break;
+	            }
+	        }
 
-			if (passwd.equals(contrasenaCorrecta)) {
-				JOptionPane.showMessageDialog(null, "Las credenciales enviadas son correctas.");
+	        // Si se encuentra el usuario, continuar
+	        if (idUsuarioEncontrado != -1) {
+	            // Obtener el rol del usuario
+	            String rolUsuario = conexion.obtenerDatoDeTabla("Usuario", "rol", "idUsuario", idUsuarioEncontrado);
 
-				frame.setVisible(false);
+	            System.out.println("Rol del usuario: " + rolUsuario);
 
-				InterfazImportante frameImp = new InterfazImportante(this);
-				frameImp.frame.setVisible(true);
+	            // Obtener datos específicos según el rol
+	            List<List<Object>> userDataList = conexion.listar(rolUsuario);
 
-				return true;
-			} else {
-				JOptionPane.showMessageDialog(null, "Las credenciales son incorrectas. Introdúcelas de nuevo.");
-				return false;
-			}
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al comprobar usuario y contraseña: " + e.getMessage());
-			System.out.println("Error al comprobar usuario y contraseña: " + e.getMessage());
-			return false;
-		}
+	            // Buscar la posición del usuario en la tabla correspondiente
+	            int posTablaDatos = 0;
+
+	            System.out.println("9");
+
+	            for (int i = 0; i < userDataList.size(); i++) {
+	                if (userDataList.get(i).get(0).toString().equals(String.valueOf(idUsuarioEncontrado))) {
+	                    posTablaDatos = i;
+	                    break;
+	                }
+	            }
+
+	            System.out.println("10");
+
+	            this.user = new Usuario(idUsuarioEncontrado, usuario, passwd, rolUsuario);
+
+	            // Aquí puedes realizar acciones adicionales según el rol o mostrar la interfaz correspondiente
+	            // Por ejemplo:
+	            if (rolUsuario.equals("Cliente")) {
+	                frame.setVisible(false);
+
+	                // Aquí tendrás que enviar también el usuario con todos los datos como parámetro al constructor
+	                JOptionPane.showMessageDialog(null, "Has iniciado sesión como Cliente (" + usuario + ")");
+	                InterfazImportante frameImp = new InterfazImportante(this);
+	                if (frameImp.frame != null) {  // Verificación antes de llamar a setVisible
+	                    frameImp.frame.setVisible(true);
+	                }
+	            } else if (rolUsuario.equals("Administrador")) {
+	                frame.setVisible(false);
+
+	                // Aquí tendrás que enviar también el usuario con todos los datos como parámetro al constructor
+	                JOptionPane.showMessageDialog(null, "Has iniciado sesión como Administrador (" + usuario + ")");
+	                InterfazImportante frameImp = new InterfazImportante(this);
+	                if (frameImp.frame != null) {  // Verificación antes de llamar a setVisible
+	                    frameImp.frame.setVisible(true);
+	                }
+	            }
+
+	            System.out.println("11");
+
+	            return true;
+	        } else {
+	            JOptionPane.showMessageDialog(null, "Las credenciales son incorrectas");
+	            return false;
+	        }
+	    } catch (Exception e) {
+	        JOptionPane.showMessageDialog(null, "Error al comprobar usuario y contraseña: " + e.getMessage());
+	        System.out.println("Error al comprobar usuario y contraseña: " + e.getMessage());
+	        return false;
+	    }
 	}
+
+
 
 	private void confirmarSalir(JFrame frame) throws Exception {
 		int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar",

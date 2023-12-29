@@ -7,8 +7,29 @@ CREATE TABLE IF NOT EXISTS Usuario(
     nombreUsuario VARCHAR(20) NOT NULL UNIQUE,
     contraseña TEXT NOT NULL,
     rol ENUM('Administrador', 'Cliente'),
-    PRIMARY KEY(IDUsuario),
+    PRIMARY KEY(idUsuario)
 );
+
+-- Crear la tabla Cliente
+CREATE TABLE IF NOT EXISTS Cliente(
+    idUsuario INT,
+    dni VARCHAR(9) NOT NULL UNIQUE,
+    telefono VARCHAR(9) NOT NULL,
+    nombre VARCHAR(20) NOT NULL,
+    apellidos VARCHAR(30) NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    numMascotas INT NOT NULL,
+    PRIMARY KEY(idUsuario)
+);
+
+-- Crear la tabla Administrador 
+CREATE TABLE IF NOT EXISTS Administrador(
+    idUsuario INT,
+    cadenaInicioSesion VARCHAR(20) NOT NULL UNIQUE,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    PRIMARY KEY(idUsuario)
+);
+
 
 -- Crear la tabla Articulo
 CREATE TABLE IF NOT EXISTS Articulo (
@@ -29,18 +50,6 @@ CREATE TABLE IF NOT EXISTS Venta (
     PRIMARY KEY (idVenta)
 );
 
--- Crear la tabla Cliente (hereda de Usuario)
-CREATE TABLE IF NOT EXISTS Cliente(
-    idUsuario INT,
-    dni VARCHAR(9) NOT NULL UNIQUE,
-    telefono VARCHAR(9) NOT NULL,
-    nombre VARCHAR(20) NOT NULL,
-    apellidos VARCHAR(30) NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
-    numMascotas INT NOT NULL,
-    PRIMARY KEY(idUsuario)
-);
-
 -- Crear la tabla Mascota
 CREATE TABLE IF NOT EXISTS Mascota (
     idMascota INT AUTO_INCREMENT,
@@ -51,14 +60,6 @@ CREATE TABLE IF NOT EXISTS Mascota (
     idUsuario INT,
     FOREIGN KEY (idUsuario) REFERENCES Cliente (idUsuario) ON DELETE CASCADE,
     PRIMARY KEY (idMascota)
-);
-
--- Crear la tabla Administrador (hereda de Usuario)
-CREATE TABLE IF NOT EXISTS Administrador(
-    idUsuario INT,
-    cadenaInicioSesion VARCHAR(20) NOT NULL UNIQUE,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
-    PRIMARY KEY(idUsuario)
 );
 
 -- Crear la tabla HistorialCompra

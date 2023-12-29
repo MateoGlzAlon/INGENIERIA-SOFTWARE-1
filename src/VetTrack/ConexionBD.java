@@ -87,6 +87,8 @@ public class ConexionBD {
 
 			System.out.println(6);
 
+			System.out.println(st.toString());
+			
 			ResultSet rs = st.executeQuery();
 			
 			System.out.println(7);

@@ -26,12 +26,16 @@ public class InterfazImportante {
 	public InterfazImportante(Interfaz interfaz) {
 		this.interfaz = interfaz;
 		
+		System.out.println(12);
+		
 		if (this.interfaz.verDatosUsuarioActivo().getRol()=="Administrador") {
 			initialize_admin();
-		}else {
+		} else {
 			initialize_cliente();
 		}
 		
+		System.out.println(13);
+
 		
 	}
 	
@@ -45,10 +49,15 @@ public class InterfazImportante {
 	private void initialize_admin() {
 		frame = new JFrame();
 		frame.setTitle("Panel de control de " + this.interfaz.verDatosUsuarioActivo().getNombreUsuario());
+		
+		System.out.println(14);
+		
 		frame.setBounds(300, 300, 1200, 900);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		
+		System.out.println(15);
 		
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -67,6 +76,9 @@ public class InterfazImportante {
 		        }
 			}
 		});
+		
+		System.out.println(16);
+
 		
 		botCerrarSesion.setBounds(1038, 11, 136, 59);
 		frame.getContentPane().add(botCerrarSesion);
