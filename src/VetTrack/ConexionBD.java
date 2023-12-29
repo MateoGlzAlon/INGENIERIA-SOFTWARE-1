@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ConexionBD {
 
@@ -67,10 +68,13 @@ public class ConexionBD {
 
 	public String obtenerDatoDeTabla(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws Exception {
 		String resultado = null;
+		
+		System.out.println(3);
 
 		try {
 			String query = "SELECT " + nombreColumnaExtraer + " FROM " + nombreTabla + " WHERE " + nombreColumnaComparar + " = ?";
 			PreparedStatement st = this.getConexion().prepareStatement(query);
+			System.out.println(4);
 
 			if (condicion instanceof Integer) {
 				st.setInt(1, (Integer) condicion);
@@ -81,7 +85,12 @@ public class ConexionBD {
 				throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro id");
 			}
 
+			System.out.println(6);
+
 			ResultSet rs = st.executeQuery();
+			
+			System.out.println(7);
+
 
 			if (rs.next()) {
 				resultado = rs.getString(nombreColumnaExtraer);
@@ -89,13 +98,78 @@ public class ConexionBD {
 			} else {
 				throw new Exception("No se encontró la fila con la condición proporcionada.");
 			}
+			
+			System.out.println(7);
 
+			
 		} catch (Exception e) {
 			throw new Exception("Error al obtener: " + e.getMessage());
 		}
 
 		return resultado;
 	}
+	
+	
+	/*
+	 *  // Crear un Map con los valores de la nueva fila
+        Map<String, Object> valoresNuevaFila = new HashMap<>();
+        valoresNuevaFila.put("Nombre", "Nuevo Articulo");
+        valoresNuevaFila.put("Descripcion", "Descripción del Nuevo Articulo");
+        valoresNuevaFila.put("Marca", "Nueva Marca");
+
+        // Llamar al método para agregar la nueva fila
+        conexion.agregarFilaATabla("Articulo", valoresNuevaFila);
+
+        // Mostrar mensaje de éxito
+        System.out.println("Nueva fila agregada correctamente a la tabla 'Articulo'")
+	 * 
+	 */
+	
+	public void agregarFilaATabla(String nombreTabla, Map<String, Object> valores) throws Exception {
+	    try {
+	        // Construir la consulta INSERT
+	        StringBuilder queryBuilder = new StringBuilder("INSERT INTO ");
+	        queryBuilder.append(nombreTabla).append(" (");
+
+	        // Agregar los nombres de las columnas
+	        for (String columna : valores.keySet()) {
+	            queryBuilder.append(columna).append(", ");
+	        }
+	        queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length()); // Eliminar la coma final
+	        queryBuilder.append(") VALUES (");
+
+	        // Agregar los valores
+	        for (int i = 0; i < valores.size(); i++) {
+	            queryBuilder.append("?, ");
+	        }
+	        queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length()); // Eliminar la coma final
+	        queryBuilder.append(")");
+
+	        // Preparar la consulta
+	        PreparedStatement st = this.getConexion().prepareStatement(queryBuilder.toString());
+
+	        // Establecer los valores de los parámetros
+	        int index = 1;
+	        for (Object valor : valores.values()) {
+	            if (valor instanceof Integer) {
+	                st.setInt(index, (Integer) valor);
+	            } else if (valor instanceof String) {
+	                st.setString(index, (String) valor);
+	            } else {
+	                throw new IllegalArgumentException("Tipo de entidad no compatible para la inserción");
+	            }
+	            index++;
+	        }
+
+	        // Ejecutar la consulta
+	        st.executeUpdate();
+	    } catch (Exception e) {
+	        throw new Exception("Error al agregar fila: " + e.getMessage());
+	    } finally {
+	        // Cerrar recursos si es necesario
+	    }
+	}
+
 
 
 	public <T> void eliminarFilaDeTabla(String nombreTabla, String nombreColumnaComparar, T condicion) throws Exception {
@@ -154,6 +228,32 @@ public class ConexionBD {
         return listaRegistros;
     }
 
+	
+	public boolean existeEnLaTabla(String nombreTabla, String nombreColumnaComparar, String nombreUsuario) {
+	    try {
+	        // Construir la consulta SQL
+	        String query = "SELECT COUNT(*) FROM " + nombreTabla + " WHERE " + nombreColumnaComparar + " = ?";
+	        
+	        // Preparar la declaración SQL
+	        PreparedStatement st = conexion.prepareStatement(query);
+	        
+	        // Establecer el valor del parámetro en la consulta
+	        st.setString(1, nombreUsuario);
+	        
+	        // Ejecutar la consulta
+	        ResultSet rs = st.executeQuery();
+	        
+	        // Verificar si hay al menos una fila que coincide con el ID de usuario
+	        if (rs.next()) {
+	            int count = rs.getInt(1);
+	            return count > 0;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return false; // Si hay un error o no se encuentra, se devuelve false por defecto
+	}
 
 
 

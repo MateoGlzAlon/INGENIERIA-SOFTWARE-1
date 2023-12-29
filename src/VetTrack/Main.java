@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -34,15 +36,29 @@ public class Main {
 			//ZONA DE PRUEBAS
 			//================================================================================================================================
 			
-			System.out.println(conexion.listar("Articulo").toString());
-			
-			System.out.println("El dato es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 1));
-			
-			conexion.eliminarFilaDeTabla("Articulo", "idArticulo", 1);
-			
-			System.out.println("El dato 2 es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 1));
-
-			
+//			System.out.println(conexion.listar("Articulo").toString());
+//			
+//			System.out.println("El dato es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 2));
+//			
+//	        Map<String, Object> valoresNuevaFila = new HashMap<>();
+//	        valoresNuevaFila.put("idArticulo", 1);
+//	        valoresNuevaFila.put("nombre", "Articulo1");
+//	        valoresNuevaFila.put("descripcionArticulo", "descArt1");
+//			
+//			conexion.agregarFilaATabla("Articulo", valoresNuevaFila);
+//			
+//			System.out.println(conexion.listar("Articulo").toString());
+//
+//			
+//			System.out.println("El dato es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 1));
+//			
+//			conexion.eliminarFilaDeTabla("Articulo", "idArticulo", 1);
+//			
+//			System.out.println(conexion.listar("Articulo").toString());
+//			
+//			System.out.println("El dato 2 es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 1));
+//
+//			
 			
 			
 			
@@ -84,12 +100,6 @@ public class Main {
 	                window.frame.setVisible(true);
 	            } catch (Exception e) {
 	                e.printStackTrace();
-	            } finally {
-	                try {
-	                    ConexionBD.getInstance().cerrarConexion();
-	                } catch (Exception e) {
-	                    e.printStackTrace();
-	                }
 	            }
 	        }
 	    });

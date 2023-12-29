@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS Usuario (
 CREATE TABLE IF NOT EXISTS Articulo (
     idArticulo INT AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
+    marca VARCHAR(20) NOT NULL,
     descripcionArticulo VARCHAR(200),
     PRIMARY KEY (idArticulo)
 );
@@ -27,17 +28,16 @@ CREATE TABLE IF NOT EXISTS Venta (
     idVenta INT AUTO_INCREMENT,
     idUsuario INT NOT NULL,
     descripcionVenta VARCHAR(200),
+    fechaVenta DATE,
     FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
     PRIMARY KEY (idVenta)
 );
 
--- Crear la tabla Cliente
-CREATE TABLE IF NOT EXISTS Cliente (
-    idUsuario INT,
-    numMascotas INT NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
-    PRIMARY KEY (idUsuario)
-);
+-- Crear la tabla Cliente (hereda de Usuario)
+CREATE TABLE IF NOT EXISTS Cliente LIKE Usuario;
+
+-- Agregar la columna específica de Cliente
+ALTER TABLE Cliente ADD COLUMN numMascotas INT NOT NULL;
 
 -- Crear la tabla Mascota
 CREATE TABLE IF NOT EXISTS Mascota (
@@ -51,13 +51,11 @@ CREATE TABLE IF NOT EXISTS Mascota (
     PRIMARY KEY (idMascota)
 );
 
--- Crear la tabla Administrador
-CREATE TABLE IF NOT EXISTS Administrador (
-    idUsuario INT,
-    cadenaInicioSesion VARCHAR(20) NOT NULL UNIQUE,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
-    PRIMARY KEY (idUsuario)
-);
+-- Crear la tabla Administrador (hereda de Usuario)
+CREATE TABLE IF NOT EXISTS Administrador LIKE Usuario;
+
+-- Agregar la columna específica de Administrador
+ALTER TABLE Administrador ADD COLUMN cadenaInicioSesion VARCHAR(20) UNIQUE;
 
 -- Crear la tabla HistorialCompra
 CREATE TABLE IF NOT EXISTS HistorialCompra (
