@@ -1,21 +1,25 @@
 package VetTrack;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
+import javax.swing.JButton;
+import javax.swing.JToggleButton;
+import javax.swing.JScrollBar;
 
 public class InterfazCliente {
 
 	public JFrame frame;
 	private Interfaz interfaz;
+	private Color colorOriginalBton;
 
 	/**
 	 * Create the application.
@@ -42,6 +46,8 @@ public class InterfazCliente {
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+//		frame.getContentPane().setBackground(new Color(150, 150, 150));
+		
 		JButton botCerrarSesion = new JButton("Cerrar Sesion");
 		botCerrarSesion.addActionListener(new ActionListener() {
 			@Override
@@ -56,6 +62,8 @@ public class InterfazCliente {
 		        }
 			}
 		});
+//		botCerrarSesion.setForeground(Color.red);
+		colorOriginalBton = botCerrarSesion.getBackground();
 		
 		botCerrarSesion.setBounds(1038, 11, 136, 59);
 		frame.getContentPane().add(botCerrarSesion);
@@ -70,7 +78,7 @@ public class InterfazCliente {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Esto es por ahora
-				JOptionPane.showMessageDialog(null, "\nId del usuario: "+interfaz.verDatosUsuarioActivo().getIdUsuario() + ""
+				JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.verDatosUsuarioActivo().getIdUsuario() + ""
 						+ "\nUsuario: "+interfaz.verDatosUsuarioActivo().getNombreUsuario()+""
 						+ "\nContraseña: "+interfaz.verDatosUsuarioActivo().getContrasena() + ""
 						+ "\nRol: "+ interfaz.verDatosUsuarioActivo().getRol());
@@ -85,18 +93,19 @@ public class InterfazCliente {
 			}
 		});
 		
+		
+		//El togle no fcambia de color 
 		botModoNoct.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	//modoNocturno(botModoNoct);
+            	modoNocturno(botModoNoct);
             	
             }
         });
 		
 	}
 	
-	/*
 	private void modoNocturno(JToggleButton botModoNoct) {
     	
 		Component[] components = frame.getContentPane().getComponents();
@@ -105,15 +114,24 @@ public class InterfazCliente {
             if (component instanceof JButton) {
             	
                 JButton boton = (JButton) component;
-                boton.setForeground(botModoNoct.isSelected() ? Color.black : Color.white);
+                boton.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
                 
             }
+            
+//            if (component instanceof JToggleButton) {
+//            	
+//            	JToggleButton toggle = (JToggleButton) component;
+//            	
+//            	toggle.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
+//            	
+//            }
+            
         }
 		
-		frame.setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : Color.white);
+		frame.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
 		
     	
-	}*/
+	}
 	
 	
 	private void confirmarSalir(JFrame frame) {
