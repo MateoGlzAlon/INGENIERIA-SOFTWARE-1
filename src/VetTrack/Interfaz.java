@@ -141,38 +141,16 @@ public class Interfaz {
 
 	private void comprobarUsuarioYContraseña(String usuario, String passwd, JFrame frame) {
 	    try {
-	        // Obtener lista de usuarios
-	        List<List<Object>> userList = conexion.listar("Usuario");
-
-	        //JOptionPane.showMessageDialog(null, "Lista:\n"+userList.toString());
-
-	        int idUsuarioEncontrado = -1;
-
-	        // Buscar el usuario por usuario y contraseña
-	        for (List<Object> user : userList) {
-	            if (user.get(1).toString().equals(usuario) && user.get(2).toString().equals(passwd)) {
-	                idUsuarioEncontrado = (int) user.get(0);
-	                break;
-	            }
-	        }
+	    	
+	    	//Lo he movido a otro metodo para poder usarlo mas tarde
+	        int idUsuarioEncontrado = recogerIdUsuario(usuario, passwd);
 
 	        // Si se encuentra el usuario, continuar
 	        if (idUsuarioEncontrado != -1) {
 	            // Obtener el rol del usuario
 	            String rolUsuario = conexion.obtenerDatoDeTabla("Usuario", "rol", "idUsuario", idUsuarioEncontrado);
 
-	            // Obtener datos específicos según el rol
-	            List<List<Object>> userDataList = conexion.listar(rolUsuario);
-
-	            // Buscar la posición del usuario en la tabla correspondiente
-	            int posTablaDatos = 0;
-
-	            for (int i = 0; i < userDataList.size(); i++) {
-	                if (userDataList.get(i).get(0).toString().equals(String.valueOf(idUsuarioEncontrado))) {
-	                    posTablaDatos = i;
-	                    break;
-	                }
-	            }
+	            //recogerDatosTablaUsuarioCorresp(rolUsuario, idUsuarioEncontrado);
 
 	            this.user = new Usuario(idUsuarioEncontrado, usuario, passwd, rolUsuario);
 
@@ -199,7 +177,45 @@ public class Interfaz {
 	}
 
 
+	private int recogerIdUsuario(String usuario, String passwd) throws Exception{
+		// Obtener lista de usuarios
+        List<List<Object>> userList = conexion.listar("Usuario");
 
+        //JOptionPane.showMessageDialog(null, "Lista:\n"+userList.toString());
+
+        int idUsuarioEncontrado = -1;
+
+        // Buscar el usuario por usuario y contraseña
+        for (List<Object> user : userList) {
+            if (user.get(1).toString().equals(usuario) && user.get(2).toString().equals(passwd)) {
+                return (int) user.get(0);
+            }
+        }
+        
+        return -1;
+	}
+
+	/*
+	 * Aqui sencillamente lo que vamos a hacer es devolver la lista con los parametros de la DB
+	 */
+	private List<Object> recupPosTablaCorrespondiente(String rolUsuario, int idUsuarioEncontrado) throws Exception {
+		// Obtener datos específicos según el rol
+        List<List<Object>> userDataList = conexion.listar(rolUsuario);
+
+        // Buscar la posición del usuario en la tabla correspondiente
+        int posTablaDatos = 0;
+
+        for (int i = 0; i < userDataList.size(); i++) {
+            if (userDataList.get(i).get(0).toString().equals(String.valueOf(idUsuarioEncontrado))) {
+                posTablaDatos = i;
+                break;
+            }
+        }
+        
+        return conexion.listar(rolUsuario).get(posTablaDatos);
+        
+	}
+	
 	private void confirmarSalir(JFrame frame) throws Exception {
 		int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar",
 				JOptionPane.YES_NO_OPTION);
