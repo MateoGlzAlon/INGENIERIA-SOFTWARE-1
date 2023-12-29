@@ -2,16 +2,12 @@
 -- DROP TABLE IF EXISTS Usuario, Articulo, Venta, Cliente, Mascota, Administrador, HistorialCompra, Cita;
 
 -- Crear la tabla Usuario
-CREATE TABLE IF NOT EXISTS Usuario (
+CREATE TABLE IF NOT EXISTS Usuario(
     idUsuario INT AUTO_INCREMENT,
-    dni VARCHAR(9) NOT NULL UNIQUE,
-    telefono VARCHAR(9) NOT NULL,
-    nombre VARCHAR(20) NOT NULL,
-    apellidos VARCHAR(30) NOT NULL,
-    nombreUsuario VARCHAR(20) NOT NULL,
+    nombreUsuario VARCHAR(20) NOT NULL UNIQUE,
     contraseña TEXT NOT NULL,
     rol ENUM('Administrador', 'Cliente'),
-    PRIMARY KEY (idUsuario)
+    PRIMARY KEY(IDUsuario),
 );
 
 -- Crear la tabla Articulo
@@ -34,10 +30,16 @@ CREATE TABLE IF NOT EXISTS Venta (
 );
 
 -- Crear la tabla Cliente (hereda de Usuario)
-CREATE TABLE IF NOT EXISTS Cliente LIKE Usuario;
-
--- Agregar la columna específica de Cliente
-ALTER TABLE Cliente ADD COLUMN numMascotas INT NOT NULL;
+CREATE TABLE IF NOT EXISTS Cliente(
+    idUsuario INT,
+    dni VARCHAR(9) NOT NULL UNIQUE,
+    telefono VARCHAR(9) NOT NULL,
+    nombre VARCHAR(20) NOT NULL,
+    apellidos VARCHAR(30) NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    numMascotas INT NOT NULL,
+    PRIMARY KEY(idUsuario)
+);
 
 -- Crear la tabla Mascota
 CREATE TABLE IF NOT EXISTS Mascota (
@@ -52,10 +54,12 @@ CREATE TABLE IF NOT EXISTS Mascota (
 );
 
 -- Crear la tabla Administrador (hereda de Usuario)
-CREATE TABLE IF NOT EXISTS Administrador LIKE Usuario;
-
--- Agregar la columna específica de Administrador
-ALTER TABLE Administrador ADD COLUMN cadenaInicioSesion VARCHAR(20) UNIQUE;
+CREATE TABLE IF NOT EXISTS Administrador(
+    idUsuario INT,
+    cadenaInicioSesion VARCHAR(20) NOT NULL UNIQUE,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    PRIMARY KEY(idUsuario)
+);
 
 -- Crear la tabla HistorialCompra
 CREATE TABLE IF NOT EXISTS HistorialCompra (

@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -143,8 +144,69 @@ public class Interfaz {
 
 	}
 
-	public boolean comprobarUsuarioYContraseña(String usuario, String passwd, JFrame frame) {
+	private boolean comprobarUsuarioYContraseña(String usuario, String passwd, JFrame frame) {
 		try {
+			
+			/* <----
+			
+			//======================================================
+			//GUIA DE COMO PODEMOS SABER EL USUARIO + ROL QUE TIENE
+			//======================================================
+			
+			//NOTA: aun queda por optimizar las cosas, lo he hecho deprisa
+			
+			List<List<Object>> userList = conexion.listar("Usuario");
+			
+			//JOptionPane.showMessageDialog(null, "Lista:\n"+userList.toString());
+			
+			int idUsuarioEncontrado = -1;
+			
+			
+			for(int i = 0; i<userList.size(); i++) {
+				if (userList.get(i).get(1)==usuario && userList.get(i).get(2)==passwd) {
+					idUsuarioEncontrado = (int) userList.get(i).get(0);
+				}
+			}
+			
+			//Si ha encontrado el usuario entra, sino el else es un mensaje de error que no lo ha encontrado
+			if (idUsuarioEncontrado != -1) {
+				//Aqui tendriamos que hacer lo que monté antes, de llamar a la clase, poner visible etc etc etc
+			}else {
+				JOptionPane.showMessageDialog(null, "Las credenciales son incorrectas");
+			}
+			
+			
+			
+			
+			//Lo siguiente es separado, pero lo pongo aqui para que lo veas
+			
+			//Ahora con el id encontrado de la tabla usuarios, podemos buscar en la tabla correspondiente usando la cuarta columna de la tabla usuarios 
+			//       que contiene el rol
+			userList = conexion.listar(userList.get(idUsuarioEncontrado).get(3).toString());
+			
+			//Como el idUsuario esta puesto en la primera columna, lo buscamos en la tabla correspondiente para saber exactamente que posicion de 
+			//		 la lista esta para recoger mas tarde los datos si los necesitamos
+			
+			int posTablaDatos = 0; //Posicion para la tabla de cliente o de administrador
+			
+			for(int i = 0; i<userList.size(); i++) {
+				if (userList.get(i).get(0).toString().intern()==idUsuarioEncontrado+"".intern()) {
+					posTablaDatos = i;
+				}
+			}
+			
+			//Y ahora con estos datos podemos si quiero dumpear los datos de esa columna
+			System.out.println(userList.get(posTablaDatos).toString());
+			
+			
+			
+			 ---> */ 
+			
+			
+			
+			
+			// =================================================================================
+			
 
 			if (conexion.existeEnLaTabla("Administrador", "nombreUsuario", usuario)) {
 
