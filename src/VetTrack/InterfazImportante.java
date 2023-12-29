@@ -28,10 +28,22 @@ public class InterfazImportante {
 		
 		System.out.println(12);
 		
-		if (this.interfaz.verDatosUsuarioActivo().getRol()=="Administrador") {
+		System.out.println(this.interfaz.verDatosUsuarioActivo().getRol());
+		
+		System.out.println(this.interfaz.verDatosUsuarioActivo().getRol() == "Administrador");
+		
+		System.out.println(this.interfaz.verDatosUsuarioActivo().getRol().equals("Administrador"));
+		
+		
+		
+		if (this.interfaz.verDatosUsuarioActivo().getRol().equals("Administrador")) {
+			System.out.println("Es admin");
 			initialize_admin();
-		} else {
+		} else if (this.interfaz.verDatosUsuarioActivo().getRol().equals("Cliente")){
+			System.out.println("Es cliente");
 			initialize_cliente();
+		} else {
+            JOptionPane.showMessageDialog(null, "Problema con el rol del usuario");
 		}
 		
 		System.out.println(13);
@@ -40,7 +52,7 @@ public class InterfazImportante {
 	}
 	
 	private void initialize_cliente() {
-		//Aqui interfaz admin
+		//Aqui interfaz cliente
 	}
 
 	/**
