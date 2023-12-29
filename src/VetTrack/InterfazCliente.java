@@ -1,21 +1,18 @@
 package VetTrack;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
-import javax.swing.JButton;
 import javax.swing.JToggleButton;
-import javax.swing.JScrollBar;
+import javax.swing.WindowConstants;
 
-public class InterfazImportante {
+public class InterfazCliente {
 
 	public JFrame frame;
 	private Interfaz interfaz;
@@ -23,15 +20,16 @@ public class InterfazImportante {
 	/**
 	 * Create the application.
 	 */
-	public InterfazImportante(Interfaz interfaz) {
-		this.interfaz = interfaz;		
-		initialize_admin();
+	public InterfazCliente(Interfaz interfaz) {
+		this.interfaz = interfaz;
+		
+		initialize_cliente();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize_admin() {
+	private void initialize_cliente() {
 		frame = new JFrame();
 		frame.setTitle("Panel de control de " + this.interfaz.verDatosUsuarioActivo().getNombreUsuario());
 		
@@ -71,7 +69,7 @@ public class InterfazImportante {
 		botVerPerfil.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Modificar ver perfil
+				//Esto es por ahora
 				JOptionPane.showMessageDialog(null, "\nId del usuario: "+interfaz.verDatosUsuarioActivo().getIdUsuario() + ""
 						+ "\nUsuario: "+interfaz.verDatosUsuarioActivo().getNombreUsuario()+""
 						+ "\nContraseña: "+interfaz.verDatosUsuarioActivo().getContrasena() + ""
@@ -131,4 +129,5 @@ public class InterfazImportante {
             
         }
     }
+
 }

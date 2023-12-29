@@ -123,9 +123,9 @@ public class Interfaz {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (comprobarUsuarioYContraseña(textUser.getText(), new String(textPasswd.getPassword()), frame)) {
-						establecerUsuario();
-					}
+					
+					comprobarUsuarioYContraseña(textUser.getText(), new String(textPasswd.getPassword()), frame);
+					
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -139,19 +139,12 @@ public class Interfaz {
 		panel.add(botonAccept, gbc_botonAccept);
 	}
 
-	protected void establecerUsuario() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private boolean comprobarUsuarioYContraseña(String usuario, String passwd, JFrame frame) {
+	private void comprobarUsuarioYContraseña(String usuario, String passwd, JFrame frame) {
 	    try {
 	        // Obtener lista de usuarios
 	        List<List<Object>> userList = conexion.listar("Usuario");
 
-	        System.out.println("user = " + usuario);
-	        System.out.println("pass = " + passwd);
-	        System.out.println(userList.toString());
+	        //JOptionPane.showMessageDialog(null, "Lista:\n"+userList.toString());
 
 	        int idUsuarioEncontrado = -1;
 
@@ -159,7 +152,6 @@ public class Interfaz {
 	        for (List<Object> user : userList) {
 	            if (user.get(1).toString().equals(usuario) && user.get(2).toString().equals(passwd)) {
 	                idUsuarioEncontrado = (int) user.get(0);
-	                System.out.println("Usuario encontrado");
 	                break;
 	            }
 	        }
@@ -169,15 +161,11 @@ public class Interfaz {
 	            // Obtener el rol del usuario
 	            String rolUsuario = conexion.obtenerDatoDeTabla("Usuario", "rol", "idUsuario", idUsuarioEncontrado);
 
-	            System.out.println("Rol del usuario: " + rolUsuario);
-
 	            // Obtener datos específicos según el rol
 	            List<List<Object>> userDataList = conexion.listar(rolUsuario);
 
 	            // Buscar la posición del usuario en la tabla correspondiente
 	            int posTablaDatos = 0;
-
-	            System.out.println("9");
 
 	            for (int i = 0; i < userDataList.size(); i++) {
 	                if (userDataList.get(i).get(0).toString().equals(String.valueOf(idUsuarioEncontrado))) {
@@ -186,43 +174,27 @@ public class Interfaz {
 	                }
 	            }
 
-	            System.out.println("10");
-
 	            this.user = new Usuario(idUsuarioEncontrado, usuario, passwd, rolUsuario);
 
-	            // Aquí puedes realizar acciones adicionales según el rol o mostrar la interfaz correspondiente
-	            // Por ejemplo:
 	            if (rolUsuario.equals("Cliente")) {
 	                frame.setVisible(false);
 
-	                // Aquí tendrás que enviar también el usuario con todos los datos como parámetro al constructor
 	                JOptionPane.showMessageDialog(null, "Has iniciado sesión como Cliente (" + usuario + ")");
-	                InterfazImportante frameImp = new InterfazImportante(this);
-	                if (frameImp.frame != null) {  // Verificación antes de llamar a setVisible
-	                    frameImp.frame.setVisible(true);
-	                }
+	                InterfazCliente frameImp = new InterfazCliente(this);
+	                
 	            } else if (rolUsuario.equals("Administrador")) {
 	                frame.setVisible(false);
 
-	                // Aquí tendrás que enviar también el usuario con todos los datos como parámetro al constructor
 	                JOptionPane.showMessageDialog(null, "Has iniciado sesión como Administrador (" + usuario + ")");
 	                InterfazImportante frameImp = new InterfazImportante(this);
-	                if (frameImp.frame != null) {  // Verificación antes de llamar a setVisible
-	                    frameImp.frame.setVisible(true);
-	                }
+	                
 	            }
-
-	            System.out.println("11");
-
-	            return true;
 	        } else {
 	            JOptionPane.showMessageDialog(null, "Las credenciales son incorrectas");
-	            return false;
+	            setText();
 	        }
 	    } catch (Exception e) {
 	        JOptionPane.showMessageDialog(null, "Error al comprobar usuario y contraseña: " + e.getMessage());
-	        System.out.println("Error al comprobar usuario y contraseña: " + e.getMessage());
-	        return false;
 	    }
 	}
 
