@@ -37,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.awt.Font;
 
 
 
@@ -59,6 +60,7 @@ public class InterfazCliente {
 	private JTextField textFieldFechaNacimientoMascota;
 	private JTextField textFieldIdUsuarioMascota;
 	private JTextPane textPaneCitasPrevias;
+	private JTextPane textPaneCitasFuturas;
 
 	/**
 	 * Create the application.
@@ -82,7 +84,7 @@ public class InterfazCliente {
 
 		frmInterfazDelCliente.setBounds(300, 300, 1200, 900);
 		frmInterfazDelCliente.setVisible(true);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 		frmInterfazDelCliente.setLocationRelativeTo(null);
 		frmInterfazDelCliente.setResizable(false);
 
@@ -133,20 +135,26 @@ public class InterfazCliente {
 		frmInterfazDelCliente.getContentPane().add(botVerPerfil);
 
 		JPanel panelDatosMascotas = new JPanel(new GridLayout(0, 4, 10, 10)); // 3 filas, 4 columnas
-		panelDatosMascotas.setBounds(673, 165, 500, 250);
+		panelDatosMascotas.setBounds(673, 165, 500, 150);
 		frmInterfazDelCliente.getContentPane().add(panelDatosMascotas);		
 
 		JLabel labelIdMascota = new JLabel("IdMascota: ");
+		labelIdMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		labelIdMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelNombreMascota = new JLabel("Nombre: ");
+		labelNombreMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		labelNombreMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelEspecieMascota = new JLabel("Especie: ");
+		labelEspecieMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		labelEspecieMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelRazaMascota = new JLabel("Raza: ");
+		labelRazaMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		labelRazaMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelFechaNacimientoMascota = new JLabel("Fecha Nacimiento: ");
+		labelFechaNacimientoMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		labelFechaNacimientoMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelIdUsuarioMascota = new JLabel("Nombre Dueño: ");
+		labelIdUsuarioMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		labelIdUsuarioMascota.setHorizontalAlignment(SwingConstants.CENTER);
 
 		// JTextFields no editables y con 15 columnas
@@ -200,6 +208,7 @@ public class InterfazCliente {
 						try {
 							mostrarDatosMascota();
 							rellenarCitasPasadas();
+							rellenarCitasFuturas();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -211,6 +220,7 @@ public class InterfazCliente {
 						textFieldRazaMascota.setText("");
 						textFieldFechaNacimientoMascota.setText("");
 						textFieldIdUsuarioMascota.setText("");
+						textPaneCitasPrevias.setText("");
 					}
 				}
 			}
@@ -220,10 +230,29 @@ public class InterfazCliente {
 		frmInterfazDelCliente.getContentPane().add(choiceMascotas);
 
 		textPaneCitasPrevias = new JTextPane();
-		textPaneCitasPrevias.setBounds(673, 426, 500, 400);
+		textPaneCitasPrevias.setBounds(673, 350, 225, 500);
 		textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
+		textPaneCitasPrevias.setEditable(false);
 
 		frmInterfazDelCliente.getContentPane().add(textPaneCitasPrevias);
+		
+		textPaneCitasFuturas = new JTextPane();
+		textPaneCitasFuturas.setEditable(false);
+		textPaneCitasFuturas.setBorder(new LineBorder(Color.BLACK, 1));
+		textPaneCitasFuturas.setBounds(949, 350, 225, 500);
+		frmInterfazDelCliente.getContentPane().add(textPaneCitasFuturas);
+		
+		JLabel labelCitasPrevias = new JLabel("CITAS PREVIAS");
+		labelCitasPrevias.setFont(new Font("Tahoma", Font.BOLD, 14));
+		labelCitasPrevias.setHorizontalAlignment(SwingConstants.CENTER);
+		labelCitasPrevias.setBounds(716, 326, 150, 14);
+		frmInterfazDelCliente.getContentPane().add(labelCitasPrevias);
+		
+		JLabel labelCitasFuturas = new JLabel("CITAS FUTURAS");
+		labelCitasFuturas.setHorizontalAlignment(SwingConstants.CENTER);
+		labelCitasFuturas.setFont(new Font("Tahoma", Font.BOLD, 14));
+		labelCitasFuturas.setBounds(991, 326, 150, 14);
+		frmInterfazDelCliente.getContentPane().add(labelCitasFuturas);
 
 		choiceMascotas.add("");
 		establecerMascotas();
@@ -374,11 +403,11 @@ public class InterfazCliente {
 		for(int i = 0; i < citasPasadas.size(); i++) {
 			
 			
-			cadenaCitasPrevias += "IdCita: "+ citasPasadas.get(i).getIdCita()+ ""
-					+ "\nFechaCita:  "  + citasPasadas.get(i).getFechaCita().toString()
-					+ "\nHoraCita: " + citasPasadas.get(i).getHoraCita().toString()
-					+ "\nDescripcion: " + citasPasadas.get(i).getDescripcion();
-			cadenaCitasPrevias+= "\n=====================";
+			cadenaCitasPrevias += " IdCita: "+ citasPasadas.get(i).getIdCita()+ ""
+					+ "\n FechaCita:  "  + new SimpleDateFormat("dd / mm / yyyy").format(citasPasadas.get(i).getFechaCita())
+					+ "\n HoraCita: " + new SimpleDateFormat("HH:mm").format(citasPasadas.get(i).getHoraCita())
+					+ "\n Descripcion: " + citasPasadas.get(i).getDescripcion();
+			cadenaCitasPrevias+= "\n----------------------------------------------------------------------------------------------------------------------------";
 		}
 		
 		textPaneCitasPrevias.setText(cadenaCitasPrevias);
@@ -386,7 +415,29 @@ public class InterfazCliente {
 
 
 	}
+	
+	
+	public void rellenarCitasFuturas() throws Exception {
 
+		String nombreMascota = choiceMascotas.getSelectedItem();
+		int idUsuario = interfaz.getUser().getIdUsuario();
+		String idMascota = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "idMascota", "nombre", nombreMascota, "idUsuario", idUsuario);
 
+		List<Cita> citasPasadas = conexion.obtenerCitasFuturas(Integer.parseInt(idMascota));
 
+		textPaneCitasFuturas.setText("");
+
+		String cadenaCitasFuturas = "";		
+		
+		for(int i = 0; i < citasPasadas.size(); i++) {
+			cadenaCitasFuturas += " IdCita: "+ citasPasadas.get(i).getIdCita()+ ""
+					+ "\n FechaCita:  "  + new SimpleDateFormat("dd / mm / yyyy").format(citasPasadas.get(i).getFechaCita())
+					+ "\n HoraCita: " + new SimpleDateFormat("HH:mm").format(citasPasadas.get(i).getHoraCita())
+					+ "\n Descripcion: " + citasPasadas.get(i).getDescripcion();
+			cadenaCitasFuturas+= "\n----------------------------------------------------------------------------------------------------------------------------";
+		}
+		
+		textPaneCitasFuturas.setText(cadenaCitasFuturas);
+
+	}
 }
