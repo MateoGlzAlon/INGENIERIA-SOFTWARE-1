@@ -67,49 +67,141 @@ public class ConexionBD {
 	}
 
 	public String obtenerDatoDeTabla(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws Exception {
-		String resultado = null;
-		
-		System.out.println(3);
+	    String resultado = null;
 
-		try {
-			String query = "SELECT " + nombreColumnaExtraer + " FROM " + nombreTabla + " WHERE " + nombreColumnaComparar + " = ?";
-			PreparedStatement st = this.getConexion().prepareStatement(query);
-			System.out.println(4);
+	    try {
+	        // Construir la consulta SQL
+	        String query = "SELECT " + nombreColumnaExtraer + " FROM " + nombreTabla + " WHERE " + nombreColumnaComparar + " = ?";
+	        
+	        // Preparar la declaración SQL
+	        try (PreparedStatement st = this.getConexion().prepareStatement(query)) {
+	            // Configurar el valor del parámetro en la consulta
+	            if (condicion instanceof Integer) {
+	                st.setInt(1, (Integer) condicion);
+	            } else if (condicion instanceof String) {
+	                st.setString(1, (String) condicion);
+	            } else {
+	                // Agregar otras conversiones según sea necesario
+	                throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion");
+	            }
 
-			if (condicion instanceof Integer) {
-				st.setInt(1, (Integer) condicion);
-			} else if (condicion instanceof String) {
-				st.setString(1, (String) condicion);
-			} else {
-				// Agregar otras conversiones según sea necesario
-				throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro id");
-			}
+	            // Imprimir la consulta SQL para verificar
+	            System.out.println(st.toString());
 
-			System.out.println(6);
+	            // Ejecutar la consulta
+	            try (ResultSet rs = st.executeQuery()) {
+	                // Verificar si hay resultados
+	                if (rs.next()) {
+	                    // Obtener el resultado de la columna
+	                    resultado = rs.getString(nombreColumnaExtraer);
+	                    System.out.println(nombreColumnaExtraer + ": " + resultado);
+	                } else {
+	                    // No se encontró la fila con la condición proporcionada
+	                    throw new Exception("No se encontró la fila con la condición proporcionada.");
+	                }
+	            }
+	        }
+	    } catch (Exception e) {
+	        // Capturar cualquier excepción y lanzarla hacia arriba
+	        throw new Exception("Error al obtener dato de la tabla: " + e.getMessage(), e);
+	    }
 
-			System.out.println(st.toString());
-			
-			ResultSet rs = st.executeQuery();
-			
-			System.out.println(7);
-
-
-			if (rs.next()) {
-				resultado = rs.getString(nombreColumnaExtraer);
-				System.out.println(nombreColumnaExtraer + ": " + resultado);
-			} else {
-				throw new Exception("No se encontró la fila con la condición proporcionada.");
-			}
-			
-			System.out.println(7);
-
-			
-		} catch (Exception e) {
-			throw new Exception("Error al obtener: " + e.getMessage());
-		}
-
-		return resultado;
+	    return resultado;
 	}
+	
+	public String obtenerDatoDeTablaConDosCondiciones(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar1, Object condicion1, String nombreColumnaComparar2, Object condicion2) throws Exception { 	    String resultado = null;
+
+	    try {
+	        // Construir la consulta SQL con dos condiciones
+	        String query = "SELECT " + nombreColumnaExtraer + " FROM " + nombreTabla + 
+	                       " WHERE " + nombreColumnaComparar1 + " = ? AND " + nombreColumnaComparar2 + " = ?";
+	        
+	        // Preparar la declaración SQL
+	        try (PreparedStatement st = this.getConexion().prepareStatement(query)) {
+	            // Configurar los valores de los parámetros en la consulta
+	            if (condicion1 instanceof Integer) {
+	                st.setInt(1, (Integer) condicion1);
+	            } else if (condicion1 instanceof String) {
+	                st.setString(1, (String) condicion1);
+	            } else {
+	                throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion1");
+	            }
+
+	            if (condicion2 instanceof Integer) {
+	                st.setInt(2, (Integer) condicion2);
+	            } else if (condicion2 instanceof String) {
+	                st.setString(2, (String) condicion2);
+	            } else {
+	                throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion2");
+	            }
+
+	            // Imprimir la consulta SQL para verificar
+	            System.out.println(st.toString());
+
+	            // Ejecutar la consulta
+	            try (ResultSet rs = st.executeQuery()) {
+	                // Verificar si hay resultados
+	                if (rs.next()) {
+	                    // Obtener el resultado de la columna
+	                    resultado = rs.getString(nombreColumnaExtraer);
+	                    System.out.println(nombreColumnaExtraer + ": " + resultado);
+	                } else {
+	                    // No se encontró la fila con las condiciones proporcionadas
+	                    throw new Exception("No se encontró la fila con las condiciones proporcionadas.");
+	                }
+	            }
+	        }
+	    } catch (Exception e) {
+	        // Capturar cualquier excepción y lanzarla hacia arriba
+	        throw new Exception("Error al obtener dato de la tabla: " + e.getMessage(), e);
+	    }
+
+	    return resultado;
+	}
+
+	
+	
+	
+	
+	public List<String> obtenerDatosDeTablaLista(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws Exception {
+	    List<String> resultados = new ArrayList<>();
+
+	    try {
+	        // Construir la consulta SQL
+	        String query = "SELECT " + nombreColumnaExtraer + " FROM " + nombreTabla + " WHERE " + nombreColumnaComparar + " = ?";
+
+	        // Preparar la declaración SQL
+	        try (PreparedStatement st = this.getConexion().prepareStatement(query)) {
+	            // Configurar el valor del parámetro en la consulta
+	            if (condicion instanceof Integer) {
+	                st.setInt(1, (Integer) condicion);
+	            } else if (condicion instanceof String) {
+	                st.setString(1, (String) condicion);
+	            } else {
+	                // Agregar otras conversiones según sea necesario
+	                throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion");
+	            }
+
+	            // Imprimir la consulta SQL para verificar
+	            System.out.println(st.toString());
+
+	            // Ejecutar la consulta
+	            try (ResultSet rs = st.executeQuery()) {
+	                // Recorrer los resultados y agregarlos a la lista
+	                while (rs.next()) {
+	                    resultados.add(rs.getString(nombreColumnaExtraer));
+	                }
+	            }
+	        }
+	    } catch (Exception e) {
+	        // Capturar cualquier excepción y lanzarla hacia arriba
+	        throw new Exception("Error al obtener datos de la tabla: " + e.getMessage(), e);
+	    }
+
+	    return resultados;
+	}
+	
+
 	
 	
 	/*

@@ -39,6 +39,11 @@ public class Interfaz {
 		initialize();
 	}
 
+	public Usuario getUser() {
+		return this.user;
+	}
+	
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -164,7 +169,7 @@ public class Interfaz {
 	                frame.setVisible(false);
 
 	                JOptionPane.showMessageDialog(null, "Has iniciado sesión como Administrador (" + usuario + ")");
-	                InterfazImportante frameImp = new InterfazImportante(this);
+	                InterfazAdministrador frameImp = new InterfazAdministrador(this);
 	                
 	            }
 	        } else {
@@ -238,4 +243,20 @@ public class Interfaz {
 	public Usuario verDatosUsuarioActivo() {
 		return this.user;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
 }

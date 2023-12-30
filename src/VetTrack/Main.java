@@ -31,7 +31,8 @@ public class Main {
 				}
 			}
 			
-			
+			sentencia.close();
+
 			
 			//ZONA DE PRUEBAS
 			//================================================================================================================================
@@ -60,27 +61,8 @@ public class Main {
 //
 //			
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			//================================================================================================================================
 			
-			
-			
-			sentencia.close();
-
 		} catch (FileNotFoundException e) {
 			System.out.println("Archivo no encontrado: " + e.getMessage());
 		} catch (SQLException e) {

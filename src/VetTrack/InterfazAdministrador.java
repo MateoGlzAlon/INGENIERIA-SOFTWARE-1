@@ -14,8 +14,9 @@ import javax.swing.WindowConstants;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.JScrollBar;
+import javax.swing.JPanel;
 
-public class InterfazImportante {
+public class InterfazAdministrador {
 
 	public JFrame frame;
 	private Interfaz interfaz;
@@ -24,7 +25,7 @@ public class InterfazImportante {
 	/**
 	 * Create the application.
 	 */
-	public InterfazImportante(Interfaz interfaz) {
+	public InterfazAdministrador(Interfaz interfaz) {
 		this.interfaz = interfaz;		
 		initialize_admin();
 	}
@@ -83,6 +84,10 @@ public class InterfazImportante {
 		});
 		botVerPerfil.setBounds(10, 11, 136, 51);
 		frame.getContentPane().add(botVerPerfil);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(10, 550, 300, 300);
+		frame.getContentPane().add(panel);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent evt) {
