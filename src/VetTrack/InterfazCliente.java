@@ -126,45 +126,51 @@ public class InterfazCliente {
 
 		JLabel labelIdMascota = new JLabel("IdMascota: ");
 		labelIdMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		labelIdMascota.setHorizontalAlignment(SwingConstants.CENTER);
+		labelIdMascota.setHorizontalAlignment(SwingConstants.LEFT);
 		JLabel labelNombreMascota = new JLabel("Nombre: ");
 		labelNombreMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		labelNombreMascota.setHorizontalAlignment(SwingConstants.CENTER);
+		labelNombreMascota.setHorizontalAlignment(SwingConstants.LEFT);
 		JLabel labelEspecieMascota = new JLabel("Especie: ");
 		labelEspecieMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		labelEspecieMascota.setHorizontalAlignment(SwingConstants.CENTER);
+		labelEspecieMascota.setHorizontalAlignment(SwingConstants.LEFT);
 		JLabel labelRazaMascota = new JLabel("Raza: ");
 		labelRazaMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		labelRazaMascota.setHorizontalAlignment(SwingConstants.CENTER);
+		labelRazaMascota.setHorizontalAlignment(SwingConstants.LEFT);
 		JLabel labelFechaNacimientoMascota = new JLabel("Fecha Nacimiento: ");
 		labelFechaNacimientoMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		labelFechaNacimientoMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelIdUsuarioMascota = new JLabel("Nombre Dueño: ");
 		labelIdUsuarioMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		labelIdUsuarioMascota.setHorizontalAlignment(SwingConstants.CENTER);
+		labelIdUsuarioMascota.setHorizontalAlignment(SwingConstants.LEFT);
 
 		// JTextFields no editables y con 15 columnas
 		textFieldIdMascota = new JTextField();
+		textFieldIdMascota.setHorizontalAlignment(SwingConstants.LEFT);
+		textFieldIdMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldIdMascota.setEditable(false);
 		textFieldIdMascota.setColumns(15);
 
 		textFieldNombreMascota = new JTextField();
+		textFieldNombreMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldNombreMascota.setEditable(false);
 		textFieldNombreMascota.setColumns(15);
 
 		textFieldEspecieMascota = new JTextField();
+		textFieldEspecieMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldEspecieMascota.setEditable(false);
 		textFieldEspecieMascota.setColumns(15);
 
 		textFieldRazaMascota = new JTextField();
+		textFieldRazaMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldRazaMascota.setEditable(false);
 		textFieldRazaMascota.setColumns(15);
 
 		textFieldFechaNacimientoMascota = new JTextField();
+		textFieldFechaNacimientoMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldFechaNacimientoMascota.setEditable(false);
 		textFieldFechaNacimientoMascota.setColumns(15);
 
 		textFieldIdUsuarioMascota = new JTextField();
+		textFieldIdUsuarioMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldIdUsuarioMascota.setEditable(false);
 		textFieldIdUsuarioMascota.setColumns(15);
 
@@ -215,14 +221,14 @@ public class InterfazCliente {
 
 		frmInterfazDelCliente.getContentPane().add(choiceMascotas);
 
-        textPaneCitasPrevias = new JTextPane();
-        textPaneCitasPrevias.setBounds(673, 350, 225, 500);
-        textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
-        textPaneCitasPrevias.setEditable(false);
+		textPaneCitasPrevias = new JTextPane();
+		textPaneCitasPrevias.setBounds(673, 350, 225, 500);
+		textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
+		textPaneCitasPrevias.setEditable(false);
 
         JScrollPane scrollPaneCitasPrevias = new JScrollPane(textPaneCitasPrevias);
         scrollPaneCitasPrevias.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPaneCitasPrevias.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneCitasPrevias.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneCitasPrevias.setBounds(673, 350, 500, 225);
         
         frmInterfazDelCliente.getContentPane().add(scrollPaneCitasPrevias);
@@ -234,7 +240,7 @@ public class InterfazCliente {
 		
         JScrollPane scrollPaneCitasFuturas = new JScrollPane(textPaneCitasFuturas);
         scrollPaneCitasFuturas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPaneCitasFuturas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneCitasFuturas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneCitasFuturas.setBounds(673, 625, 500, 225);
         
         frmInterfazDelCliente.getContentPane().add(scrollPaneCitasFuturas);
@@ -391,12 +397,12 @@ public class InterfazCliente {
 					+ "\n FechaCita:  "  + new SimpleDateFormat("dd / mm / yyyy").format(citasPasadas.get(i).getFechaCita())
 					+ "\n HoraCita: " + new SimpleDateFormat("HH:mm").format(citasPasadas.get(i).getHoraCita())
 					+ "\n Descripcion: " + citasPasadas.get(i).getDescripcion();
-			cadenaCitasPrevias+= "\n----------------------------------------------------------------------------------------------------------------------------";
+			cadenaCitasPrevias+= "\n____________________________________________________________________";
 		}
 		
-		for(int i = 0; i < 20; i++) {
-			cadenaCitasPrevias+="\nholahola hola holalalalaholahoala hola hola";
-		}
+//		for(int i = 0; i < 20; i++) {
+//			cadenaCitasPrevias+="\nholahola hola holalalalaholahoala hola hola";
+//		}
 		
 		textPaneCitasPrevias.setText(cadenaCitasPrevias);
 	}
@@ -419,12 +425,12 @@ public class InterfazCliente {
 					+ "\n FechaCita:  "  + new SimpleDateFormat("dd / mm / yyyy").format(citasPasadas.get(i).getFechaCita())
 					+ "\n HoraCita: " + new SimpleDateFormat("HH:mm").format(citasPasadas.get(i).getHoraCita())
 					+ "\n Descripcion: " + citasPasadas.get(i).getDescripcion();
-			cadenaCitasFuturas+= "\n----------------------------------------------------------------------------------------------------------------------------";
+			cadenaCitasFuturas+= "\n____________________________________________________________________";
 		}
 
-		for(int i = 0; i < 20; i++) {
-			cadenaCitasFuturas 	 +="\nholahola hola holalalalaholahoala hola hola";
-		}
+//		for(int i = 0; i < 20; i++) {
+//			cadenaCitasFuturas 	 +="\nholahola hola holalalalaholahoala hola hola";
+//		}
 		
 		textPaneCitasFuturas.setText(cadenaCitasFuturas);
 
