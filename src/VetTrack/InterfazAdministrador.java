@@ -2,7 +2,9 @@ package VetTrack;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -11,16 +13,22 @@ import java.io.DataOutputStream;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.JScrollBar;
+import javax.swing.JTextField;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 public class InterfazAdministrador {
 
 	public JFrame frame;
+	public JFrame addUsers;
 	private Interfaz interfaz;
 	private Color colorOriginalBton;
 
@@ -37,6 +45,7 @@ public class InterfazAdministrador {
 	 */
 	private void initialize_admin() {
 		frame = new JFrame();
+		
 		frame.setTitle("Panel de control de " + this.interfaz.verDatosUsuarioActivo().getNombreUsuario());
 		
 		frame.setBounds(300, 300, 1200, 900);
@@ -99,20 +108,32 @@ public class InterfazAdministrador {
 				
 			}
 		});
+		
+		
+		
 		botVerPerfil.setBounds(10, 11, 136, 51);
 		frame.getContentPane().add(botVerPerfil);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(10, 550, 300, 300);
-		frame.getContentPane().add(panel);
 		
 		JButton botCrearUsuario = new JButton("Crear Usuario...");
 		botCrearUsuario.setBounds(233, 11, 176, 51);
 		frame.getContentPane().add(botCrearUsuario);
+		botCrearUsuario.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				crearUsuario();
+			}
+		});
 		
 		JButton botQuitarUsuario = new JButton("Eliminar Usuario...");
 		botQuitarUsuario.setBounds(408, 11, 176, 51);
 		frame.getContentPane().add(botQuitarUsuario);
+		botQuitarUsuario.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Aqui poner metodo para quitar usuarios
+			}
+		});
+		
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent evt) {
@@ -144,14 +165,6 @@ public class InterfazAdministrador {
                 
             }
             
-//            if (component instanceof JToggleButton) {
-//            	
-//            	JToggleButton toggle = (JToggleButton) component;
-//            	
-//            	toggle.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
-//            	
-//            }
-            
         }
 		
 		frame.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
@@ -172,4 +185,113 @@ public class InterfazAdministrador {
             
         }
     }
+	
+	private void crearUsuario() {
+		
+		JTextField txtNombre, txtUsuario;
+	    JPasswordField txtPassword;
+	    JComboBox<String> cboTipoUsuario;
+	    JTextField txtNombreCompleto, txtTelefono, txtDNI;
+		
+		this.addUsers = new JFrame();
+		this.addUsers.setTitle("Añadir usuarios...");
+		
+		this.addUsers.setSize(500, 250);
+		this.addUsers.setVisible(true);
+		this.addUsers.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addUsers.setLocationRelativeTo(null);
+		this.addUsers.setResizable(false);
+		
+		txtNombre = new JTextField();
+        txtUsuario = new JTextField();
+        txtPassword = new JPasswordField();
+        cboTipoUsuario = new JComboBox<>(new String[]{
+        		"",
+        		"Administrador", 
+        		"Cliente"
+        		}
+        );
+        
+        txtNombreCompleto = new JTextField();
+        txtTelefono = new JTextField();
+        txtDNI = new JTextField();
+
+        // Layout
+        this.addUsers.getContentPane().setLayout(new GridLayout(0, 4));
+
+        this.addUsers.getContentPane().add(createRightAlignedLabel("Usuario:"));
+        this.addUsers.getContentPane().add(txtUsuario);
+        
+        this.addUsers.getContentPane().add(createRightAlignedLabel("Nombre del usuario:"));
+        this.addUsers.getContentPane().add(txtNombreCompleto);
+
+        this.addUsers.getContentPane().add(createRightAlignedLabel("Contraseña:"));
+        this.addUsers.getContentPane().add(txtPassword);
+        
+        this.addUsers.getContentPane().add(createRightAlignedLabel("Telefono:"));
+        this.addUsers.getContentPane().add(txtTelefono);
+
+        this.addUsers.getContentPane().add(createRightAlignedLabel("Rol:"));
+        this.addUsers.getContentPane().add(cboTipoUsuario);
+
+        this.addUsers.getContentPane().add(createRightAlignedLabel("DNI:"));
+        this.addUsers.getContentPane().add(txtDNI);
+
+        txtNombreCompleto.setVisible(false);
+        txtTelefono.setVisible(false);
+        txtDNI.setVisible(false);
+
+        cboTipoUsuario.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cboTipoUsuario.getSelectedItem().toString().intern() == "Cliente") {
+                	
+                	//Para que cuando se selecione Clietne se pongan visibles
+                    txtNombreCompleto.setVisible(true);
+                    txtTelefono.setVisible(true);
+                    txtDNI.setVisible(true);
+                } else {
+                    txtNombreCompleto.setVisible(false);
+                    txtTelefono.setVisible(false);
+                    txtDNI.setVisible(false);
+                }
+            }
+        });
+        
+        //Esto lo hago para poner paneles vacios
+        for(int i = 0; i<3;i++) {
+            this.addUsers.getContentPane().add(new JPanel());
+        }
+
+        JButton btnAdd = new JButton("Añadir");
+        btnAdd.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Hola mundo1!");
+            }
+        });
+        this.addUsers.getContentPane().add(btnAdd);
+
+        this.addUsers.setVisible(true);
+        
+        this.addUsers.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent evt) {
+				borrarFrame(addUsers);
+			}
+		});
+        
+    }
+
+	//CAnmbiar , metodo generado por chatgpt que no me gusta del todo
+    private JLabel createRightAlignedLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setHorizontalAlignment(SwingConstants.RIGHT);
+        return label;
+    }
+    
+    private void borrarFrame(JFrame frameBorrar) {
+    	frameBorrar.dispose();
+    }
+	
 }
