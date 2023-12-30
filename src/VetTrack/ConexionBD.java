@@ -397,6 +397,49 @@ public class ConexionBD {
 	    return citasPasadas;
 	}
 
+	
+	public List<Cita> obtenerCitasFuturas(int idMascota) {
+	    List<Cita> citasPasadas = new ArrayList<>();
+
+	    try {
+	        // Obtener la fecha y hora actual
+	        Calendar calendario = Calendar.getInstance();
+	        java.sql.Date fechaActual = new java.sql.Date(calendario.getTime().getTime());
+
+	        // Crear la consulta SQL para obtener citas pasadas
+	        String query = "SELECT * FROM Cita WHERE fechaCita > ? AND idMascota = ?";
+
+	        // Preparar la declaración SQL
+	        try (PreparedStatement st = conexion.prepareStatement(query)) {
+	            // Establecer la fecha actual como parámetro en la consulta
+	            st.setDate(1, fechaActual);
+	            st.setInt(2, idMascota);
+
+	            // Ejecutar la consulta
+	            try (ResultSet rs = st.executeQuery()) {
+	                // Procesar los resultados
+	                while (rs.next()) {
+	                    int idUsuario = rs.getInt("idUsuario");
+	                    int idCita = rs.getInt("idCita");
+	                    Date fechaCita = rs.getDate("fechaCita");
+	                    Time horaCita = rs.getTime("horaCita");
+	                    String descripcion = rs.getString("descripcionCita");
+	                    
+
+	                    // Crear un objeto Cita y agregarlo a la lista
+	                    Cita cita = new Cita(idCita, idUsuario, fechaCita, horaCita, idMascota, descripcion);
+	                    citasPasadas.add(cita);	
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        // Manejar la excepción según tus necesidades
+	    }
+
+	    return citasPasadas;
+	}
+	
 
 
 
