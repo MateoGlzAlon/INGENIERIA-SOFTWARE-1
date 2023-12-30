@@ -2,16 +2,12 @@ package VetTrack;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.ResultSet;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.*;
@@ -19,29 +15,19 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
-import javax.swing.JScrollBar;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.JList;
-import javax.swing.DefaultListModel;
 import java.awt.Choice;
 import java.awt.GridLayout;
 
-
-import java.sql.*;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.awt.Font;
-
-
-
-
 
 public class InterfazCliente {
 
@@ -197,7 +183,7 @@ public class InterfazCliente {
 		panelDatosMascotas.add(textFieldIdUsuarioMascota);
 
 		choiceMascotas = new Choice();
-		choiceMascotas.setBounds(673, 139, 200, 200);
+		choiceMascotas.setBounds(673, 139, 250, 30);
 
 		choiceMascotas.addItemListener(new ItemListener() {
 			@Override
@@ -229,29 +215,40 @@ public class InterfazCliente {
 
 		frmInterfazDelCliente.getContentPane().add(choiceMascotas);
 
-		textPaneCitasPrevias = new JTextPane();
-		textPaneCitasPrevias.setBounds(673, 350, 225, 500);
-		textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
-		textPaneCitasPrevias.setEditable(false);
+        textPaneCitasPrevias = new JTextPane();
+        textPaneCitasPrevias.setBounds(673, 350, 225, 500);
+        textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
+        textPaneCitasPrevias.setEditable(false);
 
-		frmInterfazDelCliente.getContentPane().add(textPaneCitasPrevias);
+        JScrollPane scrollPaneCitasPrevias = new JScrollPane(textPaneCitasPrevias);
+        scrollPaneCitasPrevias.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPaneCitasPrevias.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneCitasPrevias.setBounds(673, 350, 500, 225);
+        
+        frmInterfazDelCliente.getContentPane().add(scrollPaneCitasPrevias);
 		
 		textPaneCitasFuturas = new JTextPane();
 		textPaneCitasFuturas.setEditable(false);
 		textPaneCitasFuturas.setBorder(new LineBorder(Color.BLACK, 1));
-		textPaneCitasFuturas.setBounds(949, 350, 225, 500);
-		frmInterfazDelCliente.getContentPane().add(textPaneCitasFuturas);
+		textPaneCitasFuturas.setBounds(674, 625, 500, 225);
+		
+        JScrollPane scrollPaneCitasFuturas = new JScrollPane(textPaneCitasFuturas);
+        scrollPaneCitasFuturas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPaneCitasFuturas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneCitasFuturas.setBounds(673, 625, 500, 225);
+        
+        frmInterfazDelCliente.getContentPane().add(scrollPaneCitasFuturas);
 		
 		JLabel labelCitasPrevias = new JLabel("CITAS PREVIAS");
 		labelCitasPrevias.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelCitasPrevias.setHorizontalAlignment(SwingConstants.CENTER);
-		labelCitasPrevias.setBounds(716, 326, 150, 14);
+		labelCitasPrevias.setBounds(848, 325, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelCitasPrevias);
 		
 		JLabel labelCitasFuturas = new JLabel("CITAS FUTURAS");
 		labelCitasFuturas.setHorizontalAlignment(SwingConstants.CENTER);
 		labelCitasFuturas.setFont(new Font("Tahoma", Font.BOLD, 14));
-		labelCitasFuturas.setBounds(991, 326, 150, 14);
+		labelCitasFuturas.setBounds(848, 595, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelCitasFuturas);
 
 		choiceMascotas.add("");
@@ -288,20 +285,9 @@ public class InterfazCliente {
 				boton.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
 
 			}
-
-			//            if (component instanceof JToggleButton) {
-			//            	
-			//            	JToggleButton toggle = (JToggleButton) component;
-			//            	
-			//            	toggle.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
-			//            	
-			//            }
-
 		}
 
 		frmInterfazDelCliente.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
-
-
 
 	}
 
@@ -357,9 +343,9 @@ public class InterfazCliente {
 		textFieldRazaMascota.setText(raza);
 		textFieldFechaNacimientoMascota.setText(fechaNacimiento);
 		textFieldIdUsuarioMascota.setText(dueno);
-
 	}
 
+	
 	public void mostrarPerfil() throws Exception {
 
 		int idUsuario = interfaz.verDatosUsuarioActivo().getIdUsuario();
@@ -389,16 +375,14 @@ public class InterfazCliente {
 
 
 		String nombreMascota = choiceMascotas.getSelectedItem();
-
 		int idUsuario = interfaz.getUser().getIdUsuario();
-
 		String idMascota = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "idMascota", "nombre", nombreMascota, "idUsuario", idUsuario);
 
 		List<Cita> citasPasadas = conexion.obtenerCitasPasadas(Integer.parseInt(idMascota));
 
 		textPaneCitasPrevias.setText("");
 
-		String cadenaCitasPrevias = "";		
+		String cadenaCitasPrevias = "";
 		
 		for(int i = 0; i < citasPasadas.size(); i++) {
 			
@@ -410,10 +394,11 @@ public class InterfazCliente {
 			cadenaCitasPrevias+= "\n----------------------------------------------------------------------------------------------------------------------------";
 		}
 		
+		for(int i = 0; i < 20; i++) {
+			cadenaCitasPrevias+="\nholahola hola holalalalaholahoala hola hola";
+		}
+		
 		textPaneCitasPrevias.setText(cadenaCitasPrevias);
-
-
-
 	}
 	
 	
@@ -435,6 +420,10 @@ public class InterfazCliente {
 					+ "\n HoraCita: " + new SimpleDateFormat("HH:mm").format(citasPasadas.get(i).getHoraCita())
 					+ "\n Descripcion: " + citasPasadas.get(i).getDescripcion();
 			cadenaCitasFuturas+= "\n----------------------------------------------------------------------------------------------------------------------------";
+		}
+
+		for(int i = 0; i < 20; i++) {
+			cadenaCitasFuturas 	 +="\nholahola hola holalalalaholahoala hola hola";
 		}
 		
 		textPaneCitasFuturas.setText(cadenaCitasFuturas);
