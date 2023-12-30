@@ -182,7 +182,7 @@ public class Interfaz {
 	}
 
 
-	private int recogerIdUsuario(String usuario, String passwd) throws Exception{
+	public int recogerIdUsuario(String usuario, String passwd) throws Exception{
 		// Obtener lista de usuarios
         List<List<Object>> userList = conexion.listar("Usuario");
 
@@ -203,7 +203,7 @@ public class Interfaz {
 	/*
 	 * Aqui sencillamente lo que vamos a hacer es devolver la lista con los parametros de la DB
 	 */
-	private List<Object> recupPosTablaCorrespondiente(String rolUsuario, int idUsuarioEncontrado) throws Exception {
+	public List<Object> recupPosTablaCorrespondiente(String rolUsuario, int idUsuarioEncontrado) throws Exception {
 		// Obtener datos específicos según el rol
         List<List<Object>> userDataList = conexion.listar(rolUsuario);
 

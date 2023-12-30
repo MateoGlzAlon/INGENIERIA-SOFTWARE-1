@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.DataOutputStream;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -76,10 +78,25 @@ public class InterfazAdministrador {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Modificar ver perfil
+				
+				/*try {
+					List<Object> datosUsuario = interfaz.recupPosTablaCorrespondiente("Administrador", 
+							interfaz.recogerIdUsuario(interfaz.verDatosUsuarioActivo().getNombreUsuario(), interfaz.verDatosUsuarioActivo().getContrasena()));
+					JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.verDatosUsuarioActivo().getIdUsuario() + ""
+							+ "\nUsuario: "+interfaz.verDatosUsuarioActivo().getNombreUsuario()+""
+							+ "\nContraseña: "+interfaz.verDatosUsuarioActivo().getContrasena() + ""
+							+ "\nRol: "+ interfaz.verDatosUsuarioActivo().getRol() + ""
+							+ "\nDatos:\n"+ datosUsuario.toString());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
+				
 				JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.verDatosUsuarioActivo().getIdUsuario() + ""
 						+ "\nUsuario: "+interfaz.verDatosUsuarioActivo().getNombreUsuario()+""
 						+ "\nContraseña: "+interfaz.verDatosUsuarioActivo().getContrasena() + ""
 						+ "\nRol: "+ interfaz.verDatosUsuarioActivo().getRol());
+				
 			}
 		});
 		botVerPerfil.setBounds(10, 11, 136, 51);
@@ -88,6 +105,14 @@ public class InterfazAdministrador {
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 550, 300, 300);
 		frame.getContentPane().add(panel);
+		
+		JButton botCrearUsuario = new JButton("Crear Usuario...");
+		botCrearUsuario.setBounds(233, 11, 176, 51);
+		frame.getContentPane().add(botCrearUsuario);
+		
+		JButton botQuitarUsuario = new JButton("Eliminar Usuario...");
+		botQuitarUsuario.setBounds(408, 11, 176, 51);
+		frame.getContentPane().add(botQuitarUsuario);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent evt) {
