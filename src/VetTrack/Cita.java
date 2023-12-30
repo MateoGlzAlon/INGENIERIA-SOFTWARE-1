@@ -1,37 +1,42 @@
 package VetTrack;
 
-/**
- * Clase que representa una Cita en el sistema de VetTrack.
- */ 
+import java.util.Date;
+import java.sql.Time;
+
 public class Cita {
+	private int idCita;
+    private int idUsuario;
+    private int idMascota;
+    private Date fechaCita;
+    private Time horaCita;
+    private String descripcion;
 
-    private Fecha fechaCita;      // Fecha de la cita.
-    private Hora horaCita;        // Hora de la cita.
-    private int idCliente;        // Identificador del cliente asociado a la cita.
-    private int pasaporteMascota; // Número de pasaporte de la mascota asociada a la cita.
+    public Cita(int idCita, int idUsuario, Date fechaCita, Time horaCita, int idMascota, String descripcion) {
 
-    //=========================================================================
-    
-    public Cita(Fecha fecha, Hora hora, int idC, int passport) {
-    	
-    	setFechaCita(fecha);
-    	setHoraCita(hora);
-    	setIdCliente(idC);
-    	setPasaporteMascota(passport);
+    	setIdCita(idCita);
+    	setIdUsuario(idUsuario);
+    	setFechaCita(fechaCita);
+    	setHoraCita(horaCita);
+    	setIdMascota(idMascota);
+    	setDescripcion(descripcion);
 
     }
-    
 
-    public Fecha getFechaCita() { return fechaCita; }
-    public void setFechaCita(Fecha fechaCita) { this.fechaCita = fechaCita; }
+    public int getIdUsuario() {return idUsuario; }
+    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
 
-    public Hora getHoraCita() { return horaCita; }
-    public void setHoraCita(Hora horaCita) { this.horaCita = horaCita; }
+    public Date getFechaCita() { return fechaCita; }
+    public void setFechaCita(Date fechaCita) { this.fechaCita = fechaCita; }
 
-    public int getIdCliente() { return idCliente; }
-    public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
+    public Time getHoraCita() { return horaCita; }
+    public void setHoraCita(Time horaCita) { this.horaCita = horaCita; }
 
-    public int getPasaporteMascota() { return pasaporteMascota; }
-    public void setPasaporteMascota(int pasaporteMascota) { this.pasaporteMascota = pasaporteMascota; }
+	public String getDescripcion() { return descripcion; }
+	public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
+	public int getIdMascota() { return idMascota; }
+	public void setIdMascota(int idMascota) { this.idMascota = idMascota; }
+
+	public int getIdCita() { return idCita; }
+	public void setIdCita(int idCita) { this.idCita = idCita; }
 }

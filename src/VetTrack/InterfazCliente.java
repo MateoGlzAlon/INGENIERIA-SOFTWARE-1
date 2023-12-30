@@ -10,12 +10,15 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.ResultSet;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.JScrollBar;
@@ -28,10 +31,20 @@ import java.awt.Choice;
 import java.awt.GridLayout;
 
 
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+
+
+
 
 public class InterfazCliente {
 
-	public JFrame frame;
+	public JFrame frmInterfazDelCliente;
 	private Interfaz interfaz;
 	private Color colorOriginalBton;
 
@@ -45,6 +58,7 @@ public class InterfazCliente {
 	private JTextField textFieldRazaMascota;
 	private JTextField textFieldFechaNacimientoMascota;
 	private JTextField textFieldIdUsuarioMascota;
+	private JTextPane textPaneCitasPrevias;
 
 	/**
 	 * Create the application.
@@ -63,17 +77,17 @@ public class InterfazCliente {
 	 * @throws NumberFormatException 
 	 */
 	private void initialize_cliente() throws NumberFormatException, Exception {
-		frame = new JFrame();
-		frame.setTitle("Panel de control de " + this.interfaz.verDatosUsuarioActivo().getNombreUsuario());
+		frmInterfazDelCliente = new JFrame();
+		frmInterfazDelCliente.setTitle("Interfaz del Cliente: " + this.interfaz.getUser().getNombreUsuario());
 
-		frame.setBounds(300, 300, 1200, 900);
-		frame.setVisible(true);
+		frmInterfazDelCliente.setBounds(300, 300, 1200, 900);
+		frmInterfazDelCliente.setVisible(true);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
-		frame.setResizable(false);
+		frmInterfazDelCliente.setLocationRelativeTo(null);
+		frmInterfazDelCliente.setResizable(false);
 
-		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmInterfazDelCliente.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		frmInterfazDelCliente.getContentPane().setLayout(null);
 
 		//		frame.getContentPane().setBackground(new Color(150, 150, 150));
 
@@ -82,12 +96,12 @@ public class InterfazCliente {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres cerrar sesion?", "Confirmar", JOptionPane.YES_NO_OPTION);
+				int confirmacion = JOptionPane.showConfirmDialog(frmInterfazDelCliente, "Quieres cerrar sesion?", "Confirmar", JOptionPane.YES_NO_OPTION);
 
 				if (confirmacion == JOptionPane.YES_OPTION) {
 					interfaz.frame.setVisible(true);
 					interfaz.setText();
-					frame.dispose(); //Lo que hace el dispose es que borra en memoria todo el frame
+					frmInterfazDelCliente.dispose(); //Lo que hace el dispose es que borra en memoria todo el frame
 				}
 			}
 		});
@@ -95,37 +109,45 @@ public class InterfazCliente {
 		colorOriginalBton = botCerrarSesion.getBackground();
 
 		botCerrarSesion.setBounds(1038, 11, 136, 59);
-		frame.getContentPane().add(botCerrarSesion);
+		frmInterfazDelCliente.getContentPane().add(botCerrarSesion);
 
 		JToggleButton botModoNoct = new JToggleButton("Modo Nocturno");
 
 		botModoNoct.setBounds(897, 29, 131, 23);
-		frame.getContentPane().add(botModoNoct);
+		frmInterfazDelCliente.getContentPane().add(botModoNoct);
 
 		JButton botVerPerfil = new JButton("Ver Perfil");
 		botVerPerfil.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Esto es por ahora
-				JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.verDatosUsuarioActivo().getIdUsuario() + ""
-						+ "\nUsuario: "+interfaz.verDatosUsuarioActivo().getNombreUsuario()+""
-						+ "\nContraseña: "+interfaz.verDatosUsuarioActivo().getContrasena() + ""
-						+ "\nRol: "+ interfaz.verDatosUsuarioActivo().getRol());
+				try {
+					mostrarPerfil();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		botVerPerfil.setBounds(10, 11, 136, 51);
-		frame.getContentPane().add(botVerPerfil);
+		frmInterfazDelCliente.getContentPane().add(botVerPerfil);
 
 		JPanel panelDatosMascotas = new JPanel(new GridLayout(0, 4, 10, 10)); // 3 filas, 4 columnas
-		panelDatosMascotas.setBounds(674, 350, 500, 500);
-		frame.getContentPane().add(panelDatosMascotas);		
+		panelDatosMascotas.setBounds(673, 165, 500, 250);
+		frmInterfazDelCliente.getContentPane().add(panelDatosMascotas);		
 
 		JLabel labelIdMascota = new JLabel("IdMascota: ");
+		labelIdMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelNombreMascota = new JLabel("Nombre: ");
+		labelNombreMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelEspecieMascota = new JLabel("Especie: ");
+		labelEspecieMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelRazaMascota = new JLabel("Raza: ");
+		labelRazaMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelFechaNacimientoMascota = new JLabel("Fecha Nacimiento: ");
+		labelFechaNacimientoMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel labelIdUsuarioMascota = new JLabel("Nombre Dueño: ");
+		labelIdUsuarioMascota.setHorizontalAlignment(SwingConstants.CENTER);
 
 		// JTextFields no editables y con 15 columnas
 		textFieldIdMascota = new JTextField();
@@ -166,14 +188,8 @@ public class InterfazCliente {
 		panelDatosMascotas.add(labelIdUsuarioMascota);
 		panelDatosMascotas.add(textFieldIdUsuarioMascota);
 
-
-		JLabel lblNewLabel = new JLabel("Mascotas");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(820, 281, 100, 20);
-		frame.getContentPane().add(lblNewLabel);
-
 		choiceMascotas = new Choice();
-		choiceMascotas.setBounds(675, 324, 200, 200);
+		choiceMascotas.setBounds(673, 139, 200, 200);
 
 		choiceMascotas.addItemListener(new ItemListener() {
 			@Override
@@ -183,6 +199,7 @@ public class InterfazCliente {
 						// Llamas al método que deseas ejecutar
 						try {
 							mostrarDatosMascota();
+							rellenarCitasPasadas();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -200,15 +217,21 @@ public class InterfazCliente {
 		});
 
 
-		frame.getContentPane().add(choiceMascotas);
+		frmInterfazDelCliente.getContentPane().add(choiceMascotas);
+
+		textPaneCitasPrevias = new JTextPane();
+		textPaneCitasPrevias.setBounds(673, 426, 500, 400);
+		textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
+
+		frmInterfazDelCliente.getContentPane().add(textPaneCitasPrevias);
 
 		choiceMascotas.add("");
 		establecerMascotas();
 
-		frame.addWindowListener(new WindowAdapter() {
+		frmInterfazDelCliente.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent evt) {
-				confirmarSalir(frame);
+				confirmarSalir(frmInterfazDelCliente);
 			}
 		});
 
@@ -227,7 +250,7 @@ public class InterfazCliente {
 
 	private void modoNocturno(JToggleButton botModoNoct) {
 
-		Component[] components = frame.getContentPane().getComponents();
+		Component[] components = frmInterfazDelCliente.getContentPane().getComponents();
 
 		for (Component component : components) {
 			if (component instanceof JButton) {
@@ -247,7 +270,7 @@ public class InterfazCliente {
 
 		}
 
-		frame.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
+		frmInterfazDelCliente.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
 
 
 
@@ -273,8 +296,6 @@ public class InterfazCliente {
 	public void establecerMascotas() throws NumberFormatException, Exception {
 
 		int numMascotas = Integer.parseInt(conexion.obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", interfaz.getUser().getIdUsuario()));
-
-		System.out.println("numMasc: " + numMascotas);
 
 		int idUsuario = interfaz.getUser().getIdUsuario();
 
@@ -308,10 +329,64 @@ public class InterfazCliente {
 		textFieldFechaNacimientoMascota.setText(fechaNacimiento);
 		textFieldIdUsuarioMascota.setText(dueno);
 
-		System.out.println("Id mascota: " + idMascota);
+	}
+
+	public void mostrarPerfil() throws Exception {
+
+		int idUsuario = interfaz.verDatosUsuarioActivo().getIdUsuario();
+		String nombreUsuario = interfaz.verDatosUsuarioActivo().getNombreUsuario();
+		String contrasena = interfaz.verDatosUsuarioActivo().getContrasena();
+		String rolUsuario = interfaz.verDatosUsuarioActivo().getRol();
+		String nombre = conexion.obtenerDatoDeTabla("Cliente", "nombre", "idUsuario", idUsuario);
+		String apellidos = conexion.obtenerDatoDeTabla("Cliente", "apellidos", "idUsuario", idUsuario);
+		String dni = conexion.obtenerDatoDeTabla("Cliente", "dni", "idUsuario", idUsuario);
+		String telefono = conexion.obtenerDatoDeTabla("Cliente", "telefono", "idUsuario", idUsuario);
+
+		JOptionPane.showMessageDialog(null,
+				"Id del usuario: " + idUsuario + ""
+						+ "\nUsuario: " + nombreUsuario + ""
+						+ "\nContraseña: " + contrasena + ""
+						+ "\nRol: " + rolUsuario
+						+ "\nNombre: " + nombre
+						+ "\nApellidos: " + apellidos
+						+ "\nDNI: " + dni
+						+ "\nTelefono: " + telefono,
+						"Perfil del usuario", 
+						JOptionPane.INFORMATION_MESSAGE);
+	}
+
+
+	public void rellenarCitasPasadas() throws Exception {
+
+
+		String nombreMascota = choiceMascotas.getSelectedItem();
+
+		int idUsuario = interfaz.getUser().getIdUsuario();
+
+		String idMascota = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "idMascota", "nombre", nombreMascota, "idUsuario", idUsuario);
+
+		List<Cita> citasPasadas = conexion.obtenerCitasPasadas(Integer.parseInt(idMascota));
+
+		textPaneCitasPrevias.setText("");
+
+		String cadenaCitasPrevias = "";		
+		
+		for(int i = 0; i < citasPasadas.size(); i++) {
+			
+			
+			cadenaCitasPrevias += "IdCita: "+ citasPasadas.get(i).getIdCita()+ ""
+					+ "\nFechaCita:  "  + citasPasadas.get(i).getFechaCita().toString()
+					+ "\nHoraCita: " + citasPasadas.get(i).getHoraCita().toString()
+					+ "\nDescripcion: " + citasPasadas.get(i).getDescripcion();
+			cadenaCitasPrevias+= "\n=====================";
+		}
+		
+		textPaneCitasPrevias.setText(cadenaCitasPrevias);
 
 
 
 	}
+
+
 
 }
