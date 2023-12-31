@@ -8,7 +8,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.JFrame;
@@ -47,6 +51,7 @@ public class InterfazCliente {
 	private JTextField textFieldIdUsuarioMascota;
 	private JTextPane textPaneCitasPrevias;
 	private JTextPane textPaneCitasFuturas;
+	private JTextPane textPaneComprasRealizadas;
 
 	/**
 	 * Create the application.
@@ -57,6 +62,8 @@ public class InterfazCliente {
 		this.interfaz = interfaz;
 
 		initialize_cliente();
+		rellenarComprasPrevias();
+
 	}
 
 	/**
@@ -201,7 +208,6 @@ public class InterfazCliente {
 							mostrarDatosMascota();
 							rellenarCitasPasadas();
 							rellenarCitasFuturas();
-							rellenarComprasPrevias();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -228,55 +234,69 @@ public class InterfazCliente {
 		textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
 		textPaneCitasPrevias.setEditable(false);
 
-        JScrollPane scrollPaneCitasPrevias = new JScrollPane(textPaneCitasPrevias);
-        scrollPaneCitasPrevias.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPaneCitasPrevias.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPaneCitasPrevias.setBounds(645, 350, 500, 225);
-        
-        frmInterfazDelCliente.getContentPane().add(scrollPaneCitasPrevias);
-		
+		JScrollPane scrollPaneCitasPrevias = new JScrollPane(textPaneCitasPrevias);
+		scrollPaneCitasPrevias.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneCitasPrevias.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneCitasPrevias.setBounds(645, 350, 500, 225);
+
+		frmInterfazDelCliente.getContentPane().add(scrollPaneCitasPrevias);
+
 		textPaneCitasFuturas = new JTextPane();
 		textPaneCitasFuturas.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textPaneCitasFuturas.setEditable(false);
 		textPaneCitasFuturas.setBorder(new LineBorder(Color.BLACK, 1));
 		textPaneCitasFuturas.setBounds(674, 625, 500, 225);
-		
-        JScrollPane scrollPaneCitasFuturas = new JScrollPane(textPaneCitasFuturas);
-        scrollPaneCitasFuturas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPaneCitasFuturas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPaneCitasFuturas.setBounds(645, 625, 500, 225);
-        
-        frmInterfazDelCliente.getContentPane().add(scrollPaneCitasFuturas);
-		
+
+		JScrollPane scrollPaneCitasFuturas = new JScrollPane(textPaneCitasFuturas);
+		scrollPaneCitasFuturas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneCitasFuturas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneCitasFuturas.setBounds(645, 625, 500, 225);
+
+		frmInterfazDelCliente.getContentPane().add(scrollPaneCitasFuturas);
+
 		JLabel labelCitasPrevias = new JLabel("CITAS PREVIAS");
 		labelCitasPrevias.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelCitasPrevias.setHorizontalAlignment(SwingConstants.CENTER);
 		labelCitasPrevias.setBounds(848, 325, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelCitasPrevias);
-		
+
 		JLabel labelCitasFuturas = new JLabel("CITAS FUTURAS");
 		labelCitasFuturas.setHorizontalAlignment(SwingConstants.CENTER);
 		labelCitasFuturas.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelCitasFuturas.setBounds(848, 595, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelCitasFuturas);
-		
+
 		JScrollPane scrollPaneComprasRealizadas = new JScrollPane((Component) null);
 		scrollPaneComprasRealizadas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneComprasRealizadas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneComprasRealizadas.setBounds(42, 350, 500, 500);
 		frmInterfazDelCliente.getContentPane().add(scrollPaneComprasRealizadas);
-		
-		JTextPane textPaneComprasRealizadas = new JTextPane();
+
+		textPaneComprasRealizadas = new JTextPane();
 		textPaneComprasRealizadas.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textPaneComprasRealizadas.setEditable(false);
 		textPaneComprasRealizadas.setBorder(new LineBorder(Color.BLACK, 1));
 		scrollPaneComprasRealizadas.setViewportView(textPaneComprasRealizadas);
-		
+
 		JLabel labelComprasPrevias = new JLabel("COMPRAS PREVIAS");
 		labelComprasPrevias.setHorizontalAlignment(SwingConstants.CENTER);
 		labelComprasPrevias.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelComprasPrevias.setBounds(198, 327, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelComprasPrevias);
+
+		JButton btnNewButton = new JButton("ACTUALIZAR");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					rellenarComprasPrevias();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnNewButton.setBounds(442, 323, 100, 23);
+		frmInterfazDelCliente.getContentPane().add(btnNewButton);
 
 		choiceMascotas.add("");
 		establecerMascotas();
@@ -352,38 +372,56 @@ public class InterfazCliente {
 	}
 
 	public void mostrarDatosMascota() throws Exception {
-
 		String nombreMascota = choiceMascotas.getSelectedItem();
-
 		int idUsuario = interfaz.getUser().getIdUsuario();
 
+		// Obtener todos los datos de la mascota en una sola fila
+		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
+		String condicion = "nombre = ? AND idUsuario = ?";
 
-		String idMascota = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "idMascota", "nombre", nombreMascota, "idUsuario", idUsuario);
-		String especie = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "especie", "nombre", nombreMascota, "idUsuario", idUsuario);
-		String raza = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "raza", "nombre", nombreMascota, "idUsuario", idUsuario);
-		String fechaNacimiento = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "fechaNacimiento", "nombre", nombreMascota, "idUsuario", idUsuario);
-		String dueno = conexion.obtenerDatoDeTabla("Cliente", "nombre", "idUsuario", idUsuario);
+		Object[] parametros = {nombreMascota, idUsuario};
 
-		textFieldIdMascota.setText(idMascota);
-		textFieldNombreMascota.setText(nombreMascota);
-		textFieldEspecieMascota.setText(especie);
-		textFieldRazaMascota.setText(raza);
-		textFieldFechaNacimientoMascota.setText(fechaNacimiento);
-		textFieldIdUsuarioMascota.setText(dueno);
+		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
+
+		if (!resultados.isEmpty()) {
+			Map<String, Object> datosMascota = resultados.get(0);
+
+			// Obtener el dueño de la mascota
+			String dueno = conexion.obtenerDatoDeTabla("Cliente", "nombre", "idUsuario", idUsuario);
+
+			// Establecer los datos en los campos correspondientes
+			textFieldIdMascota.setText(String.valueOf(datosMascota.get("idMascota")));
+			textFieldNombreMascota.setText(nombreMascota);
+			textFieldEspecieMascota.setText(String.valueOf(datosMascota.get("especie")));
+			textFieldRazaMascota.setText(String.valueOf(datosMascota.get("raza")));
+			textFieldFechaNacimientoMascota.setText(String.valueOf(datosMascota.get("fechaNacimiento")));
+			textFieldIdUsuarioMascota.setText(dueno);
+		}
 	}
 
-	
+
+
+
+
 	public void mostrarPerfil() throws Exception {
+		// Obtener el usuario activo una sola vez
+		Usuario usuarioActivo = interfaz.verDatosUsuarioActivo();
 
-		int idUsuario = interfaz.verDatosUsuarioActivo().getIdUsuario();
-		String nombreUsuario = interfaz.verDatosUsuarioActivo().getNombreUsuario();
-		String contrasena = interfaz.verDatosUsuarioActivo().getContrasena();
-		String rolUsuario = interfaz.verDatosUsuarioActivo().getRol();
-		String nombre = conexion.obtenerDatoDeTabla("Cliente", "nombre", "idUsuario", idUsuario);
-		String apellidos = conexion.obtenerDatoDeTabla("Cliente", "apellidos", "idUsuario", idUsuario);
-		String dni = conexion.obtenerDatoDeTabla("Cliente", "dni", "idUsuario", idUsuario);
-		String telefono = conexion.obtenerDatoDeTabla("Cliente", "telefono", "idUsuario", idUsuario);
+		// Obtener todos los datos necesarios en una sola consulta
+		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Cliente", Arrays.asList("nombre", "apellidos", "dni", "telefono"), "idUsuario = ?", usuarioActivo.getIdUsuario());
 
+		Map<String, Object> datosCliente = resultados.isEmpty() ? Collections.emptyMap() : resultados.get(0);
+
+		int idUsuario = usuarioActivo.getIdUsuario();
+		String nombreUsuario = usuarioActivo.getNombreUsuario();
+		String contrasena = usuarioActivo.getContrasena();
+		String rolUsuario = usuarioActivo.getRol();
+		String nombre = String.valueOf(datosCliente.get("nombre"));
+		String apellidos = String.valueOf(datosCliente.get("apellidos"));
+		String dni = String.valueOf(datosCliente.get("dni"));
+		String telefono = String.valueOf(datosCliente.get("telefono"));
+
+		// Mostrar la información del perfil
 		JOptionPane.showMessageDialog(null,
 				"Id del usuario: " + idUsuario + ""
 						+ "\nUsuario: " + nombreUsuario + ""
@@ -398,70 +436,89 @@ public class InterfazCliente {
 	}
 
 
+
+
 	public void rellenarCitasPasadas() throws Exception {
-
-
 		String nombreMascota = choiceMascotas.getSelectedItem();
 		int idUsuario = interfaz.getUser().getIdUsuario();
 		String idMascota = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "idMascota", "nombre", nombreMascota, "idUsuario", idUsuario);
 
-		List<Cita> citasPasadas = conexion.obtenerCitasPasadas(Integer.parseInt(idMascota));
+		// Obtener todas las citas pasadas en una sola consulta
+		List<Map<String, Object>> filasCitasPasadas = conexion.obtenerFilasDeTabla("Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita"), "idMascota = ? AND fechaCita < ?", idMascota, new Date());
 
-		textPaneCitasPrevias.setText("");
+		StringBuilder cadenaCitasPrevias = new StringBuilder();
 
-		String cadenaCitasPrevias = "";
-		
-		for(int i = 0; i < citasPasadas.size(); i++) {
-			
-			
-			cadenaCitasPrevias += " IdCita: "+ citasPasadas.get(i).getIdCita()+ ""
-					+ "\n FechaCita:  "  + new SimpleDateFormat("dd / mm / yyyy").format(citasPasadas.get(i).getFechaCita())
-					+ "\n HoraCita: " + new SimpleDateFormat("HH:mm").format(citasPasadas.get(i).getHoraCita())
-					+ "\n Descripcion: " + citasPasadas.get(i).getDescripcion();
-			cadenaCitasPrevias+= "\n____________________________________________________________________";
+		for (Map<String, Object> fila : filasCitasPasadas) {
+			cadenaCitasPrevias.append(" IdCita: ").append(fila.get("idCita"))
+			.append("\n FechaCita: ").append(new SimpleDateFormat("dd / MM / yyyy").format(fila.get("fechaCita")))
+			.append("\n HoraCita: ").append(new SimpleDateFormat("HH:mm").format(fila.get("horaCita")))
+			.append("\n Descripcion: ").append(fila.get("descripcion"));
+			cadenaCitasPrevias.append("\n____________________________________________________________________");
 		}
-		
-//		for(int i = 0; i < 20; i++) {
-//			cadenaCitasPrevias+="\nholahola hola holalalalaholahoala hola hola";
-//		}
-		
-		textPaneCitasPrevias.setText(cadenaCitasPrevias);
+
+		// Establecer el texto en el JTextPane
+		textPaneCitasPrevias.setText(cadenaCitasPrevias.toString());
 	}
-	
-	
+
+
+
 	public void rellenarCitasFuturas() throws Exception {
-
 		String nombreMascota = choiceMascotas.getSelectedItem();
 		int idUsuario = interfaz.getUser().getIdUsuario();
 		String idMascota = conexion.obtenerDatoDeTablaConDosCondiciones("Mascota", "idMascota", "nombre", nombreMascota, "idUsuario", idUsuario);
 
-		List<Cita> citasPasadas = conexion.obtenerCitasFuturas(Integer.parseInt(idMascota));
+		// Obtener todas las citas futuras en una sola consulta
+		List<Map<String, Object>> filasCitasFuturas = conexion.obtenerFilasDeTabla("Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita"), "idMascota = ? AND fechaCita >= ?", idMascota, new Date());
 
-		textPaneCitasFuturas.setText("");
+		StringBuilder cadenaCitasFuturas = new StringBuilder();
 
-		String cadenaCitasFuturas = "";		
-		
-		for(int i = 0; i < citasPasadas.size(); i++) {
-			cadenaCitasFuturas += " IdCita: "+ citasPasadas.get(i).getIdCita()+ ""
-					+ "\n FechaCita:  "  + new SimpleDateFormat("dd / mm / yyyy").format(citasPasadas.get(i).getFechaCita())
-					+ "\n HoraCita: " + new SimpleDateFormat("HH:mm").format(citasPasadas.get(i).getHoraCita())
-					+ "\n Descripcion: " + citasPasadas.get(i).getDescripcion();
-			cadenaCitasFuturas+= "\n____________________________________________________________________";
+		for (Map<String, Object> fila : filasCitasFuturas) {
+			cadenaCitasFuturas.append(" IdCita: ").append(fila.get("idCita"))
+			.append("\n FechaCita: ").append(new SimpleDateFormat("dd / MM / yyyy").format(fila.get("fechaCita")))
+			.append("\n HoraCita: ").append(new SimpleDateFormat("HH:mm").format(fila.get("horaCita")))
+			.append("\n Descripcion: ").append(fila.get("descripcion"));
+			cadenaCitasFuturas.append("\n____________________________________________________________________");
 		}
 
-//		for(int i = 0; i < 20; i++) {
-//			cadenaCitasFuturas 	 +="\nholahola hola holalalalaholahoala hola hola";
-//		}
-		
-		textPaneCitasFuturas.setText(cadenaCitasFuturas);
+		// Establecer el texto en el JTextPane
+		textPaneCitasFuturas.setText(cadenaCitasFuturas.toString());
+	}
 
+
+
+	public void rellenarComprasPrevias() throws Exception {
+		int idUsuario = interfaz.getUser().getIdUsuario();
+
+		// Realizar una sola consulta para obtener todos los datos necesarios
+		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Venta", Arrays.asList("idVenta", "idMismaVenta", "fechaVenta", "idUsuario", "tipo", "idArtServ", "descripcionVenta"), "idUsuario = ?", idUsuario);
+
+		StringBuilder comprasPrevias = new StringBuilder();
+
+		for (int i = 0; i < resultados.size(); i++) {
+			Map<String, Object> fila = resultados.get(i);
+			String idVenta = String.valueOf(fila.get("idVenta"));
+			String idMismaVentaActual = String.valueOf(fila.get("idMismaVenta"));
+
+			if (i > 0 && !idMismaVentaActual.equals(String.valueOf(resultados.get(i - 1).get("idMismaVenta")))) {
+				comprasPrevias.append("\nfechaVenta: ").append(fila.get("fechaVenta"))
+				.append("======================================================================");
+			}
+
+			comprasPrevias.append("Id venta: ").append(idVenta)
+			.append("\nId MismaVenta: ").append(idMismaVentaActual)
+			.append("\nidUsuario: ").append(fila.get("idUsuario"))
+			.append("\ntipo: ").append(fila.get("tipo"))
+			.append("\nidArtServ: ").append(fila.get("idArtServ"));
+
+			if (i > 0 && idMismaVentaActual.equals(String.valueOf(resultados.get(i - 1).get("idMismaVenta")))) {
+				comprasPrevias.append("\nIdArtServ: ").append(fila.get("idArtServ"))
+				.append("\ndescripcionVenta: ").append(fila.get("descripcionVenta"))
+				.append("\n---------------------------------------------------------------------\n");
+			}
+		}
+
+		textPaneComprasRealizadas.setText(comprasPrevias.toString());
 	}
-	
-	
-	public void rellenarComprasPrevias() {
-	
-		
-		
-	}
-	
+
+
 }

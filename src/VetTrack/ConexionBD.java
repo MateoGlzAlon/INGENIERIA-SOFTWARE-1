@@ -9,6 +9,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +91,7 @@ public class ConexionBD {
 				}
 
 				// Imprimir la consulta SQL para verificar
-				System.out.println(st.toString());
+				//				System.out.println(st.toString());
 
 				// Ejecutar la consulta
 				try (ResultSet rs = st.executeQuery()) {
@@ -98,7 +99,7 @@ public class ConexionBD {
 					if (rs.next()) {
 						// Obtener el resultado de la columna
 						resultado = rs.getString(nombreColumnaExtraer);
-						System.out.println(nombreColumnaExtraer + ": " + resultado);
+						//						System.out.println(nombreColumnaExtraer + ": " + resultado);
 					} else {
 						// No se encontró la fila con la condición proporcionada
 						throw new Exception("No se encontró la fila con la condición proporcionada.");
@@ -140,7 +141,7 @@ public class ConexionBD {
 			}
 
 			// Imprimir la consulta SQL para verificar
-			System.out.println(st.toString());
+			//			System.out.println(st.toString());
 
 			// Ejecutar la consulta
 			try (ResultSet rs = st.executeQuery()) {
@@ -148,7 +149,7 @@ public class ConexionBD {
 				if (rs.next()) {
 					// Obtener el resultado de la columna
 					resultado = rs.getString(nombreColumnaExtraer);
-					System.out.println(nombreColumnaExtraer + ": " + resultado);
+					//					System.out.println(nombreColumnaExtraer + ": " + resultado);
 				} else {
 					// No se encontró la fila con las condiciones proporcionadas
 					throw new Exception("No se encontró la fila con las condiciones proporcionadas.");
@@ -187,7 +188,7 @@ public class ConexionBD {
 				}
 
 				// Imprimir la consulta SQL para verificar
-				System.out.println(st.toString());
+				//				System.out.println(st.toString());
 
 				// Ejecutar la consulta
 				try (ResultSet rs = st.executeQuery()) {
@@ -205,6 +206,49 @@ public class ConexionBD {
 		return resultados;
 	}
 
+
+	public List<String> obtenerDatosDeTablaListaDosCondiciones(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar1, Object condicion1, String nombreColumnaComparar2, Object condicion2) throws Exception {
+		List<String> resultados = new ArrayList<>();
+
+		try {
+			// Construir la consulta SQL con dos condiciones (AND)
+			String query = "SELECT " + nombreColumnaExtraer + " FROM " + nombreTabla +
+					" WHERE " + nombreColumnaComparar1 + " = ? AND " + nombreColumnaComparar2 + " = ?";
+
+			// Preparar la declaración SQL
+			try (PreparedStatement st = this.getConexion().prepareStatement(query)) {
+				// Configurar los valores de los parámetros en la consulta
+				if (condicion1 instanceof Integer) {
+					st.setInt(1, (Integer) condicion1);
+				} else if (condicion1 instanceof String) {
+					st.setString(1, (String) condicion1);
+				} else {
+					throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion1");
+				}
+
+				if (condicion2 instanceof Integer) {
+					st.setInt(2, (Integer) condicion2);
+				} else if (condicion2 instanceof String) {
+					st.setString(2, (String) condicion2);
+				} else {
+					throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion2");
+				}
+
+				// Ejecutar la consulta
+				try (ResultSet rs = st.executeQuery()) {
+					// Recorrer los resultados y agregarlos a la lista
+					while (rs.next()) {
+						resultados.add(rs.getString(nombreColumnaExtraer));
+					}
+				}
+			}
+		} catch (Exception e) {
+			// Capturar cualquier excepción y lanzarla hacia arriba
+			throw new Exception("Error al obtener datos de la tabla: " + e.getMessage(), e);
+		}
+
+		return resultados;
+	}
 
 
 
@@ -356,90 +400,130 @@ public class ConexionBD {
 
 
 	public List<Cita> obtenerCitasPasadas(int idMascota) {
-	    List<Cita> citasPasadas = new ArrayList<>();
+		List<Cita> citasPasadas = new ArrayList<>();
 
-	    try {
-	        // Obtener la fecha y hora actual
-	        Calendar calendario = Calendar.getInstance();
-	        java.sql.Date fechaActual = new java.sql.Date(calendario.getTime().getTime());
+		try {
+			// Obtener la fecha y hora actual
+			Calendar calendario = Calendar.getInstance();
+			java.sql.Date fechaActual = new java.sql.Date(calendario.getTime().getTime());
 
-	        // Crear la consulta SQL para obtener citas pasadas
-	        String query = "SELECT * FROM Cita WHERE fechaCita < ? AND idMascota = ?";
+			// Crear la consulta SQL para obtener citas pasadas
+			String query = "SELECT * FROM Cita WHERE fechaCita < ? AND idMascota = ?";
 
-	        // Preparar la declaración SQL
-	        try (PreparedStatement st = conexion.prepareStatement(query)) {
-	            // Establecer la fecha actual como parámetro en la consulta
-	            st.setDate(1, fechaActual);
-	            st.setInt(2, idMascota);
+			// Preparar la declaración SQL
+			try (PreparedStatement st = conexion.prepareStatement(query)) {
+				// Establecer la fecha actual como parámetro en la consulta
+				st.setDate(1, fechaActual);
+				st.setInt(2, idMascota);
 
-	            // Ejecutar la consulta
-	            try (ResultSet rs = st.executeQuery()) {
-	                // Procesar los resultados
-	                while (rs.next()) {
-	                    int idUsuario = rs.getInt("idUsuario");
-	                    int idCita = rs.getInt("idCita");
-	                    Date fechaCita = rs.getDate("fechaCita");
-	                    Time horaCita = rs.getTime("horaCita");
-	                    String descripcion = rs.getString("descripcionCita");
-	                    
+				// Ejecutar la consulta
+				try (ResultSet rs = st.executeQuery()) {
+					// Procesar los resultados
+					while (rs.next()) {
+						int idUsuario = rs.getInt("idUsuario");
+						int idCita = rs.getInt("idCita");
+						Date fechaCita = rs.getDate("fechaCita");
+						Time horaCita = rs.getTime("horaCita");
+						String descripcion = rs.getString("descripcionCita");
 
-	                    // Crear un objeto Cita y agregarlo a la lista
-	                    Cita cita = new Cita(idCita, idUsuario, fechaCita, horaCita, idMascota, descripcion);
-	                    citasPasadas.add(cita);	
-	                }
-	            }
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        // Manejar la excepción según tus necesidades
-	    }
 
-	    return citasPasadas;
+						// Crear un objeto Cita y agregarlo a la lista
+						Cita cita = new Cita(idCita, idUsuario, fechaCita, horaCita, idMascota, descripcion);
+						citasPasadas.add(cita);	
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// Manejar la excepción según tus necesidades
+		}
+
+		return citasPasadas;
 	}
 
-	
+
 	public List<Cita> obtenerCitasFuturas(int idMascota) {
-	    List<Cita> citasPasadas = new ArrayList<>();
+		List<Cita> citasPasadas = new ArrayList<>();
 
-	    try {
-	        // Obtener la fecha y hora actual
-	        Calendar calendario = Calendar.getInstance();
-	        java.sql.Date fechaActual = new java.sql.Date(calendario.getTime().getTime());
+		try {
+			// Obtener la fecha y hora actual
+			Calendar calendario = Calendar.getInstance();
+			java.sql.Date fechaActual = new java.sql.Date(calendario.getTime().getTime());
 
-	        // Crear la consulta SQL para obtener citas pasadas
-	        String query = "SELECT * FROM Cita WHERE fechaCita > ? AND idMascota = ?";
+			// Crear la consulta SQL para obtener citas pasadas
+			String query = "SELECT * FROM Cita WHERE fechaCita > ? AND idMascota = ?";
 
-	        // Preparar la declaración SQL
-	        try (PreparedStatement st = conexion.prepareStatement(query)) {
-	            // Establecer la fecha actual como parámetro en la consulta
-	            st.setDate(1, fechaActual);
-	            st.setInt(2, idMascota);
+			// Preparar la declaración SQL
+			try (PreparedStatement st = conexion.prepareStatement(query)) {
+				// Establecer la fecha actual como parámetro en la consulta
+				st.setDate(1, fechaActual);
+				st.setInt(2, idMascota);
 
-	            // Ejecutar la consulta
-	            try (ResultSet rs = st.executeQuery()) {
-	                // Procesar los resultados
-	                while (rs.next()) {
-	                    int idUsuario = rs.getInt("idUsuario");
-	                    int idCita = rs.getInt("idCita");
-	                    Date fechaCita = rs.getDate("fechaCita");
-	                    Time horaCita = rs.getTime("horaCita");
-	                    String descripcion = rs.getString("descripcionCita");
-	                    
+				// Ejecutar la consulta
+				try (ResultSet rs = st.executeQuery()) {
+					// Procesar los resultados
+					while (rs.next()) {
+						int idUsuario = rs.getInt("idUsuario");
+						int idCita = rs.getInt("idCita");
+						Date fechaCita = rs.getDate("fechaCita");
+						Time horaCita = rs.getTime("horaCita");
+						String descripcion = rs.getString("descripcionCita");
 
-	                    // Crear un objeto Cita y agregarlo a la lista
-	                    Cita cita = new Cita(idCita, idUsuario, fechaCita, horaCita, idMascota, descripcion);
-	                    citasPasadas.add(cita);	
-	                }
-	            }
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        // Manejar la excepción según tus necesidades
-	    }
 
-	    return citasPasadas;
+						// Crear un objeto Cita y agregarlo a la lista
+						Cita cita = new Cita(idCita, idUsuario, fechaCita, horaCita, idMascota, descripcion);
+						citasPasadas.add(cita);	
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// Manejar la excepción según tus necesidades
+		}
+
+		return citasPasadas;
 	}
-	
+
+
+
+	public List<Map<String, Object>> obtenerFilasDeTabla(String nombreTabla, List<String> columnas, String condicion, Object... parametros) throws SQLException {
+
+		List<Map<String, Object>> resultados = new ArrayList<>();
+
+		try (PreparedStatement statement = construirConsulta(nombreTabla, columnas, condicion)) {
+			// Configurar los parámetros en la consulta
+			configurarParametros(statement, parametros);
+
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					Map<String, Object> fila = new HashMap<>();
+					for (String columna : columnas) {
+						fila.put(columna, resultSet.getObject(columna));
+					}
+					resultados.add(fila);
+				}
+			}
+		}
+
+		return resultados;
+	}
+
+	private PreparedStatement construirConsulta(String nombreTabla, List<String> columnas, String condicion) throws SQLException {
+		String columnasStr = String.join(", ", columnas);
+		String query = "SELECT " + columnasStr + " FROM " + nombreTabla;
+
+		if (condicion != null && !condicion.isEmpty()) {
+			query += " WHERE " + condicion;
+		}
+
+		return conexion.prepareStatement(query);
+	}
+
+	private void configurarParametros(PreparedStatement statement, Object... parametros) throws SQLException {
+		for (int i = 0; i < parametros.length; i++) {
+			statement.setObject(i + 1, parametros[i]);
+		}
+	}
 
 
 

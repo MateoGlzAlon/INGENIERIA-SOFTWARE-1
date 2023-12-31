@@ -162,7 +162,7 @@ public class Interfaz {
 	            if (rolUsuario.equals("Cliente")) {
 	                frame.setVisible(false);
 
-	                JOptionPane.showMessageDialog(null, "Has iniciado sesión como Cliente (" + usuario + ")");
+//	                JOptionPane.showMessageDialog(null, "Has iniciado sesión como Cliente (" + usuario + ")");
 	                InterfazCliente frameImp = new InterfazCliente(this);
 	                
 	            } else if (rolUsuario.equals("Administrador")) {
