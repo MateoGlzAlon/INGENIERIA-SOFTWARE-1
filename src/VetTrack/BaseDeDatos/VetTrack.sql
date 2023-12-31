@@ -1,7 +1,7 @@
 -- Eliminar tablas si existen
 -- DROP TABLE IF EXISTS Usuario, Articulo, Venta, Cliente, Mascota, Administrador, HistorialCompra, Cita;
 
--- DROP TABLE IF EXISTS Cita;
+-- DROP TABLE IF EXISTS Venta;
 
 -- Crear la tabla Usuario
 CREATE TABLE IF NOT EXISTS Usuario(
@@ -38,14 +38,27 @@ CREATE TABLE IF NOT EXISTS Articulo (
     idArticulo INT AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
     marca VARCHAR(20) NOT NULL,
+    precio FLOAT NOT NULL, 
     descripcionArticulo VARCHAR(200),
     PRIMARY KEY (idArticulo)
+);
+
+-- Crear la tabla Servicio
+CREATE TABLE IF NOT EXISTS Servicio (
+    idServicio INT AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    precio FLOAT NOT NULL, 
+    descripcionServicio VARCHAR(200),
+    PRIMARY KEY (idServicio)
 );
 
 -- Crear la tabla Venta
 CREATE TABLE IF NOT EXISTS Venta (
     idVenta INT AUTO_INCREMENT,
+    idMismaVenta INT NOT NULL,
     idUsuario INT NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    idArtServ INT NOT NULL,
     descripcionVenta VARCHAR(200),
     fechaVenta DATE,
     FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),

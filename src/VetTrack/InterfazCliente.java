@@ -121,7 +121,7 @@ public class InterfazCliente {
 		frmInterfazDelCliente.getContentPane().add(botVerPerfil);
 
 		JPanel panelDatosMascotas = new JPanel(new GridLayout(0, 4, 10, 10)); // 3 filas, 4 columnas
-		panelDatosMascotas.setBounds(673, 165, 500, 150);
+		panelDatosMascotas.setBounds(645, 165, 500, 150);
 		frmInterfazDelCliente.getContentPane().add(panelDatosMascotas);		
 
 		JLabel labelIdMascota = new JLabel("IdMascota: ");
@@ -201,6 +201,7 @@ public class InterfazCliente {
 							mostrarDatosMascota();
 							rellenarCitasPasadas();
 							rellenarCitasFuturas();
+							rellenarComprasPrevias();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -222,6 +223,7 @@ public class InterfazCliente {
 		frmInterfazDelCliente.getContentPane().add(choiceMascotas);
 
 		textPaneCitasPrevias = new JTextPane();
+		textPaneCitasPrevias.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textPaneCitasPrevias.setBounds(673, 350, 225, 500);
 		textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
 		textPaneCitasPrevias.setEditable(false);
@@ -229,11 +231,12 @@ public class InterfazCliente {
         JScrollPane scrollPaneCitasPrevias = new JScrollPane(textPaneCitasPrevias);
         scrollPaneCitasPrevias.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPaneCitasPrevias.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPaneCitasPrevias.setBounds(673, 350, 500, 225);
+        scrollPaneCitasPrevias.setBounds(645, 350, 500, 225);
         
         frmInterfazDelCliente.getContentPane().add(scrollPaneCitasPrevias);
 		
 		textPaneCitasFuturas = new JTextPane();
+		textPaneCitasFuturas.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textPaneCitasFuturas.setEditable(false);
 		textPaneCitasFuturas.setBorder(new LineBorder(Color.BLACK, 1));
 		textPaneCitasFuturas.setBounds(674, 625, 500, 225);
@@ -241,7 +244,7 @@ public class InterfazCliente {
         JScrollPane scrollPaneCitasFuturas = new JScrollPane(textPaneCitasFuturas);
         scrollPaneCitasFuturas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPaneCitasFuturas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPaneCitasFuturas.setBounds(673, 625, 500, 225);
+        scrollPaneCitasFuturas.setBounds(645, 625, 500, 225);
         
         frmInterfazDelCliente.getContentPane().add(scrollPaneCitasFuturas);
 		
@@ -256,6 +259,24 @@ public class InterfazCliente {
 		labelCitasFuturas.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelCitasFuturas.setBounds(848, 595, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelCitasFuturas);
+		
+		JScrollPane scrollPaneComprasRealizadas = new JScrollPane((Component) null);
+		scrollPaneComprasRealizadas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneComprasRealizadas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneComprasRealizadas.setBounds(42, 350, 500, 500);
+		frmInterfazDelCliente.getContentPane().add(scrollPaneComprasRealizadas);
+		
+		JTextPane textPaneComprasRealizadas = new JTextPane();
+		textPaneComprasRealizadas.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textPaneComprasRealizadas.setEditable(false);
+		textPaneComprasRealizadas.setBorder(new LineBorder(Color.BLACK, 1));
+		scrollPaneComprasRealizadas.setViewportView(textPaneComprasRealizadas);
+		
+		JLabel labelComprasPrevias = new JLabel("COMPRAS PREVIAS");
+		labelComprasPrevias.setHorizontalAlignment(SwingConstants.CENTER);
+		labelComprasPrevias.setFont(new Font("Tahoma", Font.BOLD, 14));
+		labelComprasPrevias.setBounds(198, 327, 150, 14);
+		frmInterfazDelCliente.getContentPane().add(labelComprasPrevias);
 
 		choiceMascotas.add("");
 		establecerMascotas();
@@ -435,4 +456,12 @@ public class InterfazCliente {
 		textPaneCitasFuturas.setText(cadenaCitasFuturas);
 
 	}
+	
+	
+	public void rellenarComprasPrevias() {
+	
+		
+		
+	}
+	
 }
