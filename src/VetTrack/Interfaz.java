@@ -186,10 +186,6 @@ public class Interfaz {
 		// Obtener lista de usuarios
         List<List<Object>> userList = conexion.listar("Usuario");
 
-        //JOptionPane.showMessageDialog(null, "Lista:\n"+userList.toString());
-
-        int idUsuarioEncontrado = -1;
-
         // Buscar el usuario por usuario y contraseña
         for (List<Object> user : userList) {
             if (user.get(1).toString().equals(usuario) && user.get(2).toString().equals(passwd)) {
@@ -221,6 +217,24 @@ public class Interfaz {
         
 	}
 	
+	public String cogerDatosBorrar(String username) throws Exception {
+		
+		if (username == "") {
+			return "No se ha encontrado el usuario";
+		}
+		
+		List<List<Object>> userList = conexion.listar("Usuario");
+
+        for (List<Object> user : userList) {
+            if (user.get(1).toString().equals(username)) {
+                return "ID: "+ user.get(0).toString() + "\nUsername: "+user.get(1).toString()+"\nRol: "+user.get(3).toString();
+            }
+        }
+		
+		return "No se ha encontrado el usuario";
+		
+	}
+	
 	private void confirmarSalir(JFrame frame) throws Exception {
 		int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar",
 				JOptionPane.YES_NO_OPTION);
@@ -243,20 +257,6 @@ public class Interfaz {
 	public Usuario verDatosUsuarioActivo() {
 		return this.user;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	
-	
-	
-	
 	
 }
