@@ -452,7 +452,7 @@ public class InterfazCliente {
 			cadenaCitasPrevias.append(" IdCita: ").append(fila.get("idCita"))
 			.append("\n FechaCita: ").append(new SimpleDateFormat("dd / MM / yyyy").format(fila.get("fechaCita")))
 			.append("\n HoraCita: ").append(new SimpleDateFormat("HH:mm").format(fila.get("horaCita")))
-			.append("\n Descripcion: ").append(fila.get("descripcion"));
+			.append("\n Descripcion: ").append(fila.get("descripcionCita"));
 			cadenaCitasPrevias.append("\n____________________________________________________________________");
 		}
 
