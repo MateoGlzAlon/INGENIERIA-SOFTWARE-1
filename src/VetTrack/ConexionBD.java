@@ -552,6 +552,33 @@ public class ConexionBD {
 	}
 
 
+	private boolean actualizarFila(String nombreTabla, String nombreColumna, Object nuevoValor, String columnaCondicion, Object valorCondicion) {
+	    try {
+	        // Construir la consulta SQL
+	        String sql = "UPDATE " + nombreTabla +
+	                     " SET " + nombreColumna + " = ?" +
+	                     " WHERE " + columnaCondicion + " = ?";
+
+	        // Preparar la declaración SQL
+	        try (PreparedStatement preparedStatement = this.getConexion().prepareStatement(sql)) {
+	            // Establecer los parámetros en la consulta SQL
+	            preparedStatement.setObject(1, nuevoValor);
+	            preparedStatement.setObject(2, valorCondicion);
+
+	            // Ejecutar la consulta SQL
+	            int filasAfectadas = preparedStatement.executeUpdate();
+
+	            if (filasAfectadas > 0) {
+	                System.out.println("La fila ha sido actualizada exitosamente.");
+	                return true;
+	            } 
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
 
 
 	/*
