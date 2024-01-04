@@ -12,7 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -44,6 +47,10 @@ public class Interfaz {
 
 	public Usuario getUser() {
 		return this.user;
+	}
+	
+	public ConexionBD getConexion() {
+		return this.conexion;
 	}
 
 
@@ -137,28 +144,23 @@ public class Interfaz {
 	private void comprobarUsuarioYContraseña(String usuario, String passwd, JFrame frame) {
 		try {
 
-			//Lo he movido a otro metodo para poder usarlo mas tarde
 			int idUsuarioEncontrado = recogerIdUsuario(usuario, passwd);
 
 			// Si se encuentra el usuario, continuar
 			if (idUsuarioEncontrado != -1) {
-				// Obtener el rol del usuario
+				
 				String rolUsuario = conexion.obtenerDatoDeTabla("Usuario", "rol", "idUsuario", idUsuarioEncontrado);
-
-				//recogerDatosTablaUsuarioCorresp(rolUsuario, idUsuarioEncontrado);
 
 				this.user = new Usuario(idUsuarioEncontrado, usuario, passwd, rolUsuario);
 
 				if (rolUsuario.equals("Cliente")) {
 					frame.setVisible(false);
 
-					//	                JOptionPane.showMessageDialog(null, "Has iniciado sesión como Cliente (" + usuario + ")");
 					InterfazCliente frameImp = new InterfazCliente(this);
 
 				} else if (rolUsuario.equals("Administrador")) {
 					frame.setVisible(false);
 
-					JOptionPane.showMessageDialog(null, "Has iniciado sesión como Administrador (" + usuario + ")");
 					InterfazAdministrador frameImp = new InterfazAdministrador(this);
 
 				}
@@ -207,23 +209,62 @@ public class Interfaz {
 
 	}
 
-	public String cogerDatosBorrar(String username) throws Exception {
+	public List<Object> cogerDatosBorrar(String username) throws Exception {
 
 		if (username == "") {
-			return "No se ha encontrado el usuario";
+			return null;
 		}
 
 		List<List<Object>> userList = conexion.listar("Usuario");
 
 		for (List<Object> user : userList) {
 			if (user.get(1).toString().equals(username)) {
-				return "ID: "+ user.get(0).toString() + "\nUsername: "+user.get(1).toString()+"\nRol: "+user.get(3).toString();
+				return user;
 			}
 		}
 
-		return "No se ha encontrado el usuario";
+		return null;
 
 	}
+	
+	public ArrayList<String> recTodasMascotas(int id) throws NumberFormatException, Exception {
+		
+		int numMascotas = Integer.parseInt(conexion.obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", id));
+
+		List<String> lista = conexion.obtenerDatosDeTablaLista("Mascota", "nombre", "idUsuario", id);
+		
+		ArrayList<String> mascotasLista = new ArrayList<String>();
+
+		for(int i = 0; i < numMascotas; i++) {
+
+			mascotasLista.add(lista.get(i).toString().intern());
+
+		}
+		
+		return mascotasLista;
+
+	}
+	
+	public String mascRecDatos(String nombreMascota, int idUsuario) throws Exception {
+
+		// Obtener todos los datos de la mascota en una sola fila
+		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
+		String condicion = "nombre = ? AND idUsuario = ?";
+
+		Object[] parametros = {nombreMascota, idUsuario};
+
+		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
+
+		if (!resultados.isEmpty()) {
+			Map<String, Object> datosMascota = resultados.get(0);
+			
+			return "\nID: " + String.valueOf(datosMascota.get("idMascota")) + "\nNombre: "+ nombreMascota +"\nEspecie: " + String.valueOf(datosMascota.get("especie")) + "\nRaza: " + String.valueOf(datosMascota.get("raza")) + "\nFecha de nacimiento: " + String.valueOf(datosMascota.get("fechaNacimiento")) + "\n-------------------\n";
+
+		}
+
+		return "";
+	}
+	
 
 	private void confirmarSalir(JFrame frame) throws Exception {
 		int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar",
