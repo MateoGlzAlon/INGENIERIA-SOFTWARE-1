@@ -514,6 +514,26 @@ public class ConexionBD {
 		return resultados;
 	}
 
+	public List<Map<String, Object>> obtenerTodasLasFilasDeTabla(String nombreTabla, List<String> columnas) throws SQLException {
+
+	    List<Map<String, Object>> resultados = new ArrayList<>();
+
+	    try (PreparedStatement statement = construirConsulta(nombreTabla, columnas, null)) {
+	        try (ResultSet resultSet = statement.executeQuery()) {
+	            while (resultSet.next()) {
+	                Map<String, Object> fila = new HashMap<>();
+	                for (String columna : columnas) {
+	                    fila.put(columna, resultSet.getObject(columna));
+	                }
+	                resultados.add(fila);
+	            }
+	        }
+	    }
+
+	    return resultados;
+	}
+
+	
 	private PreparedStatement construirConsulta(String nombreTabla, List<String> columnas, String condicion) throws SQLException {
 		String columnasStr = String.join(", ", columnas);
 		String query = "SELECT " + columnasStr + " FROM " + nombreTabla;

@@ -15,21 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-import javax.swing.JButton;
-import javax.swing.JToggleButton;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+
 import java.awt.Choice;
 import java.awt.GridLayout;
-
+import java.awt.Image;
 import java.text.SimpleDateFormat;
 import java.awt.Font;
 
@@ -52,6 +42,7 @@ public class InterfazCliente {
 	private JTextPane textPaneCitasPrevias;
 	private JTextPane textPaneCitasFuturas;
 	private JTextPane textPaneComprasRealizadas;
+	private JButton botonActualizarCitas;
 
 	/**
 	 * Create the application.
@@ -84,8 +75,6 @@ public class InterfazCliente {
 		frmInterfazDelCliente.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frmInterfazDelCliente.getContentPane().setLayout(null);
 
-		//		frame.getContentPane().setBackground(new Color(150, 150, 150));
-
 		JButton botCerrarSesion = new JButton("Cerrar Sesion");
 		botCerrarSesion.addActionListener(new ActionListener() {
 			@Override
@@ -103,12 +92,12 @@ public class InterfazCliente {
 		//		botCerrarSesion.setForeground(Color.red);
 		colorOriginalBton = botCerrarSesion.getBackground();
 
-		botCerrarSesion.setBounds(1038, 11, 136, 59);
+		botCerrarSesion.setBounds(1038, 10, 136, 60);
 		frmInterfazDelCliente.getContentPane().add(botCerrarSesion);
 
 		JToggleButton botModoNoct = new JToggleButton("Modo Nocturno");
 
-		botModoNoct.setBounds(897, 29, 131, 23);
+		botModoNoct.setBounds(897, 10, 131, 60);
 		frmInterfazDelCliente.getContentPane().add(botModoNoct);
 
 		JButton botVerPerfil = new JButton("Ver Perfil");
@@ -128,7 +117,7 @@ public class InterfazCliente {
 		frmInterfazDelCliente.getContentPane().add(botVerPerfil);
 
 		JPanel panelDatosMascotas = new JPanel(new GridLayout(0, 4, 10, 10)); // 3 filas, 4 columnas
-		panelDatosMascotas.setBounds(645, 165, 500, 150);
+		panelDatosMascotas.setBounds(645, 135, 510, 150);
 		frmInterfazDelCliente.getContentPane().add(panelDatosMascotas);		
 
 		JLabel labelIdMascota = new JLabel("IdMascota: ");
@@ -196,7 +185,7 @@ public class InterfazCliente {
 		panelDatosMascotas.add(textFieldIdUsuarioMascota);
 
 		choiceMascotas = new Choice();
-		choiceMascotas.setBounds(673, 139, 250, 30);
+		choiceMascotas.setBounds(645, 97, 250, 30);
 
 		choiceMascotas.addItemListener(new ItemListener() {
 			@Override
@@ -229,7 +218,7 @@ public class InterfazCliente {
 		frmInterfazDelCliente.getContentPane().add(choiceMascotas);
 
 		textPaneCitasPrevias = new JTextPane();
-		textPaneCitasPrevias.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textPaneCitasPrevias.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textPaneCitasPrevias.setBounds(673, 350, 225, 500);
 		textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
 		textPaneCitasPrevias.setEditable(false);
@@ -237,12 +226,12 @@ public class InterfazCliente {
 		JScrollPane scrollPaneCitasPrevias = new JScrollPane(textPaneCitasPrevias);
 		scrollPaneCitasPrevias.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneCitasPrevias.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPaneCitasPrevias.setBounds(645, 350, 500, 225);
+		scrollPaneCitasPrevias.setBounds(640, 335, 515, 225);
 
 		frmInterfazDelCliente.getContentPane().add(scrollPaneCitasPrevias);
 
 		textPaneCitasFuturas = new JTextPane();
-		textPaneCitasFuturas.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textPaneCitasFuturas.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textPaneCitasFuturas.setEditable(false);
 		textPaneCitasFuturas.setBorder(new LineBorder(Color.BLACK, 1));
 		textPaneCitasFuturas.setBounds(674, 625, 500, 225);
@@ -250,30 +239,30 @@ public class InterfazCliente {
 		JScrollPane scrollPaneCitasFuturas = new JScrollPane(textPaneCitasFuturas);
 		scrollPaneCitasFuturas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneCitasFuturas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPaneCitasFuturas.setBounds(645, 625, 500, 225);
+		scrollPaneCitasFuturas.setBounds(640, 610, 515, 225);
 
 		frmInterfazDelCliente.getContentPane().add(scrollPaneCitasFuturas);
 
 		JLabel labelCitasPrevias = new JLabel("CITAS PREVIAS");
 		labelCitasPrevias.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelCitasPrevias.setHorizontalAlignment(SwingConstants.CENTER);
-		labelCitasPrevias.setBounds(848, 325, 150, 14);
+		labelCitasPrevias.setBounds(822, 310, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelCitasPrevias);
 
 		JLabel labelCitasFuturas = new JLabel("CITAS FUTURAS");
 		labelCitasFuturas.setHorizontalAlignment(SwingConstants.CENTER);
 		labelCitasFuturas.setFont(new Font("Tahoma", Font.BOLD, 14));
-		labelCitasFuturas.setBounds(848, 595, 150, 14);
+		labelCitasFuturas.setBounds(822, 585, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelCitasFuturas);
 
 		JScrollPane scrollPaneComprasRealizadas = new JScrollPane((Component) null);
 		scrollPaneComprasRealizadas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneComprasRealizadas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPaneComprasRealizadas.setBounds(42, 350, 500, 500);
+		scrollPaneComprasRealizadas.setBounds(30, 335, 550, 500);
 		frmInterfazDelCliente.getContentPane().add(scrollPaneComprasRealizadas);
 
 		textPaneComprasRealizadas = new JTextPane();
-		textPaneComprasRealizadas.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textPaneComprasRealizadas.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textPaneComprasRealizadas.setEditable(false);
 		textPaneComprasRealizadas.setBorder(new LineBorder(Color.BLACK, 1));
 		scrollPaneComprasRealizadas.setViewportView(textPaneComprasRealizadas);
@@ -281,11 +270,11 @@ public class InterfazCliente {
 		JLabel labelComprasPrevias = new JLabel("COMPRAS PREVIAS");
 		labelComprasPrevias.setHorizontalAlignment(SwingConstants.CENTER);
 		labelComprasPrevias.setFont(new Font("Tahoma", Font.BOLD, 14));
-		labelComprasPrevias.setBounds(198, 327, 150, 14);
+		labelComprasPrevias.setBounds(217, 310, 150, 14);
 		frmInterfazDelCliente.getContentPane().add(labelComprasPrevias);
 
-		JButton btnNewButton = new JButton("ACTUALIZAR");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton botonActualizarCompras = new JButton("ACTUALIZAR");
+		botonActualizarCompras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					rellenarComprasPrevias();
@@ -295,8 +284,38 @@ public class InterfazCliente {
 				}
 			}
 		});
-		btnNewButton.setBounds(442, 323, 100, 23);
-		frmInterfazDelCliente.getContentPane().add(btnNewButton);
+		botonActualizarCompras.setBounds(400, 308, 180, 23);
+		frmInterfazDelCliente.getContentPane().add(botonActualizarCompras);
+
+
+
+		ImageIcon icon = new ImageIcon("etc/IMAGENES/logo_VetTrack.png");
+
+		Image image = icon.getImage();
+		Image scaledImage = image.getScaledInstance(175, 175, Image.SCALE_SMOOTH);
+
+		ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+
+		JLabel labelIcono = new JLabel(scaledIcon);
+		labelIcono.setBounds(42, 73, 175, 175);
+		frmInterfazDelCliente.getContentPane().add(labelIcono);
+		
+		botonActualizarCitas = new JButton("ACTUALIZAR");
+		botonActualizarCitas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					rellenarCitasPasadas();
+					rellenarCitasFuturas();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		botonActualizarCitas.setBounds(975, 97, 180, 23);
+		frmInterfazDelCliente.getContentPane().add(botonActualizarCitas);
 
 		choiceMascotas.add("");
 		establecerMascotas();
@@ -452,8 +471,9 @@ public class InterfazCliente {
 			cadenaCitasPrevias.append(" IdCita: ").append(fila.get("idCita"))
 			.append("\n FechaCita: ").append(new SimpleDateFormat("dd / MM / yyyy").format(fila.get("fechaCita")))
 			.append("\n HoraCita: ").append(new SimpleDateFormat("HH:mm").format(fila.get("horaCita")))
-			.append("\n Descripcion: ").append(fila.get("descripcion"));
-			cadenaCitasPrevias.append("\n____________________________________________________________________");
+			.append("\n Descripcion: ").append(fila.get("descripcionCita"));
+			cadenaCitasPrevias.append("\n=================================================");
+
 		}
 
 		// Establecer el texto en el JTextPane
@@ -476,8 +496,9 @@ public class InterfazCliente {
 			cadenaCitasFuturas.append(" IdCita: ").append(fila.get("idCita"))
 			.append("\n FechaCita: ").append(new SimpleDateFormat("dd / MM / yyyy").format(fila.get("fechaCita")))
 			.append("\n HoraCita: ").append(new SimpleDateFormat("HH:mm").format(fila.get("horaCita")))
-			.append("\n Descripcion: ").append(fila.get("descripcion"));
-			cadenaCitasFuturas.append("\n____________________________________________________________________");
+			.append("\n Descripcion: ").append(fila.get("descripcionCita"));
+			cadenaCitasFuturas.append("\n=================================================");
+
 		}
 
 		// Establecer el texto en el JTextPane
@@ -490,35 +511,42 @@ public class InterfazCliente {
 		int idUsuario = interfaz.getUser().getIdUsuario();
 
 		// Realizar una sola consulta para obtener todos los datos necesarios
-		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Venta", Arrays.asList("idVenta", "idMismaVenta", "fechaVenta", "idUsuario", "tipo", "idArtServ", "descripcionVenta"), "idUsuario = ?", idUsuario);
+		List<Map<String, Object>> resultadosVenta = conexion.obtenerFilasDeTabla("Venta", Arrays.asList("idVenta", "idMismaVenta", "fechaVenta", "idUsuario", "tipo", "idArtServ", "descripcionVenta"), "idUsuario = ?", idUsuario);
+		List<Map<String, Object>> resultadosArticulo = conexion.obtenerTodasLasFilasDeTabla("Articulo", Arrays.asList("idArticulo", "nombre", "marca", "precio", "descripcionArticulo"));
+		List<Map<String, Object>> resultadosServicio = conexion.obtenerTodasLasFilasDeTabla("Servicio", Arrays.asList("idServicio", "nombre", "precio", "descripcionServicio"));
+
+		System.out.println(resultadosArticulo.toString());
 
 		StringBuilder comprasPrevias = new StringBuilder();
 
-		for (int i = 0; i < resultados.size(); i++) {
-			Map<String, Object> fila = resultados.get(i);
+		for (int i = 0; i < resultadosVenta.size(); i++) {
+			Map<String, Object> fila = resultadosVenta.get(i);	
 			String idVenta = String.valueOf(fila.get("idVenta"));
-			String idMismaVentaActual = String.valueOf(fila.get("idMismaVenta"));
 
-			if (i > 0 && !idMismaVentaActual.equals(String.valueOf(resultados.get(i - 1).get("idMismaVenta")))) {
-				comprasPrevias.append("\nfechaVenta: ").append(fila.get("fechaVenta"))
-				.append("======================================================================");
-			}
+			comprasPrevias.append(" Id venta: ").append(idVenta).append("\n");
 
-			comprasPrevias.append("Id venta: ").append(idVenta)
-			.append("\nId MismaVenta: ").append(idMismaVentaActual)
-			.append("\nidUsuario: ").append(fila.get("idUsuario"))
-			.append("\ntipo: ").append(fila.get("tipo"))
-			.append("\nidArtServ: ").append(fila.get("idArtServ"));
-
-			if (i > 0 && idMismaVentaActual.equals(String.valueOf(resultados.get(i - 1).get("idMismaVenta")))) {
-				comprasPrevias.append("\nIdArtServ: ").append(fila.get("idArtServ"))
-				.append("\ndescripcionVenta: ").append(fila.get("descripcionVenta"))
-				.append("\n---------------------------------------------------------------------\n");
-			}
+			if (fila.get("tipo").equals("Articulo")) {
+				for (Map<String, Object> articulo : resultadosArticulo) {
+					if (fila.get("idArtServ").equals(articulo.get("idArticulo"))) {
+						comprasPrevias.append(" Fecha de la venta: ").append(fila.get("fechaVenta")).append("\n")
+						.append(" Articulo: ").append(articulo.get("nombre")).append("\n")
+						.append(" Precio: ").append(articulo.get("precio")).append("€\n")
+						.append(" DescripcionArticulo: ").append(articulo.get("descripcionArticulo")).append("\n");
+					}
+				}
+			} else if (fila.get("tipo").equals("Servicio")) {
+				for (Map<String, Object> servicio : resultadosServicio) {
+					if (fila.get("idArtServ").equals(servicio.get("idServicio"))) {
+						comprasPrevias.append(" Fecha de la venta: ").append(fila.get("fechaVenta")).append("\n")
+						.append(" Servicio: ").append(servicio.get("nombre")).append("\n")
+						.append(" Precio: ").append(servicio.get("precio")).append("€\n")
+						.append(" DescripcionServicio: ").append(servicio.get("descripcionServicio")).append("\n");
+					}
+				}
+			} 
+			comprasPrevias.append("======================================================================\n");
 		}
 
 		textPaneComprasRealizadas.setText(comprasPrevias.toString());
-	}
-
-
+	}	
 }
