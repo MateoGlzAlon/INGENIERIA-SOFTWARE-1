@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
+import javax.swing.JEditorPane;
 
 public class InterfazAdministrador {
 
@@ -259,7 +263,7 @@ public class InterfazAdministrador {
 						
 						Map<String, Object> valores = new HashMap<>();
 						
-						//valores.put("idArticulo", maximo);
+						valores.put("idArticulo", maximo+1);
 						valores.put("nombre", textNombreArticulo.getText().intern());
 						valores.put("marca", textMarcaArticulo.getText().intern());
 			            valores.put("precio", Float.parseFloat(textPrecioArticulo.getText().intern()));
@@ -294,7 +298,7 @@ public class InterfazAdministrador {
 		textUserCita.setColumns(10);
 		
 		JLabel lblNewLabel_5 = new JLabel("Nombre Usuario:");
-		lblNewLabel_5.setBounds(22, 572, 89, 14);
+		lblNewLabel_5.setBounds(22, 572, 152, 14);
 		frame.getContentPane().add(lblNewLabel_5);
 		
 		textFechaCita = new JTextField();
@@ -302,12 +306,12 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(textFechaCita);
 		textFechaCita.setColumns(10);
 		
-		JLabel lblNewLabel_6 = new JLabel("Fecha cita:");
-		lblNewLabel_6.setBounds(226, 572, 76, 14);
+		JLabel lblNewLabel_6 = new JLabel("Fecha cita: (YYYY-MM-DD)");
+		lblNewLabel_6.setBounds(226, 572, 152, 14);
 		frame.getContentPane().add(lblNewLabel_6);
 		
-		JLabel lblNewLabel_7 = new JLabel("Hora cita:");
-		lblNewLabel_7.setBounds(226, 628, 76, 14);
+		JLabel lblNewLabel_7 = new JLabel("Hora cita: (hh:mm:ss)");
+		lblNewLabel_7.setBounds(226, 628, 152, 14);
 		frame.getContentPane().add(lblNewLabel_7);
 		
 		textHoraCita = new JTextField();
@@ -316,7 +320,7 @@ public class InterfazAdministrador {
 		textHoraCita.setColumns(10);
 		
 		JLabel lblNewLabel_8 = new JLabel("Nombre mascota:");
-		lblNewLabel_8.setBounds(22, 628, 89, 14);
+		lblNewLabel_8.setBounds(22, 628, 152, 14);
 		frame.getContentPane().add(lblNewLabel_8);
 		
 		textMascCita = new JTextField();
@@ -324,9 +328,82 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(textMascCita);
 		textMascCita.setColumns(10);
 		
+		JTextPane panelDescrCita = new JTextPane();
+		panelDescrCita.setBounds(22, 704, 356, 64);
+		frame.getContentPane().add(panelDescrCita);
+		
 		JButton botCrearCita = new JButton("Crear");
-		botCrearCita.setBounds(289, 704, 89, 23);
+		botCrearCita.setBounds(284, 779, 89, 23);
 		frame.getContentPane().add(botCrearCita);
+		botCrearCita.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (textUserCita.getText().intern() != "" && textMascCita.getText().intern() != "" && textFechaCita.getText().intern() != "" && textHoraCita.getText().intern() != "" && panelDescrCita.getText().intern()!="") {
+					
+					try {
+						List<Object> user = interfaz.cogerDatosBorrar(textUserCita.getText().intern());
+						
+						int idMascota = -1;
+						
+						if(user != null) {
+							
+							boolean compr = false;
+							
+							ArrayList<String> listaMasc = interfaz.recTodasMascotas(Integer.parseInt(user.get(0).toString()));
+							
+							for (String mascota : listaMasc) {
+								
+								if (textMascCita.getText().intern() == mascota.intern()) {
+									
+									compr = true;
+									
+									idMascota = interfaz.idMascotaRecuperar(mascota, Integer.parseInt(user.get(0).toString()));
+									
+								}
+								
+							}
+							
+							if (compr == true) {
+								
+								List<List<Object>> citasTtal = interfaz.getConexion().listar("Cita");
+								
+								int maximo = -1;
+								
+								for (List<Object> cita : citasTtal) {
+									if ((int) cita.get(0) > maximo) {
+										maximo = (int) cita.get(0);
+									}
+								}
+								
+								Map<String, Object> valores = new HashMap<>();
+								
+								valores.put("idCita", maximo+1);
+								valores.put("idUsuario", Integer.parseInt(user.get(0).toString()));
+								valores.put("fechaCita", java.sql.Date.valueOf(textFechaCita.getText()));
+								valores.put("horaCita", java.sql.Time.valueOf(textHoraCita.getText()));
+								valores.put("idMascota", idMascota);
+								valores.put("descripcionCita", panelDescrCita.getText());
+								
+					            interfaz.getConexion().agregarFilaATabla("Cita", valores);
+					            
+					            JOptionPane.showMessageDialog(null, "La cita se ha añadido correctamente");
+								
+							}else {
+								JOptionPane.showMessageDialog(null, "La mascota no existe");
+							}
+							
+						}else {
+							JOptionPane.showMessageDialog(null, "El usuario no existe");
+						}
+						
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					
+				}else {
+					JOptionPane.showMessageDialog(null, "No puede haber un campo vacio");
+				}
+			}
+		});
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setBounds(410, 188, 351, 303);
@@ -358,6 +435,10 @@ public class InterfazAdministrador {
 		textMarcaArticulo.setBounds(77, 261, 296, 20);
 		frame.getContentPane().add(textMarcaArticulo);
 		textMarcaArticulo.setColumns(10);
+		
+		JLabel lblNewLabel_12 = new JLabel("Descripcion");
+		lblNewLabel_12.setBounds(22, 684, 89, 14);
+		frame.getContentPane().add(lblNewLabel_12);
 		
 		frame.addWindowListener(new WindowAdapter() {
 			@Override

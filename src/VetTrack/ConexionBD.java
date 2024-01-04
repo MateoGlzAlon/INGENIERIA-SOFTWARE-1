@@ -297,7 +297,13 @@ public class ConexionBD {
 					st.setInt(index, (Integer) valor);
 				} else if (valor instanceof String) {
 					st.setString(index, (String) valor);
-				} else {
+				}  else if (valor instanceof java.sql.Date) {
+	                st.setDate(index, (java.sql.Date) valor);
+	            } else if (valor instanceof java.sql.Time) {
+	                st.setTime(index, (java.sql.Time) valor);
+	            } else if (valor instanceof Float) {
+	                st.setFloat(index, (Float) valor);
+	            } else {
 					throw new IllegalArgumentException("Tipo de entidad no compatible para la inserción");
 				}
 				index++;

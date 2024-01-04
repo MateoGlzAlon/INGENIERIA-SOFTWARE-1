@@ -245,9 +245,26 @@ public class Interfaz {
 
 	}
 	
+	public int idMascotaRecuperar(String nombreMascota, int idUsuario) throws Exception{
+		
+		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
+		String condicion = "nombre = ? AND idUsuario = ?";
+
+		Object[] parametros = {nombreMascota, idUsuario};
+
+		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
+
+		if (!resultados.isEmpty()) {
+			Map<String, Object> datosMascota = resultados.get(0);
+			
+			return (int) datosMascota.get("idMascota");
+		}
+		
+		return -1;
+	}
+	
 	public String mascRecDatos(String nombreMascota, int idUsuario) throws Exception {
 
-		// Obtener todos los datos de la mascota en una sola fila
 		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
 		String condicion = "nombre = ? AND idUsuario = ?";
 
