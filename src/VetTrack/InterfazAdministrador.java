@@ -430,6 +430,41 @@ public class InterfazAdministrador {
 		JButton botActualizarUserBuscar = new JButton("Actualizar");
 		botActualizarUserBuscar.setBounds(1085, 157, 89, 23);
 		frame.getContentPane().add(botActualizarUserBuscar);
+		
+		JButton botAddMasc = new JButton("Añadir Mascota");
+		botAddMasc.setBounds(957, 157, 115, 23);
+		frame.getContentPane().add(botAddMasc);
+		botAddMasc.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					
+					if(textUserBuscar.getText().intern() != "") {
+						
+						List<Object> cadena = interfaz.cogerDatosBorrar(textUserBuscar.getText().intern());
+						
+						if (cadena == null) {
+			        		textUserBuscar.setText("");
+			        		panelTextUser.setText("");
+			            	JOptionPane.showMessageDialog(null, "No se ha encontrado ningun usuario con ese nombre");
+			            }else {
+			            	
+			            	
+			            	
+			            }
+						
+					}else {
+						JOptionPane.showMessageDialog(null, "No hay un usuario seleccionado");
+					}
+					
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
 		botActualizarUserBuscar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
