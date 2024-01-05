@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JToggleButton;
@@ -50,8 +51,8 @@ public class InterfazAdministrador {
 	private JTextField textHoraCita;
 	private JTextField textMascCita;
 	private JTextField textMarcaArticulo;
-	private JTextPane textPane;
-	private JTextPane textPane_1;
+	private JTextPane textPaneCitasPrevias;
+	private JTextPane textPaneCitasFuturas;
 	private JTextPane panelTextUser;
 
 	/**
@@ -162,17 +163,20 @@ public class InterfazAdministrador {
 		panelTextUser = new JTextPane();
 		panelTextUser.setBounds(799, 219, 375, 631);
 		panelTextUser.setEditable(false);
+		panelTextUser.setBorder(new LineBorder(Color.BLACK, 1));
 		frame.getContentPane().add(panelTextUser);
 		
-		textPane = new JTextPane();
-		textPane.setBounds(410, 188, 351, 303);
-		textPane.setEditable(false);
-		frame.getContentPane().add(textPane);
+		textPaneCitasPrevias = new JTextPane();
+		textPaneCitasPrevias.setBounds(410, 188, 351, 303);
+		textPaneCitasPrevias.setEditable(false);
+		textPaneCitasPrevias.setBorder(new LineBorder(Color.BLACK, 1));
+		frame.getContentPane().add(textPaneCitasPrevias);
 		
-		textPane_1 = new JTextPane();
-		textPane_1.setBounds(410, 547, 351, 303);
-		textPane_1.setEditable(false);
-		frame.getContentPane().add(textPane_1);
+		textPaneCitasFuturas = new JTextPane();
+		textPaneCitasFuturas.setBounds(410, 547, 351, 303);
+		textPaneCitasFuturas.setEditable(false);
+		textPaneCitasFuturas.setBorder(new LineBorder(Color.BLACK, 1));
+		frame.getContentPane().add(textPaneCitasFuturas);
 		
 		JButton botBuscarUser = new JButton("Buscar");
 		botBuscarUser.setBounds(1085, 185, 89, 23);
@@ -218,6 +222,8 @@ public class InterfazAdministrador {
 		
 		JTextArea textAreaArticulo = new JTextArea();
 		textAreaArticulo.setBounds(77, 302, 296, 119);
+		textAreaArticulo.setBorder(new LineBorder(Color.BLACK, 1));
+
 		frame.getContentPane().add(textAreaArticulo);
 		
 		JLabel lblNewLabel_3 = new JLabel("Descripcion");
@@ -325,6 +331,8 @@ public class InterfazAdministrador {
 		
 		JTextPane panelDescrCita = new JTextPane();
 		panelDescrCita.setBounds(22, 704, 356, 64);
+		panelDescrCita.setBorder(new LineBorder(Color.BLACK, 1));
+
 		frame.getContentPane().add(panelDescrCita);
 		
 		JButton botCrearCita = new JButton("Crear");
@@ -544,8 +552,8 @@ public class InterfazAdministrador {
             	
             	panelTextUser.setText(datosUser + mascClient);
             	
-            	textPane.setText(recCitasUsuario(Integer.parseInt(cadena.get(0).toString()), "<"));
-            	textPane_1.setText(recCitasUsuario(Integer.parseInt(cadena.get(0).toString()), ">"));
+            	textPaneCitasPrevias.setText(recCitasUsuario(Integer.parseInt(cadena.get(0).toString()), "<"));
+            	textPaneCitasFuturas.setText(recCitasUsuario(Integer.parseInt(cadena.get(0).toString()), ">"));
             	
             }
 		
