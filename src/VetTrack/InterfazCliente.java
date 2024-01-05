@@ -10,6 +10,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -300,7 +301,7 @@ public class InterfazCliente {
 		JLabel labelIcono = new JLabel(scaledIcon);
 		labelIcono.setBounds(42, 73, 175, 175);
 		frmInterfazDelCliente.getContentPane().add(labelIcono);
-		
+
 		botonActualizarCitas = new JButton("ACTUALIZAR");
 		botonActualizarCitas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -311,7 +312,7 @@ public class InterfazCliente {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
 		botonActualizarCitas.setBounds(975, 97, 180, 23);
@@ -456,7 +457,6 @@ public class InterfazCliente {
 
 
 
-
 	public void rellenarCitasPasadas() throws Exception {
 		String nombreMascota = choiceMascotas.getSelectedItem();
 		int idUsuario = interfaz.getUser().getIdUsuario();
@@ -464,6 +464,9 @@ public class InterfazCliente {
 
 		// Obtener todas las citas pasadas en una sola consulta
 		List<Map<String, Object>> filasCitasPasadas = conexion.obtenerFilasDeTabla("Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita"), "idMascota = ? AND fechaCita < ?", idMascota, new Date());
+
+		// Ordenar las citas por fecha en orden descendente (de la más reciente a la más antigua)
+		filasCitasPasadas.sort(Comparator.comparing((Map<String, Object> fila) -> (Date) fila.get("fechaCita")).reversed());
 
 		StringBuilder cadenaCitasPrevias = new StringBuilder();
 
@@ -473,7 +476,6 @@ public class InterfazCliente {
 			.append("\n HoraCita: ").append(new SimpleDateFormat("HH:mm").format(fila.get("horaCita")))
 			.append("\n Descripcion: ").append(fila.get("descripcionCita"));
 			cadenaCitasPrevias.append("\n=================================================");
-
 		}
 
 		// Establecer el texto en el JTextPane
@@ -490,6 +492,9 @@ public class InterfazCliente {
 		// Obtener todas las citas futuras en una sola consulta
 		List<Map<String, Object>> filasCitasFuturas = conexion.obtenerFilasDeTabla("Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita"), "idMascota = ? AND fechaCita >= ?", idMascota, new Date());
 
+		// Ordenar las citas por fecha
+		filasCitasFuturas.sort(Comparator.comparing(fila -> (Date) fila.get("fechaCita")));
+
 		StringBuilder cadenaCitasFuturas = new StringBuilder();
 
 		for (Map<String, Object> fila : filasCitasFuturas) {
@@ -498,7 +503,6 @@ public class InterfazCliente {
 			.append("\n HoraCita: ").append(new SimpleDateFormat("HH:mm").format(fila.get("horaCita")))
 			.append("\n Descripcion: ").append(fila.get("descripcionCita"));
 			cadenaCitasFuturas.append("\n=================================================");
-
 		}
 
 		// Establecer el texto en el JTextPane
@@ -515,12 +519,13 @@ public class InterfazCliente {
 		List<Map<String, Object>> resultadosArticulo = conexion.obtenerTodasLasFilasDeTabla("Articulo", Arrays.asList("idArticulo", "nombre", "marca", "precio", "descripcionArticulo"));
 		List<Map<String, Object>> resultadosServicio = conexion.obtenerTodasLasFilasDeTabla("Servicio", Arrays.asList("idServicio", "nombre", "precio", "descripcionServicio"));
 
-		System.out.println(resultadosArticulo.toString());
+		// Invertir el orden de resultadosVenta para que las compras más recientes aparezcan primero
+		Collections.reverse(resultadosVenta);
 
 		StringBuilder comprasPrevias = new StringBuilder();
 
 		for (int i = 0; i < resultadosVenta.size(); i++) {
-			Map<String, Object> fila = resultadosVenta.get(i);	
+			Map<String, Object> fila = resultadosVenta.get(i);   
 			String idVenta = String.valueOf(fila.get("idVenta"));
 
 			comprasPrevias.append(" Id venta: ").append(idVenta).append("\n");
@@ -528,19 +533,21 @@ public class InterfazCliente {
 			if (fila.get("tipo").equals("Articulo")) {
 				for (Map<String, Object> articulo : resultadosArticulo) {
 					if (fila.get("idArtServ").equals(articulo.get("idArticulo"))) {
-						comprasPrevias.append(" Fecha de la venta: ").append(fila.get("fechaVenta")).append("\n")
+						comprasPrevias
+						.append(" Fecha de la venta: ").append(new SimpleDateFormat("dd / MM / yyyy").format(fila.get("fechaVenta"))).append("\n")
 						.append(" Articulo: ").append(articulo.get("nombre")).append("\n")
-						.append(" Precio: ").append(articulo.get("precio")).append("€\n")
-						.append(" DescripcionArticulo: ").append(articulo.get("descripcionArticulo")).append("\n");
+						.append(" Precio: ").append(articulo.get("precio")).append(" €\n")
+						.append(" Descripcion del artículo: ").append(articulo.get("descripcionArticulo")).append("\n");
 					}
 				}
 			} else if (fila.get("tipo").equals("Servicio")) {
 				for (Map<String, Object> servicio : resultadosServicio) {
-					if (fila.get("idArtServ").equals(servicio.get("idServicio"))) {
-						comprasPrevias.append(" Fecha de la venta: ").append(fila.get("fechaVenta")).append("\n")
+					if (fila.get("idArtServ").equals(servicio.get("idServicio")))
+					{
+						comprasPrevias.append(" Fecha de la venta: ").append(new SimpleDateFormat("dd / MM / yyyy").format(fila.get("fechaVenta"))).append("\n")
 						.append(" Servicio: ").append(servicio.get("nombre")).append("\n")
-						.append(" Precio: ").append(servicio.get("precio")).append("€\n")
-						.append(" DescripcionServicio: ").append(servicio.get("descripcionServicio")).append("\n");
+						.append(" Precio: ").append(servicio.get("precio")).append(" €\n")
+						.append(" Descripcion del servicio: ").append(servicio.get("descripcionServicio")).append("\n");
 					}
 				}
 			} 
