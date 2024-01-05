@@ -1,13 +1,8 @@
 package VetTrack;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -146,7 +141,6 @@ public class Interfaz {
 
 			int idUsuarioEncontrado = recogerIdUsuario(usuario, passwd);
 
-			// Si se encuentra el usuario, continuar
 			if (idUsuarioEncontrado != -1) {
 				
 				String rolUsuario = conexion.obtenerDatoDeTabla("Usuario", "rol", "idUsuario", idUsuarioEncontrado);
@@ -188,14 +182,10 @@ public class Interfaz {
 		return -1;
 	}
 
-	/*
-	 * Aqui sencillamente lo que vamos a hacer es devolver la lista con los parametros de la DB
-	 */
 	public List<Object> recupPosTablaCorrespondiente(String rolUsuario, int idUsuarioEncontrado) throws Exception {
-		// Obtener datos específicos según el rol
+
 		List<List<Object>> userDataList = conexion.listar(rolUsuario);
 
-		// Buscar la posición del usuario en la tabla correspondiente
 		int posTablaDatos = 0;
 
 		for (int i = 0; i < userDataList.size(); i++) {
@@ -295,16 +285,9 @@ public class Interfaz {
 		}
 	}
 
-
-
 	public void setText() {
 		textPasswd.setText(null);
 		textUser.setText(null);
 	}
-
-	public Usuario verDatosUsuarioActivo() {
-		return this.user;
-	}
-
 
 }

@@ -9,8 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
-import javax.swing.JEditorPane;
 
 import java.util.Base64;
 
@@ -69,11 +66,10 @@ public class InterfazAdministrador {
 	private void initialize_admin() {
 		frame = new JFrame();
 		
-		frame.setTitle("Panel de control de " + this.interfaz.verDatosUsuarioActivo().getNombreUsuario());
+		frame.setTitle("Panel de control de " + this.interfaz.getUser().getNombreUsuario());
 		
 		frame.setBounds(300, 300, 1200, 900);
 		frame.setVisible(true);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		
@@ -113,20 +109,20 @@ public class InterfazAdministrador {
 				
 				/*try {
 					List<Object> datosUsuario = interfaz.recupPosTablaCorrespondiente("Administrador", 
-							interfaz.recogerIdUsuario(interfaz.verDatosUsuarioActivo().getNombreUsuario(), interfaz.verDatosUsuarioActivo().getContrasena()));
-					JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.verDatosUsuarioActivo().getIdUsuario() + ""
-							+ "\nUsuario: "+interfaz.verDatosUsuarioActivo().getNombreUsuario()+""
-							+ "\nContraseña: "+interfaz.verDatosUsuarioActivo().getContrasena() + ""
-							+ "\nRol: "+ interfaz.verDatosUsuarioActivo().getRol() + ""
+							interfaz.recogerIdUsuario(interfaz.getUser().getNombreUsuario(), interfaz.getUser().getContrasena()));
+					JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.getUser().getIdUsuario() + ""
+							+ "\nUsuario: "+interfaz.getUser().getNombreUsuario()+""
+							+ "\nContraseña: "+interfaz.getUser().getContrasena() + ""
+							+ "\nRol: "+ interfaz.getUser().getRol() + ""
 							+ "\nDatos:\n"+ datosUsuario.toString());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}*/
 				
-				JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.verDatosUsuarioActivo().getIdUsuario() + ""
-						+ "\nUsuario: "+interfaz.verDatosUsuarioActivo().getNombreUsuario()+""
-						+ "\nContraseña: "+interfaz.verDatosUsuarioActivo().getContrasena() + ""
-						+ "\nRol: "+ interfaz.verDatosUsuarioActivo().getRol());
+				JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.getUser().getIdUsuario() + ""
+						+ "\nUsuario: "+interfaz.getUser().getNombreUsuario()+""
+						+ "\nContraseña: "+interfaz.getUser().getContrasena() + ""
+						+ "\nRol: "+ interfaz.getUser().getRol());
 				
 			}
 		});
@@ -154,7 +150,7 @@ public class InterfazAdministrador {
 			}
 		});
 		
-		JLabel labText = new JLabel("Hola, "+ this.interfaz.verDatosUsuarioActivo().getNombreUsuario());
+		JLabel labText = new JLabel("Hola, "+ this.interfaz.getUser().getNombreUsuario());
 		labText.setBounds(563, 11, 324, 59);
 		labText.setFont(new Font("Arial", Font.PLAIN, 30));
 		labText.setHorizontalAlignment(SwingConstants.CENTER);
@@ -222,7 +218,6 @@ public class InterfazAdministrador {
 		
 		JTextArea textAreaArticulo = new JTextArea();
 		textAreaArticulo.setBounds(77, 302, 296, 119);
-		textAreaArticulo.setBorder(new LineBorder(((LineBorder) textPrecioArticulo.getBorder()).getLineColor(), 1));
 
 		frame.getContentPane().add(textAreaArticulo);
 		
@@ -233,14 +228,6 @@ public class InterfazAdministrador {
 		JButton botCrearArticulo = new JButton("Crear");
 		botCrearArticulo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*
-				try {
-					List<List<Object>> articulosTtal = interfaz.getConexion().listar("Articulo");
-					JOptionPane.showMessageDialog(null, articulosTtal.toString());
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-				*/
 				
 				if (textAreaArticulo.getText().intern() != "" && textPrecioArticulo.getText().intern() != "" && textNombreArticulo.getText().intern() != "" 
 						&& textMarcaArticulo.getText().intern() != "" && Integer.parseInt(textPrecioArticulo.getText().intern())>0) {
@@ -331,7 +318,6 @@ public class InterfazAdministrador {
 		
 		JTextPane panelDescrCita = new JTextPane();
 		panelDescrCita.setBounds(22, 704, 356, 64);
-		panelDescrCita.setBorder(new LineBorder(((LineBorder) textPrecioArticulo.getBorder()).getLineColor(), 1));
 
 		frame.getContentPane().add(panelDescrCita);
 		
@@ -458,7 +444,13 @@ public class InterfazAdministrador {
 			            	JOptionPane.showMessageDialog(null, "No se ha encontrado ningun usuario con ese nombre");
 			            }else {
 			            	
-			            	
+			            	if (cadena.get(3).toString().intern() == "Cliente") {
+			            		
+			            		addMascotaCliente(Integer.parseInt(cadena.get(0).toString().intern()));
+			            		
+			            	}else {
+			            		JOptionPane.showMessageDialog(null, "Estas seleccionando un Administrador");
+			            	}
 			            	
 			            }
 						
@@ -487,7 +479,6 @@ public class InterfazAdministrador {
 			}
 		});
 		
-		//No tira el cambiar de color el toggle
 		botModoNoct.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -497,6 +488,73 @@ public class InterfazAdministrador {
             }
         });
 		
+		
+		
+	}
+	
+	private void addMascotaCliente(int idUsuario) {
+		/*
+		 * PRUEBAS
+		 */
+		
+		JPanel panel = new JPanel(new GridLayout(0, 2));
+
+        JTextField campoNombre = new JTextField();
+        JTextField campoEspecie = new JTextField();
+        JTextField campoRaza = new JTextField();
+        JTextField campofecha = new JTextField();
+
+        panel.add(new JLabel("Nombre:"));
+        panel.add(campoNombre);
+        panel.add(new JLabel("Especie:"));
+        panel.add(campoEspecie);
+        panel.add(new JLabel("Raza:"));
+        panel.add(campoRaza);
+        panel.add(new JLabel("FechaNacimiento:"));
+        panel.add(campofecha);
+        
+        
+
+        int resultado = JOptionPane.showConfirmDialog(null, panel, "Ingrese Informacion", JOptionPane.OK_CANCEL_OPTION);
+
+        if (resultado == JOptionPane.OK_OPTION) {
+        	
+        	try {
+        		List<List<Object>> mascotaTotal = interfaz.getConexion().listar("Mascota");
+        		int maximo = 0;
+        		
+        		for (List<Object> user : mascotaTotal) {
+    				if ((int) user.get(0) > maximo) {
+    					maximo = (int) user.get(0);
+    				}
+    			}
+    			
+    			maximo++;
+        		
+        		Map<String, Object> valores = new HashMap<>();
+        		
+        		valores.put("idMascota", maximo);
+        		valores.put("nombre", campoNombre.getText().intern());
+        		valores.put("especie", campoEspecie.getText().intern());
+        		valores.put("raza", campoRaza.getText().intern());
+        		valores.put("fechaNacimiento", java.sql.Date.valueOf(campofecha.getText()));
+        		valores.put("idUsuario", idUsuario);
+        		
+        		interfaz.getConexion().agregarFilaATabla("Mascota", valores);
+        		
+        		List<Map<String, Object>> filaCliente = interfaz.getConexion().obtenerFilasDeTabla("Cliente", Arrays.asList("numMascotas"), "idUsuario = ?", idUsuario);
+        		
+        		int nuevoNumMascotas = (int) filaCliente.get(0).get("numMascotas") + 1;
+        		
+        		interfaz.getConexion().actualizarFila("Cliente", "numMascotas", nuevoNumMascotas, "idUsuario", idUsuario);
+        		
+        		
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+        	
+        }
 	}
 	
 	private void modoNocturno(JToggleButton botModoNoct) {
@@ -509,6 +567,9 @@ public class InterfazAdministrador {
                 JButton boton = (JButton) component;
                 boton.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
                 
+            } else if (component instanceof JLabel) {
+            	JLabel labl = (JLabel) component;
+            	labl.setForeground(botModoNoct.isSelected() ? Color.white : Color.black);
             }
         }
 		frame.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
@@ -640,73 +701,94 @@ public class InterfazAdministrador {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	
-            	//añadir Primero usuario -> recoger id creado -> añadir a cliente/administrador
-            	
-            	if (txtUsuario.getText().intern()!= "" && txtPassword.getPassword().toString().intern() != "" && cboTipoUsuario.getSelectedItem().toString().intern()!= "" 
-            			&& txtNombreCompleto.getText().intern()!= "" && txtTelefono.getText().intern() != "" && txtDNI.getText().intern() != "") {
-            		
-            		
-					try {
-						List<List<Object>> usuariosTotal = interfaz.getConexion().listar("Usuario");
-						
-						int maximo = -1;
-						
-						for (List<Object> user : usuariosTotal) {
-							if ((int) user.get(0) > maximo) {
-								maximo = (int) user.get(0);
-							}
-						}
-						
-						maximo++;
-	            		
-	            		//Primero Usuario
-	            		
-	            		
-	            		Map<String, Object> valores = new HashMap<>();
-						
-						valores.put("idUsuario", maximo);
-						valores.put("nombreUsuario", txtUsuario.getText().intern());
-						valores.put("contraseña", txtPassword.getPassword().toString().intern());
-						valores.put("rol", cboTipoUsuario.getSelectedItem().toString().intern());
-						interfaz.getConexion().agregarFilaATabla("Usuario", valores);
-				        
-						//Ahora creamos el cliente a base de idUsuario
-						if(cboTipoUsuario.getSelectedItem().toString().intern()== "Cliente") {
-							Map<String, Object> valoresCliente = new HashMap<>();
-							
-							valoresCliente.put("idUsuario", maximo);
-							valoresCliente.put("dni", txtDNI.getText().intern());
-							valoresCliente.put("telefono", txtTelefono.getText().intern());
+            	try {
+					
+            		if (txtUsuario.getText().intern()!= "" && txtPassword.getPassword().toString().intern() != "" && cboTipoUsuario.getSelectedItem().toString().intern()!= "") {
+            			
+            			if(cboTipoUsuario.getSelectedItem().toString().intern()== "Cliente" && txtNombreCompleto.getText().intern()!= "" 
+                				&& txtTelefono.getText().intern() != "" && txtDNI.getText().intern() != "") {
+                			
+                			List<List<Object>> usuariosTotal = interfaz.getConexion().listar("Usuario");
+    						
+    						int maximo = -1;
+    						
+    						for (List<Object> user : usuariosTotal) {
+    							if ((int) user.get(0) > maximo) {
+    								maximo = (int) user.get(0);
+    							}
+    						}
+    						
+    						maximo++;
+    	            		
+    	            		Map<String, Object> valores = new HashMap<>();
+    						
+    						valores.put("idUsuario", maximo);
+    						valores.put("nombreUsuario", txtUsuario.getText().intern());
+    						valores.put("contraseña", new String(txtPassword.getPassword()).intern());
+    						valores.put("rol", cboTipoUsuario.getSelectedItem().toString().intern());
+    						interfaz.getConexion().agregarFilaATabla("Usuario", valores);
+    						
+    						Map<String, Object> valoresCliente = new HashMap<>();
+    						
+    						valoresCliente.put("idUsuario", maximo);
+    						valoresCliente.put("dni", txtDNI.getText().intern());
+    						valoresCliente.put("telefono", txtTelefono.getText().intern());
 
-							String cadenasep[] = txtNombreCompleto.getText().intern().split(" ");
-							
-							valoresCliente.put("nombre", cadenasep[0]);
-							valoresCliente.put("apellidos", String.join(" ", Arrays.copyOfRange(cadenasep, 1, cadenasep.length)));
-							valoresCliente.put("numMascotas", 0);
-							
-							interfaz.getConexion().agregarFilaATabla("Cliente", valoresCliente);
-						}else {
-							Map<String, Object> valoresAdministrador = new HashMap<>();
-						
-							valoresAdministrador.put("idUsuario", maximo);
-							valoresAdministrador.put("cadenaInicioSesion", new String(Base64.getEncoder().encode(txtUsuario.getText().intern().getBytes())));
-							
-							interfaz.getConexion().agregarFilaATabla("Cliente", valoresAdministrador);
-						}
-						
-						
-						
-						JOptionPane.showMessageDialog(null, "Se ha añadido el Usuario correctamente");
-						
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
+    						String cadenasep[] = txtNombreCompleto.getText().intern().split(" ");
+    						
+    						valoresCliente.put("nombre", cadenasep[0]);
+    						valoresCliente.put("apellidos", String.join(" ", Arrays.copyOfRange(cadenasep, 1, cadenasep.length)));
+    						valoresCliente.put("numMascotas", 0);
+    						
+    						interfaz.getConexion().agregarFilaATabla("Cliente", valoresCliente);
+    						
+    						JOptionPane.showMessageDialog(null, "Se ha añadido al cliente correctamente");
+                			
+                		}else if (cboTipoUsuario.getSelectedItem().toString().intern()== "Administrador") {
+                			
+                			List<List<Object>> usuariosTotal = interfaz.getConexion().listar("Usuario");
+    						
+    						int maximo = -1;
+    						
+    						for (List<Object> user : usuariosTotal) {
+    							if ((int) user.get(0) > maximo) {
+    								maximo = (int) user.get(0);
+    							}
+    						}
+    						
+    						maximo++;
+    	            		
+    	            		Map<String, Object> valores = new HashMap<>();
+    						
+    						valores.put("idUsuario", maximo);
+    						valores.put("nombreUsuario", txtUsuario.getText().intern());
+    						valores.put("contraseña", new String(txtPassword.getPassword()).intern());
+    						valores.put("rol", cboTipoUsuario.getSelectedItem().toString().intern());
+    						interfaz.getConexion().agregarFilaATabla("Usuario", valores);
+    						
+    						Map<String, Object> valoresAdministrador = new HashMap<>();
+    						
+    						valoresAdministrador.put("idUsuario", maximo);
+    						valoresAdministrador.put("cadenaInicioSesion", new String(Base64.getEncoder().encode(txtUsuario.getText().intern().getBytes())));
+    						
+    						interfaz.getConexion().agregarFilaATabla("Administrador", valoresAdministrador);
+    						
+    						JOptionPane.showMessageDialog(null, "Se ha añadido al administrador correctamente");
+                			
+                		}else {
+                			JOptionPane.showMessageDialog(null, "Revisa los campos, no se puede añadir al usuario");
+                		}
+            			
+            		}else {
+            			JOptionPane.showMessageDialog(null, "No puede haber campos vacios");
+            		}
             		
             		
-            	}
+            		
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
             	
-                JOptionPane.showMessageDialog(null, "Aqui falta poder añadir");
             }
         });
         this.addUsers.getContentPane().add(btnAdd);
@@ -763,8 +845,8 @@ public class InterfazAdministrador {
                 				JOptionPane.YES_NO_OPTION);
 
                 		if (confirmacion == JOptionPane.YES_OPTION) {
-                			interfaz.getConexion().eliminarFilaDeTabla("Usuario", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
                 			interfaz.getConexion().eliminarFilaDeTabla(cadena.get(3).toString().intern(), "idUsuario", Integer.parseInt(cadena.get(0).toString()));
+                			interfaz.getConexion().eliminarFilaDeTabla("Usuario", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
                 			JOptionPane.showMessageDialog(null, "El usuario "+cadena.get(1).toString()+" se ha eliminado correctamente");
                 		}
                     }

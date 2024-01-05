@@ -552,7 +552,7 @@ public class ConexionBD {
 	}
 
 
-	private boolean actualizarFila(String nombreTabla, String nombreColumna, Object nuevoValor, String columnaCondicion, Object valorCondicion) {
+	public boolean actualizarFila(String nombreTabla, String nombreColumna, Object nuevoValor, String columnaCondicion, Object valorCondicion) {
 	    try {
 	        // Construir la consulta SQL
 	        String sql = "UPDATE " + nombreTabla +

@@ -351,7 +351,14 @@ public class InterfazCliente {
 				JButton boton = (JButton) component;
 				boton.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
 
-			}
+			} else if (component instanceof JLabel) {
+            	JLabel labl = (JLabel) component;
+            	labl.setForeground(botModoNoct.isSelected() ? Color.white : Color.black);
+            	
+            } /*else if (component instanceof Choice) {
+            	Choice choic = (Choice) component;
+            	choic.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
+            }*/
 		}
 
 		frmInterfazDelCliente.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
@@ -425,7 +432,7 @@ public class InterfazCliente {
 
 	public void mostrarPerfil() throws Exception {
 		// Obtener el usuario activo una sola vez
-		Usuario usuarioActivo = interfaz.verDatosUsuarioActivo();
+		Usuario usuarioActivo = interfaz.getUser();
 
 		// Obtener todos los datos necesarios en una sola consulta
 		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Cliente", Arrays.asList("nombre", "apellidos", "dni", "telefono"), "idUsuario = ?", usuarioActivo.getIdUsuario());
