@@ -845,6 +845,11 @@ public class InterfazAdministrador {
                 				JOptionPane.YES_NO_OPTION);
 
                 		if (confirmacion == JOptionPane.YES_OPTION) {
+                			
+                			if (cadena.get(3).toString().intern()=="Cliente") {
+                				interfaz.getConexion().eliminarFilaDeTabla("Mascota", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
+                			}
+                			
                 			interfaz.getConexion().eliminarFilaDeTabla(cadena.get(3).toString().intern(), "idUsuario", Integer.parseInt(cadena.get(0).toString()));
                 			interfaz.getConexion().eliminarFilaDeTabla("Usuario", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
                 			JOptionPane.showMessageDialog(null, "El usuario "+cadena.get(1).toString()+" se ha eliminado correctamente");
