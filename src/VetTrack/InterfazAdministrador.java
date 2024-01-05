@@ -222,7 +222,7 @@ public class InterfazAdministrador {
 		
 		JTextArea textAreaArticulo = new JTextArea();
 		textAreaArticulo.setBounds(77, 302, 296, 119);
-		textAreaArticulo.setBorder(new LineBorder(Color.BLACK, 1));
+		textAreaArticulo.setBorder(new LineBorder(((LineBorder) textPrecioArticulo.getBorder()).getLineColor(), 1));
 
 		frame.getContentPane().add(textAreaArticulo);
 		
@@ -331,7 +331,7 @@ public class InterfazAdministrador {
 		
 		JTextPane panelDescrCita = new JTextPane();
 		panelDescrCita.setBounds(22, 704, 356, 64);
-		panelDescrCita.setBorder(new LineBorder(Color.BLACK, 1));
+		panelDescrCita.setBorder(new LineBorder(((LineBorder) textPrecioArticulo.getBorder()).getLineColor(), 1));
 
 		frame.getContentPane().add(panelDescrCita);
 		
