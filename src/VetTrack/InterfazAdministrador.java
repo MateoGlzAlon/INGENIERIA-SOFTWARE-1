@@ -294,11 +294,11 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(textFechaCita);
 		textFechaCita.setColumns(10);
 		
-		JLabel lblNewLabel_6 = new JLabel("Fecha cita: (YYYY-MM-DD)");
+		JLabel lblNewLabel_6 = new JLabel("Fecha cita: (dd/mm/aaaa)");
 		lblNewLabel_6.setBounds(226, 572, 152, 14);
 		frame.getContentPane().add(lblNewLabel_6);
 		
-		JLabel lblNewLabel_7 = new JLabel("Hora cita: (hh:mm:ss)");
+		JLabel lblNewLabel_7 = new JLabel("Hora cita: (hh:mm)");
 		lblNewLabel_7.setBounds(226, 628, 152, 14);
 		frame.getContentPane().add(lblNewLabel_7);
 		
@@ -326,74 +326,96 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(botCrearCita);
 		botCrearCita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (textUserCita.getText().intern() != "" && textMascCita.getText().intern() != "" && 
-						textFechaCita.getText().intern() != "" && textHoraCita.getText().intern() != "" && 
-						panelDescrCita.getText().intern()!= "" && java.sql.Date.valueOf(textFechaCita.getText()).getTime() < Date.valueOf(LocalDate.now()).getTime()) {
-					
-					try {
-						List<Object> user = interfaz.cogerDatosBorrar(textUserCita.getText().intern());
-						
-						int idMascota = -1;
-						
-						if(user != null) {
-							
-							boolean compr = false;
-							
-							ArrayList<String> listaMasc = interfaz.recTodasMascotas(Integer.parseInt(user.get(0).toString()));
-							
-							for (String mascota : listaMasc) {
-								
-								if (textMascCita.getText().intern() == mascota.intern()) {
-									
-									compr = true;
-									
-									idMascota = interfaz.idMascotaRecuperar(mascota, Integer.parseInt(user.get(0).toString()));
-									
-								}
-								
-							}
-							
-							if (compr == true) {
-								
-								List<List<Object>> citasTtal = interfaz.getConexion().listar("Cita");
-								
-								int maximo = -1;
-								
-								for (List<Object> cita : citasTtal) {
-									if ((int) cita.get(0) > maximo) {
-										maximo = (int) cita.get(0);
-									}
-								}
-								
-								Map<String, Object> valores = new HashMap<>();
-								
-								valores.put("idCita", maximo+1);
-								valores.put("idUsuario", Integer.parseInt(user.get(0).toString()));
-								valores.put("fechaCita", java.sql.Date.valueOf(textFechaCita.getText()));
-								valores.put("horaCita", java.sql.Time.valueOf(textHoraCita.getText()));
-								valores.put("idMascota", idMascota);
-								valores.put("descripcionCita", panelDescrCita.getText());
-								
-					            interfaz.getConexion().agregarFilaATabla("Cita", valores);
-					            
-					            JOptionPane.showMessageDialog(null, "La cita se ha añadido correctamente");
-								
-							}else {
-								JOptionPane.showMessageDialog(null, "La mascota no existe");
-							}
-							
-						}else {
-							JOptionPane.showMessageDialog(null, "El usuario no existe");
-						}
-						
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-					
-				}else {
-					JOptionPane.showMessageDialog(null, "No puede haber un campo vacio o la fecha es incorrecta");
-				}
+			    String fechaFinal = "";
+
+			    if (!textFechaCita.getText().equals("")) {
+			        String fechaCita = textFechaCita.getText();
+
+			        String[] partesFecha = fechaCita.split("/");
+
+			        // Obtener día, mes y año
+			        String anio = partesFecha[2];
+			        String mes = partesFecha[1];
+			        String dia = partesFecha[0];
+
+			        fechaFinal = anio + "-" + mes + "-" + dia;
+
+			        System.out.println("Fecha: " + fechaFinal);
+			    }
+
+			    if (!textUserCita.getText().isEmpty() && !textMascCita.getText().isEmpty() && !textFechaCita.getText().isEmpty()
+			            && !textHoraCita.getText().isEmpty() && !panelDescrCita.getText().isEmpty()) {
+
+			        try {
+			            List<Object> user = interfaz.cogerDatosBorrar(textUserCita.getText().intern());
+
+			            int idMascota = -1;
+
+			            if (user != null) {
+
+			                boolean compr = false;
+
+			                ArrayList<String> listaMasc = interfaz.recTodasMascotas(Integer.parseInt(user.get(0).toString()));
+
+			                for (String mascota : listaMasc) {
+
+			                    if (textMascCita.getText().intern().equals(mascota.intern())) {
+
+			                        compr = true;
+
+			                        idMascota = interfaz.idMascotaRecuperar(mascota, Integer.parseInt(user.get(0).toString()));
+
+			                    }
+
+			                }
+
+			                if (compr) {
+
+			                    List<List<Object>> citasTtal = interfaz.getConexion().listar("Cita");
+
+			                    int maximo = -1;
+
+			                    for (List<Object> cita : citasTtal) {
+			                        if ((int) cita.get(0) > maximo) {
+			                            maximo = (int) cita.get(0);
+			                        }
+			                    }
+
+			                    Map<String, Object> valores = new HashMap<>();
+
+			                    valores.put("idCita", maximo + 1);
+			                    valores.put("idUsuario", Integer.parseInt(user.get(0).toString()));
+			                    valores.put("fechaCita", java.sql.Date.valueOf(fechaFinal));
+
+			                    String horaCita = textHoraCita.getText() + ":00";
+
+			                    valores.put("horaCita", java.sql.Time.valueOf(horaCita));
+			                    valores.put("idMascota", idMascota);
+			                    valores.put("descripcionCita", panelDescrCita.getText());
+
+			                    System.out.println("Cita: " + valores.toString());
+
+			                    interfaz.getConexion().agregarFilaATabla("Cita", valores);
+
+			                    JOptionPane.showMessageDialog(null, "La cita se ha añadido correctamente");
+
+			                } else {
+			                    JOptionPane.showMessageDialog(null, "La mascota no existe");
+			                }
+
+			            } else {
+			                JOptionPane.showMessageDialog(null, "El usuario no existe");
+			            }
+
+			        } catch (Exception e1) {
+			            e1.printStackTrace();
+			        }
+
+			    } else {
+			        JOptionPane.showMessageDialog(null, "No puede haber un campo vacío o la fecha es incorrecta");
+			    }
 			}
+
 		});
 		
 		JLabel lblNewLabel_9 = new JLabel("Citas futuras");
