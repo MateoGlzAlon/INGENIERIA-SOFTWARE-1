@@ -428,6 +428,10 @@ public class InterfazAdministrador {
 		JButton botAddMasc = new JButton("Añadir Mascota");
 		botAddMasc.setBounds(957, 157, 115, 23);
 		frame.getContentPane().add(botAddMasc);
+		
+		JButton botGenerarVenta = new JButton("Generar Venta");
+		botGenerarVenta.setBounds(10, 432, 131, 23);
+		frame.getContentPane().add(botGenerarVenta);
 		botAddMasc.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -553,6 +557,37 @@ public class InterfazAdministrador {
 				e.printStackTrace();
 			}
 			
+        	
+        }
+	}
+	
+	//No quitar, esto es para ir cambiando a JOptionPane
+	private void addUsers() {
+		
+		JTextField txtUsuario;
+	    JPasswordField txtPassword;
+	    JComboBox<String> cboTipoUsuario;
+	    JTextField txtNombreCompleto, txtTelefono, txtDNI;
+	    
+	    JPanel panel = new JPanel(new GridLayout(0, 2));
+		
+		txtUsuario = new JTextField();
+        txtPassword = new JPasswordField();
+        cboTipoUsuario = new JComboBox<>(new String[]{
+        		"",
+        		"Administrador", 
+        		"Cliente"
+        		}
+        );
+        
+        txtNombreCompleto = new JTextField();
+        txtTelefono = new JTextField();
+        txtDNI = new JTextField();
+        
+
+        int resultado = JOptionPane.showConfirmDialog(null, panel, "Ingrese Informacion", JOptionPane.OK_CANCEL_OPTION);
+
+        if (resultado == JOptionPane.OK_OPTION) {
         	
         }
 	}
