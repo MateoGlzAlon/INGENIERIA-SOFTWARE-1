@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -35,6 +36,8 @@ import javax.swing.JTextArea;
 
 import java.util.Base64;
 import javax.swing.JScrollPane;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 public class InterfazAdministrador {
 
@@ -82,6 +85,7 @@ public class InterfazAdministrador {
 		frame.getContentPane().setLayout(null);
 
 		JButton botCerrarSesion = new JButton("Cerrar Sesion");
+		botCerrarSesion.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		botCerrarSesion.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -102,11 +106,13 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(botCerrarSesion);
 
 		JToggleButton botModoNoct = new JToggleButton("Modo Nocturno");
+		botModoNoct.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
 		botModoNoct.setBounds(897, 29, 131, 23);
 		frame.getContentPane().add(botModoNoct);
 
 		JButton botVerPerfil = new JButton("Ver Perfil");
+		botVerPerfil.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		botVerPerfil.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -136,6 +142,7 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(botVerPerfil);
 
 		JButton botCrearUsuario = new JButton("Crear Usuario...");
+		botCrearUsuario.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		botCrearUsuario.setBounds(202, 11, 176, 51);
 		frame.getContentPane().add(botCrearUsuario);
 		botCrearUsuario.addActionListener(new ActionListener() {
@@ -146,6 +153,7 @@ public class InterfazAdministrador {
 		});
 
 		JButton botQuitarUsuario = new JButton("Eliminar Usuario...");
+		botQuitarUsuario.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		botQuitarUsuario.setBounds(377, 11, 176, 51);
 		frame.getContentPane().add(botQuitarUsuario);
 		botQuitarUsuario.addActionListener(new ActionListener() {
@@ -202,7 +210,8 @@ public class InterfazAdministrador {
 		
 
 		JButton botBuscarUser = new JButton("Buscar");
-		botBuscarUser.setBounds(1075, 185, 100, 23);
+		botBuscarUser.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		botBuscarUser.setBounds(940, 186, 100, 23);
 		frame.getContentPane().add(botBuscarUser);
 		botBuscarUser.addActionListener(new ActionListener() {
 			@Override
@@ -212,11 +221,13 @@ public class InterfazAdministrador {
 		});
 
 		textUserBuscar = new JTextField();
+		textUserBuscar.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textUserBuscar.setBounds(830, 186, 100, 20);
 		frame.getContentPane().add(textUserBuscar);
 		textUserBuscar.setColumns(10);
 
 		JLabel labUserBuscar = new JLabel("Buscar Usuario:");
+		labUserBuscar.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		labUserBuscar.setBounds(830, 161, 159, 14);
 		frame.getContentPane().add(labUserBuscar);
 
@@ -225,8 +236,9 @@ public class InterfazAdministrador {
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 		frame.getContentPane().add(lblNewLabel);
 
-		JLabel lblNewLabel_1 = new JLabel("Nombre");
-		lblNewLabel_1.setBounds(22, 195, 46, 14);
+		JLabel lblNewLabel_1 = new JLabel("Nombre:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_1.setBounds(15, 195, 80, 14);
 		frame.getContentPane().add(lblNewLabel_1);
 
 		textNombreArticulo = new JTextField();
@@ -234,8 +246,9 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(textNombreArticulo);
 		textNombreArticulo.setColumns(10);
 
-		JLabel lblNewLabel_2 = new JLabel("Precio");
-		lblNewLabel_2.setBounds(22, 229, 46, 14);
+		JLabel lblNewLabel_2 = new JLabel("Precio:");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_2.setBounds(15, 229, 70, 14);
 		frame.getContentPane().add(lblNewLabel_2);
 
 		textPrecioArticulo = new JTextField();
@@ -249,11 +262,13 @@ public class InterfazAdministrador {
 
 		frame.getContentPane().add(textAreaArticulo);
 
-		JLabel lblNewLabel_3 = new JLabel("Descripcion");
-		lblNewLabel_3.setBounds(10, 307, 80, 14);
+		JLabel lblNewLabel_3 = new JLabel("Descripcion:");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_3.setBounds(15, 307, 80, 14);
 		frame.getContentPane().add(lblNewLabel_3);
 
 		JButton botCrearArticulo = new JButton("Crear");
+		botCrearArticulo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		botCrearArticulo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -277,6 +292,7 @@ public class InterfazAdministrador {
 		textUserCita.setColumns(10);
 
 		JLabel lblNewLabel_5 = new JLabel("Nombre Usuario:");
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_5.setBounds(40, 572, 152, 14);
 		frame.getContentPane().add(lblNewLabel_5);
 
@@ -286,10 +302,12 @@ public class InterfazAdministrador {
 		textFechaCita.setColumns(10);
 
 		JLabel lblNewLabel_6 = new JLabel("Fecha cita: (dd/mm/aaaa)");
+		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_6.setBounds(245, 572, 152, 14);
 		frame.getContentPane().add(lblNewLabel_6);
 
 		JLabel lblNewLabel_7 = new JLabel("Hora cita: (hh:mm)");
+		lblNewLabel_7.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_7.setBounds(245, 628, 152, 14);
 		frame.getContentPane().add(lblNewLabel_7);
 
@@ -299,6 +317,7 @@ public class InterfazAdministrador {
 		textHoraCita.setColumns(10);
 
 		JLabel lblNewLabel_8 = new JLabel("Nombre mascota:");
+		lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_8.setBounds(40, 628, 152, 14);
 		frame.getContentPane().add(lblNewLabel_8);
 
@@ -314,7 +333,8 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(panelDescrCita);
 
 		JButton botCrearCita = new JButton("Crear");
-		botCrearCita.setBounds(284, 779, 89, 23);
+		botCrearCita.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		botCrearCita.setBounds(308, 779, 89, 23);
 		frame.getContentPane().add(botCrearCita);
 		botCrearCita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -337,7 +357,8 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(lblNewLabel_10);
 
 		JLabel lblNewLabel_11 = new JLabel("Marca:");
-		lblNewLabel_11.setBounds(22, 264, 46, 14);
+		lblNewLabel_11.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_11.setBounds(15, 264, 70, 14);
 		frame.getContentPane().add(lblNewLabel_11);
 
 		textMarcaArticulo = new JTextField();
@@ -345,19 +366,23 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(textMarcaArticulo);
 		textMarcaArticulo.setColumns(10);
 
-		JLabel lblNewLabel_12 = new JLabel("Descripcion");
+		JLabel lblNewLabel_12 = new JLabel("Descripción:");
+		lblNewLabel_12.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_12.setBounds(40, 684, 89, 14);
 		frame.getContentPane().add(lblNewLabel_12);
 
 		JButton botActualizarUserBuscar = new JButton("Actualizar");
-		botActualizarUserBuscar.setBounds(1075, 157, 100, 23);
+		botActualizarUserBuscar.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		botActualizarUserBuscar.setBounds(940, 152, 100, 23);
 		frame.getContentPane().add(botActualizarUserBuscar);
 
 		JButton botAddMasc = new JButton("Añadir Mascota");
-		botAddMasc.setBounds(940, 157, 130, 23);
+		botAddMasc.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		botAddMasc.setBounds(1044, 186, 130, 23);
 		frame.getContentPane().add(botAddMasc);
 
 		JButton botonNuevaVenta = new JButton("Nueva venta");
+		botonNuevaVenta.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		botonNuevaVenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -365,8 +390,18 @@ public class InterfazAdministrador {
 
 			}
 		});
-		botonNuevaVenta.setBounds(940, 185, 130, 23);
+		botonNuevaVenta.setBounds(1044, 152, 130, 23);
 		frame.getContentPane().add(botonNuevaVenta);
+		
+		
+		ImageIcon icon = new ImageIcon("etc/IMAGENES/logo_VetTrack.png");
+		Image image = icon.getImage();
+		Image scaledImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+		JLabel labelIcono = new JLabel(scaledIcon);
+		labelIcono.setBounds(30, 75, 100, 100);
+		frame.getContentPane().add(labelIcono);
 		
 		
 		botAddMasc.addActionListener(new ActionListener() {
@@ -523,14 +558,14 @@ public class InterfazAdministrador {
 				panelTextUser.setText("");
 				JOptionPane.showMessageDialog(null, "No se ha encontrado ningun usuario con ese nombre");
 			} else {
-				String datosUser = " ID: "+ cadena.get(0).toString() + 
+				String datosUser = " ID del Cliente: "+ cadena.get(0).toString() + 
 						"\n Username: "+cadena.get(1).toString()+
 						"\n Rol: "+cadena.get(3).toString();
 				String mascClient = "";
 
 				if (cadena.get(3).toString().intern() != "Administrador") {
 					mascClient = "\nMascotas que tiene el cliente:\n" + 
-							"_____________________________________________";
+							"_____________________________________________\n";
 
 					List<String> mascotas = interfaz.recTodasMascotas((int) cadena.get(0));
 

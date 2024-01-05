@@ -266,7 +266,7 @@ public class Interfaz {
 		if (!resultados.isEmpty()) {
 			Map<String, Object> datosMascota = resultados.get(0);
 
-			return  "\n ID: " + String.valueOf(datosMascota.get("idMascota")) + 
+			return    " ID de la mascota: " + String.valueOf(datosMascota.get("idMascota")) + 
 					"\n Nombre: "+ nombreMascota +
 					"\n Especie: " + String.valueOf(datosMascota.get("especie")) +
 					"\n Raza: " +  String.valueOf(datosMascota.get("raza")) + 
