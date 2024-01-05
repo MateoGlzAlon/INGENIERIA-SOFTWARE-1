@@ -306,8 +306,12 @@ public class InterfazCliente {
 		botonActualizarCitas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					rellenarCitasPasadas();
-					rellenarCitasFuturas();
+
+					if(choiceMascotas.getSelectedIndex() != 0) {
+						rellenarCitasPasadas();
+						rellenarCitasFuturas();	
+					}
+
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -352,10 +356,10 @@ public class InterfazCliente {
 				boton.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
 
 			} else if (component instanceof JLabel) {
-            	JLabel labl = (JLabel) component;
-            	labl.setForeground(botModoNoct.isSelected() ? Color.white : Color.black);
-            	
-            } /*else if (component instanceof Choice) {
+				JLabel labl = (JLabel) component;
+				labl.setForeground(botModoNoct.isSelected() ? Color.white : Color.black);
+
+			} /*else if (component instanceof Choice) {
             	Choice choic = (Choice) component;
             	choic.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
             }*/
@@ -385,7 +389,6 @@ public class InterfazCliente {
 	public void establecerMascotas() throws NumberFormatException, Exception {
 
 		int numMascotas = Integer.parseInt(conexion.obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", interfaz.getUser().getIdUsuario()));
-
 		int idUsuario = interfaz.getUser().getIdUsuario();
 
 		List<String> lista = conexion.obtenerDatosDeTablaLista("Mascota", "nombre", "idUsuario", idUsuario);
@@ -421,15 +424,13 @@ public class InterfazCliente {
 			textFieldNombreMascota.setText(nombreMascota);
 			textFieldEspecieMascota.setText(String.valueOf(datosMascota.get("especie")));
 			textFieldRazaMascota.setText(String.valueOf(datosMascota.get("raza")));
-			textFieldFechaNacimientoMascota.setText(String.valueOf(datosMascota.get("fechaNacimiento")));
+			textFieldFechaNacimientoMascota.setText(new SimpleDateFormat("dd / MM / yyyy").format(datosMascota.get("fechaNacimiento")));
 			textFieldIdUsuarioMascota.setText(dueno);
 		}
 	}
 
-
-
-
-
+	
+	
 	public void mostrarPerfil() throws Exception {
 		// Obtener el usuario activo una sola vez
 		Usuario usuarioActivo = interfaz.getUser();
