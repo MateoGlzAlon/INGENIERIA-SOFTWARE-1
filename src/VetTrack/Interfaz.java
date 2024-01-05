@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class Interfaz {
 	public Usuario getUser() {
 		return this.user;
 	}
-	
+
 	public ConexionBD getConexion() {
 		return this.conexion;
 	}
@@ -123,13 +124,13 @@ public class Interfaz {
 		panel.add(botonAccept);
 
 		ImageIcon icon = new ImageIcon("etc/IMAGENES/logo_VetTrack.png");
-		
-		Image image = icon.getImage();
-        Image scaledImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-		
-		
+		Image image = icon.getImage();
+		Image scaledImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+
+		ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+
 		JLabel labelIcono = new JLabel(scaledIcon);
 		labelIcono.setBounds(490, 40, 100, 100);
 		panel.add(labelIcono);
@@ -142,7 +143,7 @@ public class Interfaz {
 			int idUsuarioEncontrado = recogerIdUsuario(usuario, passwd);
 
 			if (idUsuarioEncontrado != -1) {
-				
+
 				String rolUsuario = conexion.obtenerDatoDeTabla("Usuario", "rol", "idUsuario", idUsuarioEncontrado);
 
 				this.user = new Usuario(idUsuarioEncontrado, usuario, passwd, rolUsuario);
@@ -201,7 +202,7 @@ public class Interfaz {
 
 	public List<Object> cogerDatosBorrar(String username) throws Exception {
 
-		if (username == "") {
+		if (username.equals("")) {
 			return null;
 		}
 
@@ -216,13 +217,13 @@ public class Interfaz {
 		return null;
 
 	}
-	
+
 	public ArrayList<String> recTodasMascotas(int id) throws NumberFormatException, Exception {
-		
+
 		int numMascotas = Integer.parseInt(conexion.obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", id));
 
 		List<String> lista = conexion.obtenerDatosDeTablaLista("Mascota", "nombre", "idUsuario", id);
-		
+
 		ArrayList<String> mascotasLista = new ArrayList<String>();
 
 		for(int i = 0; i < numMascotas; i++) {
@@ -230,13 +231,13 @@ public class Interfaz {
 			mascotasLista.add(lista.get(i).toString().intern());
 
 		}
-		
+
 		return mascotasLista;
 
 	}
-	
+
 	public int idMascotaRecuperar(String nombreMascota, int idUsuario) throws Exception{
-		
+
 		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
 		String condicion = "nombre = ? AND idUsuario = ?";
 
@@ -246,13 +247,13 @@ public class Interfaz {
 
 		if (!resultados.isEmpty()) {
 			Map<String, Object> datosMascota = resultados.get(0);
-			
+
 			return (int) datosMascota.get("idMascota");
 		}
-		
+
 		return -1;
 	}
-	
+
 	public String mascRecDatos(String nombreMascota, int idUsuario) throws Exception {
 
 		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
@@ -264,14 +265,19 @@ public class Interfaz {
 
 		if (!resultados.isEmpty()) {
 			Map<String, Object> datosMascota = resultados.get(0);
-			
-			return "\nID: " + String.valueOf(datosMascota.get("idMascota")) + "\nNombre: "+ nombreMascota +"\nEspecie: " + String.valueOf(datosMascota.get("especie")) + "\nRaza: " + String.valueOf(datosMascota.get("raza")) + "\nFecha de nacimiento: " + String.valueOf(datosMascota.get("fechaNacimiento")) + "\n-------------------\n";
+
+			return  "\n ID: " + String.valueOf(datosMascota.get("idMascota")) + 
+					"\n Nombre: "+ nombreMascota +
+					"\n Especie: " + String.valueOf(datosMascota.get("especie")) +
+					"\n Raza: " +  String.valueOf(datosMascota.get("raza")) + 
+					"\n Fecha de nacimiento: " + String.valueOf(new SimpleDateFormat("dd / MM / yyyy").format(datosMascota.get("fechaNacimiento"))) + 
+					"\n=============================================\n";
 
 		}
 
 		return "";
 	}
-	
+
 
 	private void confirmarSalir(JFrame frame) throws Exception {
 		int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar",
