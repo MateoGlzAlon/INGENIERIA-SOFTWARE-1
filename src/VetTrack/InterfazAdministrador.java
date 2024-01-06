@@ -42,7 +42,6 @@ import javax.swing.ImageIcon;
 public class InterfazAdministrador {
 
 	public JFrame frame;
-	private JFrame addUsers;
 	private JFrame delUsers;
 	private Interfaz interfaz;
 	private Color colorOriginalBton;
@@ -148,7 +147,8 @@ public class InterfazAdministrador {
 		botCrearUsuario.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				crearUsuario();
+				//crearUsuario();
+				createUser();
 			}
 		});
 
@@ -159,7 +159,8 @@ public class InterfazAdministrador {
 		botQuitarUsuario.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				eliminarUsuario();
+				//eliminarUsuario();
+				deleteUser();
 			}
 		});
 
@@ -442,9 +443,6 @@ public class InterfazAdministrador {
 	}
 
 	private void addMascotaCliente(int idUsuario) {
-		/*
-		 * PRUEBAS
-		 */
 
 		JPanel panel = new JPanel(new GridLayout(0, 2));
 
@@ -468,50 +466,53 @@ public class InterfazAdministrador {
 
 		if (resultado == JOptionPane.OK_OPTION) {
 			
-			String fechaCita = campofecha.getText();
+			if (campoEspecie.getText().intern()!="" && campofecha.getText().intern() != "" && campoRaza.getText().intern() != "" && campoNombre.getText().intern() != "") {
+				String fechaCita = campofecha.getText();
 
-			String[] partesFecha = fechaCita.split("/");
+				String[] partesFecha = fechaCita.split("/");
 
-			// Obtener día, mes y año
-			String anio = partesFecha[2];
-			String mes = partesFecha[1];
-			String dia = partesFecha[0];
+				String anio = partesFecha[2];
+				String mes = partesFecha[1];
+				String dia = partesFecha[0];
 
-			String fechaFinal = anio + "-" + mes + "-" + dia;
+				String fechaFinal = anio + "-" + mes + "-" + dia;
 
 
-			try {
-				List<List<Object>> mascotaTotal = interfaz.getConexion().listar("Mascota");
-				int maximo = 0;
+				try {
+					List<List<Object>> mascotaTotal = interfaz.getConexion().listar("Mascota");
+					int maximo = 0;
 
-				for (List<Object> user : mascotaTotal) {
-					if ((int) user.get(0) > maximo) {
-						maximo = (int) user.get(0);
+					for (List<Object> user : mascotaTotal) {
+						if ((int) user.get(0) > maximo) {
+							maximo = (int) user.get(0);
+						}
 					}
+
+					maximo++;
+
+					Map<String, Object> valores = new HashMap<>();
+
+					valores.put("idMascota", maximo);
+					valores.put("nombre", campoNombre.getText().intern());
+					valores.put("especie", campoEspecie.getText().intern());
+					valores.put("raza", campoRaza.getText().intern());
+					valores.put("fechaNacimiento", java.sql.Date.valueOf(fechaFinal));
+					valores.put("idUsuario", idUsuario);
+
+					interfaz.getConexion().agregarFilaATabla("Mascota", valores);
+
+					List<Map<String, Object>> filaCliente = interfaz.getConexion().obtenerFilasDeTabla("Cliente", Arrays.asList("numMascotas"), "idUsuario = ?", idUsuario);
+
+					int nuevoNumMascotas = (int) filaCliente.get(0).get("numMascotas") + 1;
+
+					interfaz.getConexion().actualizarFila("Cliente", "numMascotas", nuevoNumMascotas, "idUsuario", idUsuario);
+
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-
-				maximo++;
-
-				Map<String, Object> valores = new HashMap<>();
-
-				valores.put("idMascota", maximo);
-				valores.put("nombre", campoNombre.getText().intern());
-				valores.put("especie", campoEspecie.getText().intern());
-				valores.put("raza", campoRaza.getText().intern());
-				valores.put("fechaNacimiento", java.sql.Date.valueOf(fechaFinal));
-				valores.put("idUsuario", idUsuario);
-
-				interfaz.getConexion().agregarFilaATabla("Mascota", valores);
-
-				List<Map<String, Object>> filaCliente = interfaz.getConexion().obtenerFilasDeTabla("Cliente", Arrays.asList("numMascotas"), "idUsuario = ?", idUsuario);
-
-				int nuevoNumMascotas = (int) filaCliente.get(0).get("numMascotas") + 1;
-
-				interfaz.getConexion().actualizarFila("Cliente", "numMascotas", nuevoNumMascotas, "idUsuario", idUsuario);
-
-
-			} catch (Exception e) {
-				e.printStackTrace();
+			}else {
+				JOptionPane.showMessageDialog(null, "Hay campos vacios");
 			}
 
 
@@ -589,60 +590,28 @@ public class InterfazAdministrador {
 			e1.printStackTrace();
 		}
 	}
-
-	private void crearUsuario() {
-
+	
+	private void createUser() {
+		
+		JPanel panel = new JPanel(new GridLayout(0, 2));
+		
 		JTextField txtUsuario;
 		JPasswordField txtPassword;
 		JComboBox<String> cboTipoUsuario;
 		JTextField txtNombreCompleto, txtTelefono, txtDNI;
-
-		this.addUsers = new JFrame();
-		this.addUsers.setTitle("Añadir usuarios...");
-
-		this.addUsers.setSize(500, 250);
-		this.addUsers.setVisible(true);
-		this.addUsers.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.addUsers.setLocationRelativeTo(null);
-		this.addUsers.setResizable(false);
-
+		
 		txtUsuario = new JTextField();
 		txtPassword = new JPasswordField();
 		cboTipoUsuario = new JComboBox<>(new String[]{
 				"",
 				"Administrador", 
 				"Cliente"
-		}
-				);
-
+		});
+		
 		txtNombreCompleto = new JTextField();
 		txtTelefono = new JTextField();
 		txtDNI = new JTextField();
-
-		this.addUsers.getContentPane().setLayout(new GridLayout(0, 4));
-
-		this.addUsers.getContentPane().add(createRightAlignedLabel("Usuario:"));
-		this.addUsers.getContentPane().add(txtUsuario);
-
-		this.addUsers.getContentPane().add(createRightAlignedLabel("Nombre del usuario:"));
-		this.addUsers.getContentPane().add(txtNombreCompleto);
-
-		this.addUsers.getContentPane().add(createRightAlignedLabel("Contraseña:"));
-		this.addUsers.getContentPane().add(txtPassword);
-
-		this.addUsers.getContentPane().add(createRightAlignedLabel("Telefono:"));
-		this.addUsers.getContentPane().add(txtTelefono);
-
-		this.addUsers.getContentPane().add(createRightAlignedLabel("Rol:"));
-		this.addUsers.getContentPane().add(cboTipoUsuario);
-
-		this.addUsers.getContentPane().add(createRightAlignedLabel("DNI:"));
-		this.addUsers.getContentPane().add(txtDNI);
-
-		txtNombreCompleto.setVisible(false);
-		txtTelefono.setVisible(false);
-		txtDNI.setVisible(false);
-
+		
 		cboTipoUsuario.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -658,22 +627,39 @@ public class InterfazAdministrador {
 				}
 			}
 		});
+		
+		panel.add(new JLabel("Usuario:"));
+		panel.add(txtUsuario);
+		
+		panel.add(new JLabel("Contraseña:"));
+		panel.add(txtPassword);
+		
+		panel.add(new JLabel("Rol:"));
+		panel.add(cboTipoUsuario);
+		
+		panel.add(new JLabel("NombreCompleto:"));
+		panel.add(txtNombreCompleto);
+		
+		panel.add(new JLabel("Telefono:"));
+		panel.add(txtTelefono);
+		
+		panel.add(new JLabel("DNI:"));
+		panel.add(txtDNI);
+		
+		int resultado = JOptionPane.showConfirmDialog(this.frame, panel, "Agregar Usuario", JOptionPane.OK_CANCEL_OPTION);
 
-		for(int i = 0; i<3;i++) {
-			this.addUsers.getContentPane().add(new JPanel());
-		}
+		if (resultado == JOptionPane.OK_OPTION) {
+			try {
 
-		JButton btnAdd = new JButton("Añadir");
-		btnAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
+				if (txtUsuario.getText().intern()!= "" && txtPassword.getPassword().toString().intern() != "" && cboTipoUsuario.getSelectedItem().toString().intern()!= "") {
 
-					if (txtUsuario.getText().intern()!= "" && txtPassword.getPassword().toString().intern() != "" && cboTipoUsuario.getSelectedItem().toString().intern()!= "") {
-
-						if(cboTipoUsuario.getSelectedItem().toString().intern()== "Cliente" && txtNombreCompleto.getText().intern()!= "" 
-								&& txtTelefono.getText().intern() != "" && txtDNI.getText().intern() != "") {
-
+					if(cboTipoUsuario.getSelectedItem().toString().intern()== "Cliente" && txtNombreCompleto.getText().intern()!= "" 
+							&& txtTelefono.getText().intern() != "" && txtDNI.getText().intern() != "") {
+						
+						if (txtDNI.getText().intern().length() != 9 || txtTelefono.getText().intern().length() != 9) {
+							JOptionPane.showMessageDialog(null, "ERROR: El telefono o DNI deben de tener de maximo 9 caracteres");
+						}else {
+							
 							List<List<Object>> usuariosTotal = interfaz.getConexion().listar("Usuario");
 
 							int maximo = -1;
@@ -709,148 +695,105 @@ public class InterfazAdministrador {
 							interfaz.getConexion().agregarFilaATabla("Cliente", valoresCliente);
 
 							JOptionPane.showMessageDialog(null, "Se ha añadido al cliente correctamente");
+							
+						}
+						
 
-						}else if (cboTipoUsuario.getSelectedItem().toString().intern()== "Administrador") {
+					}else if (cboTipoUsuario.getSelectedItem().toString().intern()== "Administrador") {
 
-							List<List<Object>> usuariosTotal = interfaz.getConexion().listar("Usuario");
+						List<List<Object>> usuariosTotal = interfaz.getConexion().listar("Usuario");
 
-							int maximo = -1;
+						int maximo = -1;
 
-							for (List<Object> user : usuariosTotal) {
-								if ((int) user.get(0) > maximo) {
-									maximo = (int) user.get(0);
-								}
+						for (List<Object> user : usuariosTotal) {
+							if ((int) user.get(0) > maximo) {
+								maximo = (int) user.get(0);
 							}
-
-							maximo++;
-
-							Map<String, Object> valores = new HashMap<>();
-
-							valores.put("idUsuario", maximo);
-							valores.put("nombreUsuario", txtUsuario.getText().intern());
-							valores.put("contraseña", new String(txtPassword.getPassword()).intern());
-							valores.put("rol", cboTipoUsuario.getSelectedItem().toString().intern());
-							interfaz.getConexion().agregarFilaATabla("Usuario", valores);
-
-							Map<String, Object> valoresAdministrador = new HashMap<>();
-
-							valoresAdministrador.put("idUsuario", maximo);
-							valoresAdministrador.put("cadenaInicioSesion", new String(Base64.getEncoder().encode(txtUsuario.getText().intern().getBytes())));
-
-							interfaz.getConexion().agregarFilaATabla("Administrador", valoresAdministrador);
-
-							JOptionPane.showMessageDialog(null, "Se ha añadido al administrador correctamente");
-
-						}else {
-							JOptionPane.showMessageDialog(null, "Revisa los campos, no se puede añadir al usuario");
 						}
 
+						maximo++;
+
+						Map<String, Object> valores = new HashMap<>();
+
+						valores.put("idUsuario", maximo);
+						valores.put("nombreUsuario", txtUsuario.getText().intern());
+						valores.put("contraseña", new String(txtPassword.getPassword()).intern());
+						valores.put("rol", cboTipoUsuario.getSelectedItem().toString().intern());
+						interfaz.getConexion().agregarFilaATabla("Usuario", valores);
+
+						Map<String, Object> valoresAdministrador = new HashMap<>();
+
+						valoresAdministrador.put("idUsuario", maximo);
+						valoresAdministrador.put("cadenaInicioSesion", new String(Base64.getEncoder().encode(txtUsuario.getText().intern().getBytes())));
+
+						interfaz.getConexion().agregarFilaATabla("Administrador", valoresAdministrador);
+
+						JOptionPane.showMessageDialog(null, "Se ha añadido al administrador correctamente");
+
 					}else {
-						JOptionPane.showMessageDialog(null, "No puede haber campos vacios");
+						JOptionPane.showMessageDialog(null, "Revisa los campos, no se puede añadir al usuario");
 					}
 
-
-
-				} catch (Exception e2) {
-					e2.printStackTrace();
+				}else {
+					JOptionPane.showMessageDialog(null, "No puede haber campos vacios");
 				}
 
-			}
-		});
-		this.addUsers.getContentPane().add(btnAdd);
 
-		this.addUsers.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent evt) {
-				borrarFrame(addUsers);
-			}
-		});
 
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
 	}
-
-	private void eliminarUsuario() {
-
+	
+	private void deleteUser() {
+		
+		JPanel panel = new JPanel(new GridLayout(0, 2));
+		
 		JTextField txtNombre = new JTextField();
-		JLabel labelUser = new JLabel("Usuario:");
-		labelUser.setHorizontalAlignment(SwingConstants.CENTER);
+	
+		panel.add(new JLabel("Usuario:"));
+		panel.add(txtNombre);
+		
+		int resultado = JOptionPane.showConfirmDialog(null, panel, "Borrar Usuario", JOptionPane.OK_CANCEL_OPTION);
 
-		this.delUsers = new JFrame();
-		this.delUsers.setTitle("Borrar Usuario...");
+		if (resultado == JOptionPane.OK_OPTION) {
+			
+			try {
 
-		this.delUsers.setSize(500, 250);
-		this.delUsers.setVisible(true);
-		this.delUsers.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.delUsers.setLocationRelativeTo(null);
-		this.delUsers.setResizable(false);
+				List<Object> cadena = interfaz.cogerDatosBorrar(txtNombre.getText().toString().intern());
 
-		this.delUsers.getContentPane().setLayout(new GridLayout(0, 4));
+				if (cadena == null) {
+					JOptionPane.showMessageDialog(null, "No se ha encontrado ningun usuario con ese nombre");
+				}else {
+					int confirmacion = JOptionPane.showConfirmDialog(null, "ID: "+ cadena.get(0).toString() + "\nUsername: "+cadena.get(1).toString()+"\nRol: "+cadena.get(3).toString(), "Confirmar",
+							JOptionPane.YES_NO_OPTION);
 
-		for (int i = 0; i<5; i++) {
-			this.delUsers.getContentPane().add(new JPanel());
-		}
-
-		this.delUsers.getContentPane().add(labelUser);
-		this.delUsers.getContentPane().add(txtNombre);
-
-		for (int i = 0; i<3; i++) {
-			this.delUsers.getContentPane().add(new JPanel());
-		}
-
-		JButton btnAdd = new JButton("Buscar");
-		btnAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-
-					List<Object> cadena = interfaz.cogerDatosBorrar(txtNombre.getText().toString().intern());
-
-					if (cadena == null) {
-						JOptionPane.showMessageDialog(null, "No se ha encontrado ningun usuario con ese nombre");
-					}else {
-						int confirmacion = JOptionPane.showConfirmDialog(delUsers, "ID: "+ cadena.get(0).toString() + "\nUsername: "+cadena.get(1).toString()+"\nRol: "+cadena.get(3).toString(), "Confirmar",
-								JOptionPane.YES_NO_OPTION);
-
-						if (confirmacion == JOptionPane.YES_OPTION) {
-
-							if (cadena.get(3).toString().intern()=="Cliente") {
+					if (confirmacion == JOptionPane.YES_OPTION) {
+						
+						if (cadena.get(3).toString().intern()=="Cliente") {
+							//comprobar si tiene mascotas
+							if (Integer.parseInt(interfaz.getConexion().obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", Integer.parseInt(cadena.get(0).toString()))) != 0) {
 								interfaz.getConexion().eliminarFilaDeTabla("Mascota", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
 							}
-
-							interfaz.getConexion().eliminarFilaDeTabla(cadena.get(3).toString().intern(), "idUsuario", Integer.parseInt(cadena.get(0).toString()));
-							interfaz.getConexion().eliminarFilaDeTabla("Usuario", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
-							JOptionPane.showMessageDialog(null, "El usuario "+cadena.get(1).toString()+" se ha eliminado correctamente");
+							
 						}
-					}
 
-				} catch (Exception e1) {
-					e1.printStackTrace();
+						interfaz.getConexion().eliminarFilaDeTabla(cadena.get(3).toString().intern(), "idUsuario", Integer.parseInt(cadena.get(0).toString()));
+						interfaz.getConexion().eliminarFilaDeTabla("Usuario", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
+						JOptionPane.showMessageDialog(null, "El usuario "+cadena.get(1).toString()+" se ha eliminado correctamente");
+					}
 				}
 
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
-		});
-		this.delUsers.getContentPane().add(btnAdd);
-
-		this.delUsers.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent evt) {
-				borrarFrame(delUsers);
-			}
-		});
-
-		for (int i = 0; i<5; i++) {
-			this.delUsers.getContentPane().add(new JPanel());
+			
 		}
-
-	}
-
-	private JLabel createRightAlignedLabel(String text) {
-		JLabel label = new JLabel(text);
-		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		return label;
-	}
-
-	private void borrarFrame(JFrame frameBorrar) {
-		frameBorrar.dispose();
+		
+		
+		
 	}
 
 	//Puede haber solamente 2, > y <
