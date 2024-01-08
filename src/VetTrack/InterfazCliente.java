@@ -24,6 +24,8 @@ import java.awt.Image;
 import java.text.SimpleDateFormat;
 import java.awt.Font;
 
+import Exceptions.DBException;
+
 public class InterfazCliente {
 
 	public JFrame frmInterfazDelCliente;

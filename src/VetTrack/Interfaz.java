@@ -24,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.SwingConstants;
 
+import Exceptions.DBException;
+
 public class Interfaz {
 
 	// Usuario

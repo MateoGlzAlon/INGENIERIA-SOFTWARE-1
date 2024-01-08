@@ -39,6 +39,8 @@ import javax.swing.JScrollPane;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import Exceptions.DBException;
+
 public class InterfazAdministrador {
 
 	public JFrame frame;

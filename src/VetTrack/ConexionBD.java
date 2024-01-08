@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Exceptions.DBException;
+
 public class ConexionBD {
 
 	private static ConexionBD instancia; // Instancia única para el Singleton
@@ -38,7 +40,7 @@ public class ConexionBD {
 		return instancia;
 	}
 
-	public void abrirConexion() throws Exception {
+	public void abrirConexion() throws DBException {
 		if (dataBaseURL.isEmpty() || user.isEmpty() || pass.isEmpty() || driverName.isEmpty()) {
 			System.out.println("Error al crear la conexión (¿están inicializados?) con estos valores:");
 			this.mostrarValoresConexion();
@@ -47,19 +49,19 @@ public class ConexionBD {
 				Class.forName(this.driverName);
 				this.conexion = DriverManager.getConnection(this.dataBaseURL, this.user, this.pass);
 			} catch (Exception e) {
-				throw new Exception("Al abrir la base de datos " + e.getMessage());
+				throw new DBException("Al abrir la base de datos " + e.getMessage());
 			}
 		}
 	}
 
-	public void cerrarConexion() throws Exception {
+	public void cerrarConexion() throws DBException {
 		try {
 			if (this.conexion != null && !this.conexion.isClosed()) {
 				this.conexion.close();
 				System.out.println("Cierre correcto de la conexión con la base de datos");
 			}
 		} catch (Exception e) {
-			throw new Exception("Al cerrar la conexión de la base de datos. " + e.getMessage());
+			throw new DBException("Al cerrar la conexión de la base de datos. " + e.getMessage());
 		}
 	}
 
@@ -71,7 +73,7 @@ public class ConexionBD {
 		// Implementa el método para mostrar los valores de la conexión si es necesario
 	}
 
-	public String obtenerDatoDeTabla(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws Exception {
+	public String obtenerDatoDeTabla(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws DBException {
 		String resultado = null;
 
 		try {
@@ -102,19 +104,21 @@ public class ConexionBD {
 						//						System.out.println(nombreColumnaExtraer + ": " + resultado);
 					} else {
 						// No se encontró la fila con la condición proporcionada
-						throw new Exception("No se encontró la fila con la condición proporcionada.");
+						throw new DBException("No se encontró la fila con la condición proporcionada.");
 					}
 				}
 			}
 		} catch (Exception e) {
 			// Capturar cualquier excepción y lanzarla hacia arriba
-			throw new Exception("Error al obtener dato de la tabla: " + e.getMessage(), e);
+			throw new DBException("Error al obtener dato de la tabla: ");
 		}
 
 		return resultado;
 	}
 
-	public String obtenerDatoDeTablaConDosCondiciones(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar1, Object condicion1, String nombreColumnaComparar2, Object condicion2) throws Exception { 	    String resultado = null;
+	public String obtenerDatoDeTablaConDosCondiciones(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar1, Object condicion1, String nombreColumnaComparar2, Object condicion2) throws DBException { 	    
+		
+		String resultado = null;
 
 	try {
 		// Construir la consulta SQL con dos condiciones
@@ -152,13 +156,13 @@ public class ConexionBD {
 					//					System.out.println(nombreColumnaExtraer + ": " + resultado);
 				} else {
 					// No se encontró la fila con las condiciones proporcionadas
-					throw new Exception("No se encontró la fila con las condiciones proporcionadas.");
+					throw new DBException("No se encontró la fila con las condiciones proporcionadas.");
 				}
 			}
 		}
 	} catch (Exception e) {
 		// Capturar cualquier excepción y lanzarla hacia arriba
-		throw new Exception("Error al obtener dato de la tabla: " + e.getMessage(), e);
+		throw new DBException("Error al obtener dato de la tabla");
 	}
 
 	return resultado;
@@ -168,7 +172,7 @@ public class ConexionBD {
 
 
 
-	public List<String> obtenerDatosDeTablaLista(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws Exception {
+	public List<String> obtenerDatosDeTablaLista(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws DBException {
 		List<String> resultados = new ArrayList<>();
 
 		try {
@@ -200,14 +204,14 @@ public class ConexionBD {
 			}
 		} catch (Exception e) {
 			// Capturar cualquier excepción y lanzarla hacia arriba
-			throw new Exception("Error al obtener datos de la tabla: " + e.getMessage(), e);
+			throw new DBException("Error al obtener datos de la tabla");
 		}
 
 		return resultados;
 	}
 
 
-	public List<String> obtenerDatosDeTablaListaDosCondiciones(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar1, Object condicion1, String nombreColumnaComparar2, Object condicion2) throws Exception {
+	public List<String> obtenerDatosDeTablaListaDosCondiciones(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar1, Object condicion1, String nombreColumnaComparar2, Object condicion2) throws DBException {
 		List<String> resultados = new ArrayList<>();
 
 		try {
@@ -244,7 +248,7 @@ public class ConexionBD {
 			}
 		} catch (Exception e) {
 			// Capturar cualquier excepción y lanzarla hacia arriba
-			throw new Exception("Error al obtener datos de la tabla: " + e.getMessage(), e);
+			throw new DBException("Error al obtener datos de la tabla");
 		}
 
 		return resultados;
@@ -267,7 +271,7 @@ public class ConexionBD {
 	 * 
 	 */
 
-	public void agregarFilaATabla(String nombreTabla, Map<String, Object> valores) throws Exception {
+	public void agregarFilaATabla(String nombreTabla, Map<String, Object> valores) throws DBException {
 		try {
 			// Construir la consulta INSERT
 			StringBuilder queryBuilder = new StringBuilder("INSERT INTO ");
@@ -312,7 +316,7 @@ public class ConexionBD {
 			// Ejecutar la consulta
 			st.executeUpdate();
 		} catch (Exception e) {
-			throw new Exception("Error al agregar fila: " + e.getMessage());
+			throw new DBException("Error al agregar fila: " + e.getMessage());
 		} finally {
 			// Cerrar recursos si es necesario
 		}
@@ -320,7 +324,7 @@ public class ConexionBD {
 
 
 
-	public <T> void eliminarFilaDeTabla(String nombreTabla, String nombreColumnaComparar, T condicion) throws Exception {
+	public <T> void eliminarFilaDeTabla(String nombreTabla, String nombreColumnaComparar, T condicion) throws DBException {
 		try {
 			String query = "DELETE FROM " + nombreTabla + " WHERE " + nombreColumnaComparar + " = ?";
 			PreparedStatement st = this.getConexion().prepareStatement(query);
@@ -339,14 +343,14 @@ public class ConexionBD {
 				throw new Exception("No se encontró la fila para eliminar con la condición proporcionada.");
 			}
 		} catch (Exception e) {
-			throw new Exception("Error al eliminar: " + e.getMessage());
+			throw new DBException("Error al eliminar: " + e.getMessage());
 		} finally {
 
 		}
 	}
 
 
-	public List<List<Object>> listar(String nombreTabla) throws Exception {
+	public List<List<Object>> listar(String nombreTabla) throws DBException {
 		List<List<Object>> listaRegistros = new ArrayList<>();
 
 		try {
@@ -367,7 +371,7 @@ public class ConexionBD {
 				listaRegistros.add(registro);
 			}
 		} catch (Exception e) {
-			throw new Exception("Error al listar registros: " + e.getMessage());
+			throw new DBException("Error al listar registros: " + e.getMessage());
 		} finally {
 			// Asegúrate de cerrar la conexión, independientemente de si hubo una excepción o no
 
