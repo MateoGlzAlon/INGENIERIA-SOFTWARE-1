@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -442,27 +443,79 @@ public class InterfazCliente {
 
 		Map<String, Object> datosCliente = resultados.isEmpty() ? Collections.emptyMap() : resultados.get(0);
 
-		int idUsuario = usuarioActivo.getIdUsuario();
-		String nombreUsuario = usuarioActivo.getNombreUsuario();
-		String contrasena = usuarioActivo.getContrasena();
-		String rolUsuario = usuarioActivo.getRol();
 		String nombre = String.valueOf(datosCliente.get("nombre"));
 		String apellidos = String.valueOf(datosCliente.get("apellidos"));
 		String dni = String.valueOf(datosCliente.get("dni"));
 		String telefono = String.valueOf(datosCliente.get("telefono"));
+		
+		JPanel panel = new JPanel(new BorderLayout());
+		
+		JPanel panelInfo = new JPanel(new GridLayout(0, 2));
+		
+		JPanel panelImagen = new JPanel();
+		
+		ImageIcon icon = new ImageIcon("etc/IMAGENES/pfp.png");
+		Image image = icon.getImage();
+		Image scaledImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		ImageIcon scaledIcon = new ImageIcon(scaledImage);
+		
+		JLabel labelImagen = new JLabel(scaledIcon);
+		panelImagen.add(labelImagen);
+		
+		JLabel labelUsername = new JLabel("Username: " +this.interfaz.getUser().getNombreUsuario());
+		JLabel labelPasswd = new JLabel("Password: " + getAsteriscos(this.interfaz.getUser().getContrasena()));
+		JLabel labelRol = new JLabel("Rol: Administrador");
 
-		// Mostrar la información del perfil
-		JOptionPane.showMessageDialog(null,
-				"Id del usuario: " + idUsuario + ""
-						+ "\nUsuario: " + nombreUsuario + ""
-						+ "\nContraseña: " + contrasena + ""
-						+ "\nRol: " + rolUsuario
-						+ "\nNombre: " + nombre
-						+ "\nApellidos: " + apellidos
-						+ "\nDNI: " + dni
-						+ "\nTelefono: " + telefono,
-						"Perfil del usuario", 
-						JOptionPane.INFORMATION_MESSAGE);
+		JLabel labelNombre = new JLabel("Nombre: " + nombre);
+		JLabel labelApellidos = new JLabel("Apellidos: " + apellidos);
+		JLabel labelDNI = new JLabel("DNI: " + dni);
+		JLabel labelTel = new JLabel("Telefono: " + telefono);
+		
+		JButton btnVerPass = new JButton("Ver");
+		
+		btnVerPass.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	
+                JOptionPane.showMessageDialog(null, interfaz.getUser().getContrasena().toString(), "Ver Contraseña", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+		
+		panelInfo.add(labelUsername);
+		panelInfo.add(new JLabel());
+        panelInfo.add(labelPasswd);
+        panelInfo.add(btnVerPass);
+        panelInfo.add(labelRol);
+        panelInfo.add(new JLabel());
+        panelInfo.add(labelNombre);
+        panelInfo.add(new JLabel());
+        panelInfo.add(labelApellidos);
+        panelInfo.add(new JLabel());
+        panelInfo.add(labelDNI);
+        panelInfo.add(new JLabel());
+		panelInfo.add(labelTel);
+		panelInfo.add(new JLabel());
+        
+        panel.add(panelImagen, BorderLayout.WEST);
+        panel.add(panelInfo, BorderLayout.CENTER);
+		
+		JOptionPane.showMessageDialog(null, panel, "Ver Perfil", JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+	
+	private String getAsteriscos(String passwd) {
+		
+		int ast = passwd.length();
+		
+		StringBuffer cadena = new StringBuffer("");
+		
+		for(int i = 0; i<ast; i++) {
+			cadena.append("*");
+		}
+		
+		return cadena.toString();
+		
+	
 	}
 
 

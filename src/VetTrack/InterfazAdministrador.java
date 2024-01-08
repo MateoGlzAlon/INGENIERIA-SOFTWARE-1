@@ -453,7 +453,7 @@ public class InterfazAdministrador {
         });
 		
 		JLabel labelUsername = new JLabel("Username: " +this.interfaz.getUser().getNombreUsuario());
-		JLabel labelPasswd = new JLabel("Password: " + getAsteriscos(this.interfaz.getUser().getNombreUsuario()));
+		JLabel labelPasswd = new JLabel("Password: " + getAsteriscos(this.interfaz.getUser().getContrasena()));
 		JLabel labelRol = new JLabel("Rol: Administrador");
 		
 		panelInfo.add(labelUsername);
