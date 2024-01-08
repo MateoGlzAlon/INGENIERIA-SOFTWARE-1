@@ -1,5 +1,6 @@
 package VetTrack;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -44,7 +45,6 @@ import Exceptions.DBException;
 public class InterfazAdministrador {
 
 	public JFrame frame;
-	private JFrame delUsers;
 	private Interfaz interfaz;
 	private Color colorOriginalBton;
 	private JTextField textUserBuscar;
@@ -117,25 +117,7 @@ public class InterfazAdministrador {
 		botVerPerfil.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Modificar ver perfil
-
-				/*try {
-					List<Object> datosUsuario = interfaz.recupPosTablaCorrespondiente("Administrador", 
-							interfaz.recogerIdUsuario(interfaz.getUser().getNombreUsuario(), interfaz.getUser().getContrasena()));
-					JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.getUser().getIdUsuario() + ""
-							+ "\nUsuario: "+interfaz.getUser().getNombreUsuario()+""
-							+ "\nContraseña: "+interfaz.getUser().getContrasena() + ""
-							+ "\nRol: "+ interfaz.getUser().getRol() + ""
-							+ "\nDatos:\n"+ datosUsuario.toString());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}*/
-
-				JOptionPane.showMessageDialog(null, "Id del usuario: "+interfaz.getUser().getIdUsuario() + ""
-						+ "\nUsuario: "+interfaz.getUser().getNombreUsuario()+""
-						+ "\nContraseña: "+interfaz.getUser().getContrasena() + ""
-						+ "\nRol: "+ interfaz.getUser().getRol());
-
+				verPerfil();
 			}
 		});
 
@@ -442,6 +424,63 @@ public class InterfazAdministrador {
 
 
 
+	}
+	
+	private void verPerfil() {
+		
+		JPanel panel = new JPanel(new BorderLayout());
+		
+		JPanel panelInfo = new JPanel(new GridLayout(0, 2));
+		
+		JPanel panelImagen = new JPanel();
+		
+		ImageIcon icon = new ImageIcon("etc/IMAGENES/pfp.png");
+		Image image = icon.getImage();
+		Image scaledImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		ImageIcon scaledIcon = new ImageIcon(scaledImage);
+		
+		JLabel labelImagen = new JLabel(scaledIcon);
+		panelImagen.add(labelImagen);
+		
+		JButton btnVerPass = new JButton("Ver");
+		
+		btnVerPass.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	
+                JOptionPane.showMessageDialog(null, interfaz.getUser().getContrasena().toString(), "Ver Contraseña", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+		
+		JLabel labelUsername = new JLabel("Username: " +this.interfaz.getUser().getNombreUsuario());
+		JLabel labelPasswd = new JLabel("Password: " + getAsteriscos(this.interfaz.getUser().getNombreUsuario()));
+		JLabel labelRol = new JLabel("Rol: Administrador");
+		
+		panelInfo.add(labelUsername);
+		panelInfo.add(new JLabel());
+        panelInfo.add(labelPasswd);
+        panelInfo.add(btnVerPass);
+        panelInfo.add(labelRol);
+        
+        panel.add(panelImagen, BorderLayout.WEST);
+        panel.add(panelInfo, BorderLayout.CENTER);
+		
+		JOptionPane.showMessageDialog(null, panel, "Ver Perfil", JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+	
+	private String getAsteriscos(String passwd) {
+		
+		int ast = passwd.length();
+		
+		StringBuffer cadena = new StringBuffer("");
+		
+		for(int i = 0; i<ast; i++) {
+			cadena.append("*");
+		}
+		
+		return cadena.toString();
+		
 	}
 
 	private void addMascotaCliente(int idUsuario) {
