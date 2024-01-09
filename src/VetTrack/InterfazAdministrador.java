@@ -37,7 +37,6 @@ import javax.swing.JTextArea;
 
 import java.util.Base64;
 import javax.swing.JScrollPane;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import Exceptions.DBException;
@@ -520,17 +519,9 @@ public class InterfazAdministrador {
 
 
 				try {
-					List<List<Object>> mascotaTotal = interfaz.getConexion().listar("Mascota");
-					int maximo = 0;
+					int maximo = buscarMaximo("Mascota");
 
-					for (List<Object> user : mascotaTotal) {
-						if ((int) user.get(0) > maximo) {
-							maximo = (int) user.get(0);
-						}
-					}
-
-					maximo++;
-
+					
 					Map<String, Object> valores = new HashMap<>();
 
 					valores.put("idMascota", maximo);
@@ -558,6 +549,23 @@ public class InterfazAdministrador {
 
 
 		}
+	}
+	
+	private int buscarMaximo(String cadena) throws DBException {
+		
+		List<List<Object>> mascotaTotal = interfaz.getConexion().listar("Mascota");
+		int maximo = 0;
+
+		for (List<Object> user : mascotaTotal) {
+			if ((int) user.get(0) > maximo) {
+				maximo = (int) user.get(0);
+			}
+		}
+
+		maximo++;
+		
+		return maximo;
+		
 	}
 
 	private void modoNocturno(JToggleButton botModoNoct) {
@@ -622,8 +630,6 @@ public class InterfazAdministrador {
 				textPaneCitasPrevias.setText(recCitasUsuario(Integer.parseInt(cadena.get(0).toString()), "<"));
 				textPaneCitasFuturas.setText(recCitasUsuario(Integer.parseInt(cadena.get(0).toString()), ">"));
 				
-				System.out.println(interfaz.getConexion().listar("Cita"));
-
 			}
 
 
@@ -701,17 +707,7 @@ public class InterfazAdministrador {
 							JOptionPane.showMessageDialog(null, "ERROR: El telefono o DNI deben de tener de maximo 9 caracteres");
 						}else {
 							
-							List<List<Object>> usuariosTotal = interfaz.getConexion().listar("Usuario");
-
-							int maximo = -1;
-
-							for (List<Object> user : usuariosTotal) {
-								if ((int) user.get(0) > maximo) {
-									maximo = (int) user.get(0);
-								}
-							}
-
-							maximo++;
+							int maximo = buscarMaximo("Usuario");
 
 							Map<String, Object> valores = new HashMap<>();
 
@@ -742,17 +738,7 @@ public class InterfazAdministrador {
 
 					}else if (cboTipoUsuario.getSelectedItem().toString().intern()== "Administrador") {
 
-						List<List<Object>> usuariosTotal = interfaz.getConexion().listar("Usuario");
-
-						int maximo = -1;
-
-						for (List<Object> user : usuariosTotal) {
-							if ((int) user.get(0) > maximo) {
-								maximo = (int) user.get(0);
-							}
-						}
-
-						maximo++;
+						int maximo = buscarMaximo("Usuario");
 
 						Map<String, Object> valores = new HashMap<>();
 
@@ -874,23 +860,13 @@ public class InterfazAdministrador {
 				&& textMarcaArticulo.getText().intern() != "" && Float.parseFloat(textPrecioArticulo.getText().intern())>0) {
 
 			try {
-				List<List<Object>> articulosTtal = interfaz.getConexion().listar("Articulo");
-
-				int maximo = -1;
-
-				for (List<Object> artic : articulosTtal) {
-					if ((int) artic.get(0) > maximo) {
-						maximo = (int) artic.get(0);
-					}
-				}
+				int maximo = buscarMaximo("Articulo");
 
 				Map<String, Object> valores = new HashMap<>();
 
 				valores.put("idArticulo", maximo+1);
 				valores.put("nombre", textNombreArticulo.getText().intern());
 				valores.put("marca", textMarcaArticulo.getText().intern());
-				System.out.println("A: " + textPrecioArticulo.getText());
-				System.out.println("B: " + Float.parseFloat(textPrecioArticulo.getText().intern()));
 				valores.put("precio", Float.parseFloat(textPrecioArticulo.getText().intern()));
 				valores.put("descripcionArticulo", textAreaArticulo.getText().intern());
 
@@ -929,7 +905,6 @@ public class InterfazAdministrador {
 
 			fechaFinal = anio + "-" + mes + "-" + dia;
 
-			System.out.println("Fecha: " + fechaFinal);
 		}
 
 		if (!textUserCita.getText().isEmpty() && !textMascCita.getText().isEmpty() && !textFechaCita.getText().isEmpty()
@@ -960,15 +935,7 @@ public class InterfazAdministrador {
 
 					if (compr) {
 
-						List<List<Object>> citasTtal = interfaz.getConexion().listar("Cita");
-
-						int maximo = -1;
-
-						for (List<Object> cita : citasTtal) {
-							if ((int) cita.get(0) > maximo) {
-								maximo = (int) cita.get(0);
-							}
-						}
+						int maximo = buscarMaximo("Cita");
 
 						Map<String, Object> valores = new HashMap<>();
 
@@ -981,8 +948,6 @@ public class InterfazAdministrador {
 						valores.put("horaCita", java.sql.Time.valueOf(horaCita));
 						valores.put("idMascota", idMascota);
 						valores.put("descripcionCita", panelDescrCita.getText());
-
-						System.out.println("Cita: " + valores.toString());
 
 						interfaz.getConexion().agregarFilaATabla("Cita", valores);
 
