@@ -130,7 +130,6 @@ public class InterfazAdministrador {
 		botCrearUsuario.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//crearUsuario();
 				createUser();
 			}
 		});
@@ -142,7 +141,6 @@ public class InterfazAdministrador {
 		botQuitarUsuario.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//eliminarUsuario();
 				deleteUser();
 			}
 		});
@@ -369,9 +367,7 @@ public class InterfazAdministrador {
 		botonNuevaVenta.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		botonNuevaVenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				agregarVenta();
-
 			}
 		});
 		botonNuevaVenta.setBounds(1044, 152, 130, 23);
@@ -391,9 +387,7 @@ public class InterfazAdministrador {
 		botAddMasc.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				agregarMascota();
-
 			}
 		});
 
@@ -401,7 +395,6 @@ public class InterfazAdministrador {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buscarUsuario();
-				
 			}
 		});
 
@@ -415,9 +408,7 @@ public class InterfazAdministrador {
 		botModoNoct.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				modoNocturno(botModoNoct);
-
 			}
 		});
 
@@ -617,10 +608,10 @@ public class InterfazAdministrador {
 					mascClient = "\nMascotas que tiene el cliente:\n" + 
 							"_____________________________________________\n";
 
-					List<String> mascotas = interfaz.recTodasMascotas((int) cadena.get(0));
+					List<String> mascotas = recTodasMascotas((int) cadena.get(0));
 
 					for (String masc : mascotas) {
-						mascClient += interfaz.mascRecDatos(masc, (int) cadena.get(0));
+						mascClient += mascRecDatos(masc, (int) cadena.get(0));
 					}
 
 				}
@@ -636,6 +627,48 @@ public class InterfazAdministrador {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+	
+	private String mascRecDatos(String nombreMascota, int idUsuario) throws Exception {
+
+		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
+		String condicion = "nombre = ? AND idUsuario = ?";
+
+		Object[] parametros = {nombreMascota, idUsuario};
+
+		List<Map<String, Object>> resultados = this.interfaz.getConexion().obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
+
+		if (!resultados.isEmpty()) {
+			Map<String, Object> datosMascota = resultados.get(0);
+
+			return    " ID de la mascota: " + String.valueOf(datosMascota.get("idMascota")) + 
+					"\n Nombre: "+ nombreMascota +
+					"\n Especie: " + String.valueOf(datosMascota.get("especie")) +
+					"\n Raza: " +  String.valueOf(datosMascota.get("raza")) + 
+					"\n Fecha de nacimiento: " + String.valueOf(new SimpleDateFormat("dd / MM / yyyy").format(datosMascota.get("fechaNacimiento"))) + 
+					"\n=============================================\n";
+
+		}
+
+		return "";
+	}
+	
+	private ArrayList<String> recTodasMascotas(int id) throws NumberFormatException, Exception {
+
+		int numMascotas = Integer.parseInt(this.interfaz.getConexion().obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", id));
+
+		List<String> lista = this.interfaz.getConexion().obtenerDatosDeTablaLista("Mascota", "nombre", "idUsuario", id);
+
+		ArrayList<String> mascotasLista = new ArrayList<String>();
+
+		for(int i = 0; i < numMascotas; i++) {
+
+			mascotasLista.add(lista.get(i).toString().intern());
+
+		}
+
+		return mascotasLista;
+
 	}
 	
 	private void createUser() {
@@ -828,7 +861,7 @@ public class InterfazAdministrador {
 	//	"<" ---> es para menor
 	private String recCitasUsuario(int id, String caracter) throws Exception{
 
-		List<Map<String, Object>> citas = this.interfaz.getConexion().obtenerFilasDeTabla( "Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita", "idMascota"), "idUsuario = ? AND fechaCita "+caracter+" ?",     			id, Date.valueOf(LocalDate.now()));
+		List<Map<String, Object>> citas = this.interfaz.getConexion().obtenerFilasDeTabla( "Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita", "idMascota"), "idUsuario = ? AND fechaCita "+caracter+" ?", id, Date.valueOf(LocalDate.now()));
 
 		StringBuffer stringBuffer = new StringBuffer("");
 		int i = 1;
@@ -919,7 +952,7 @@ public class InterfazAdministrador {
 
 					boolean compr = false;
 
-					ArrayList<String> listaMasc = interfaz.recTodasMascotas(Integer.parseInt(user.get(0).toString()));
+					ArrayList<String> listaMasc = recTodasMascotas(Integer.parseInt(user.get(0).toString()));
 
 					for (String mascota : listaMasc) {
 
@@ -927,7 +960,7 @@ public class InterfazAdministrador {
 
 							compr = true;
 
-							idMascota = interfaz.idMascotaRecuperar(mascota, Integer.parseInt(user.get(0).toString()));
+							idMascota = idMascotaRecuperar(mascota, Integer.parseInt(user.get(0).toString()));
 
 						}
 
@@ -968,6 +1001,24 @@ public class InterfazAdministrador {
 		} else {
 			JOptionPane.showMessageDialog(null, "No puede haber un campo vacío o la fecha es incorrecta");
 		}
+	}
+	
+	private int idMascotaRecuperar(String nombreMascota, int idUsuario) throws Exception{
+
+		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
+		String condicion = "nombre = ? AND idUsuario = ?";
+
+		Object[] parametros = {nombreMascota, idUsuario};
+
+		List<Map<String, Object>> resultados = this.interfaz.getConexion().obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
+
+		if (!resultados.isEmpty()) {
+			Map<String, Object> datosMascota = resultados.get(0);
+
+			return (int) datosMascota.get("idMascota");
+		}
+
+		return -1;
 	}
 	
 	private void agregarMascota() {

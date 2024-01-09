@@ -27,7 +27,6 @@ public class Main {
 				String instruccionSql = sqlScanner.next().trim();
 				if (!instruccionSql.isEmpty()) {
 					sentencia.execute(instruccionSql);
-					//System.out.println("Sentencia ejecutada: " + instruccionSql);
 				}
 			}
 			

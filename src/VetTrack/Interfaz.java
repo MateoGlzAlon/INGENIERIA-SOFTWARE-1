@@ -184,7 +184,8 @@ public class Interfaz {
 
 		return -1;
 	}
-
+	
+	/*
 	public List<Object> recupPosTablaCorrespondiente(String rolUsuario, int idUsuarioEncontrado) throws Exception {
 
 		List<List<Object>> userDataList = conexion.listar(rolUsuario);
@@ -200,7 +201,7 @@ public class Interfaz {
 
 		return conexion.listar(rolUsuario).get(posTablaDatos);
 
-	}
+	}*/
 
 	public List<Object> cogerDatosBorrar(String username) throws Exception {
 
@@ -219,67 +220,6 @@ public class Interfaz {
 		return null;
 
 	}
-
-	public ArrayList<String> recTodasMascotas(int id) throws NumberFormatException, Exception {
-
-		int numMascotas = Integer.parseInt(conexion.obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", id));
-
-		List<String> lista = conexion.obtenerDatosDeTablaLista("Mascota", "nombre", "idUsuario", id);
-
-		ArrayList<String> mascotasLista = new ArrayList<String>();
-
-		for(int i = 0; i < numMascotas; i++) {
-
-			mascotasLista.add(lista.get(i).toString().intern());
-
-		}
-
-		return mascotasLista;
-
-	}
-
-	public int idMascotaRecuperar(String nombreMascota, int idUsuario) throws Exception{
-
-		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
-		String condicion = "nombre = ? AND idUsuario = ?";
-
-		Object[] parametros = {nombreMascota, idUsuario};
-
-		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
-
-		if (!resultados.isEmpty()) {
-			Map<String, Object> datosMascota = resultados.get(0);
-
-			return (int) datosMascota.get("idMascota");
-		}
-
-		return -1;
-	}
-
-	public String mascRecDatos(String nombreMascota, int idUsuario) throws Exception {
-
-		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
-		String condicion = "nombre = ? AND idUsuario = ?";
-
-		Object[] parametros = {nombreMascota, idUsuario};
-
-		List<Map<String, Object>> resultados = conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
-
-		if (!resultados.isEmpty()) {
-			Map<String, Object> datosMascota = resultados.get(0);
-
-			return    " ID de la mascota: " + String.valueOf(datosMascota.get("idMascota")) + 
-					"\n Nombre: "+ nombreMascota +
-					"\n Especie: " + String.valueOf(datosMascota.get("especie")) +
-					"\n Raza: " +  String.valueOf(datosMascota.get("raza")) + 
-					"\n Fecha de nacimiento: " + String.valueOf(new SimpleDateFormat("dd / MM / yyyy").format(datosMascota.get("fechaNacimiento"))) + 
-					"\n=============================================\n";
-
-		}
-
-		return "";
-	}
-
 
 	private void confirmarSalir(JFrame frame) throws Exception {
 		int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar",
