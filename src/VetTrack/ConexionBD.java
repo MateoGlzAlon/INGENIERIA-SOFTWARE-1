@@ -94,7 +94,7 @@ public class ConexionBD {
 				}
 
 				// Imprimir la consulta SQL para verificar
-				//				System.out.println(st.toString());
+//								System.out.println(st.toString());
 
 				// Ejecutar la consulta
 				try (ResultSet rs = st.executeQuery()) {
@@ -574,7 +574,7 @@ public class ConexionBD {
 				int filasAfectadas = preparedStatement.executeUpdate();
 
 				if (filasAfectadas > 0) {
-					System.out.println("La fila ha sido actualizada exitosamente.");
+//					System.out.println("La fila ha sido actualizada exitosamente.");
 					return true;
 				} 
 			}
@@ -587,7 +587,9 @@ public class ConexionBD {
 	public String catalogoToString() throws SQLException {
 		List<Map<String, Object>> resultadosArticulo = obtenerTodasLasFilasDeTabla("Articulo", Arrays.asList("idArticulo", "nombre", "marca", "precio", "descripcionArticulo"));
 
-		StringBuilder catalogo = new StringBuilder();
+		StringBuilder catalogoArticulos = new StringBuilder();
+		
+		catalogoArticulos.append("**ARTICULOS**\n");
 
 		for (Map<String, Object> fila : resultadosArticulo) {
 			
@@ -600,7 +602,7 @@ public class ConexionBD {
 
 				switch (columna) {
 				case "idArticulo":
-					catalogo.append(" ID del Artículo").append(": ").append(valor).append("\n");
+					catalogoArticulos.append(" ID del Artículo").append(": ").append(valor).append("\n");
 					break;
 				case "marca":
 					aux.append(" Marca").append(": ").append(valor).append("\n");
@@ -612,15 +614,53 @@ public class ConexionBD {
 					aux.append(" Descripción").append(": ").append(valor).append("\n");
 					break;	
 				case "nombre":
-					catalogo.append(" Nombre").append(": ").append(valor).append("\n").append(aux.toString());
+					catalogoArticulos.append(" Nombre").append(": ").append(valor).append("\n").append(aux.toString());
 					break;
 
 				}
 
 			}
-	        catalogo.append("==============================================\n"); // Separador horizontal
+			catalogoArticulos.append("==============================================\n"); // Separador horizontal
+		}
+		
+		
+		
+		List<Map<String, Object>> resultadosServicio = obtenerTodasLasFilasDeTabla("Servicio", Arrays.asList("idServicio", "nombre", "precio", "descripcionServicio"));
+
+		StringBuilder catalogoServicios = new StringBuilder();
+		
+		catalogoServicios.append("**SERVICIOS**\n");
+
+		for (Map<String, Object> fila : resultadosServicio) {
+			
+			StringBuilder aux = new StringBuilder();
+			
+			for (Map.Entry<String, Object> entry : fila.entrySet()) {
+
+				String columna = entry.getKey();
+				Object valor = entry.getValue();
+
+				switch (columna) {
+				case "idServicio":
+					catalogoServicios.append(" ID del Artículo").append(": ").append(valor).append("\n");
+					break;
+				case "precio":
+					aux.append(" Precio").append(": ").append(valor).append("€\n");
+					break;
+				case "descripcionServicio":
+					aux.append(" Descripción").append(": ").append(valor).append("\n");
+					break;	
+				case "nombre":
+					catalogoServicios.append(" Nombre").append(": ").append(valor).append("\n").append(aux.toString());
+					break;
+
+				}
+
+			}
+			catalogoServicios.append("==============================================\n"); // Separador horizontal
 		}
 
-		return catalogo.toString();
+
+		return catalogoServicios.toString() + catalogoArticulos.toString();
 	}
 }

@@ -636,8 +636,13 @@ public class InterfazCliente {
 				}
 			} 
 			comprasPrevias.append("======================================================================\n");
+			
+			
 		}
 
+		
+		
+		
 		textPaneComprasRealizadas.setText(comprasPrevias.toString());
 	}	
 	
@@ -646,7 +651,7 @@ public class InterfazCliente {
         JTextArea textArea = new JTextArea(10, 30);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-
+        
         // Establece un texto predeterminado
         textArea.setText(conexion.catalogoToString());
         textArea.setEditable(false);

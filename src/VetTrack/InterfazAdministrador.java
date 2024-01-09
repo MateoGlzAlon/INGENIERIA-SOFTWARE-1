@@ -1,16 +1,20 @@
 package VetTrack;
 
 import java.awt.BorderLayout;
+import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,9 +30,12 @@ import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.JTextField;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -37,7 +44,13 @@ import javax.swing.JTextArea;
 
 import java.util.Base64;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import Exceptions.DBException;
 
@@ -59,6 +72,18 @@ public class InterfazAdministrador {
 	private JTextPane panelTextUser;
 	private JTextArea textAreaArticulo;
 	private JTextPane panelDescrCita;
+
+	private List<JTextField> celdas;
+	private List<JComboBox<String>> choices;
+
+
+	private List<String> idsParaVentas;
+	private List<String> tiposParaVentas;
+
+	private JTextArea textAreaDesc;
+	private String descripcionAux; 
+
+
 
 	/**
 	 * Create the application.
@@ -362,9 +387,26 @@ public class InterfazAdministrador {
 		botonNuevaVenta.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		botonNuevaVenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				agregarVenta();
+
+				try {
+					//					System.out.println("aa" + textUserBuscar.getText());
+					if(!textUserBuscar.getText().equals("")){
+						mostrarCatalogoConVenta();
+					} else {
+						JOptionPane.showMessageDialog(null, "No has seleccionado un usuario", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (DBException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 			}
 		});
+
+
 		botonNuevaVenta.setBounds(1044, 152, 130, 23);
 		frame.getContentPane().add(botonNuevaVenta);
 
@@ -377,6 +419,13 @@ public class InterfazAdministrador {
 		JLabel labelIcono = new JLabel(scaledIcon);
 		labelIcono.setBounds(30, 75, 100, 100);
 		frame.getContentPane().add(labelIcono);
+
+
+		celdas = new ArrayList<>();
+		choices = new ArrayList<>();
+		idsParaVentas = new ArrayList<>();
+		tiposParaVentas = new ArrayList<>();
+		textAreaDesc = new JTextArea();
 
 
 		botAddMasc.addActionListener(new ActionListener() {
@@ -533,9 +582,9 @@ public class InterfazAdministrador {
 		}
 	}
 
-	private int buscarMaximo(String cadena) throws DBException {
+	private int buscarMaximo(String tabla) throws DBException {
 
-		List<List<Object>> mascotaTotal = interfaz.getConexion().listar("Mascota");
+		List<List<Object>> mascotaTotal = interfaz.getConexion().listar(tabla);
 		int maximo = 0;
 
 		for (List<Object> user : mascotaTotal) {
@@ -543,8 +592,6 @@ public class InterfazAdministrador {
 				maximo = (int) user.get(0);
 			}
 		}
-
-		maximo++;
 
 		return maximo;
 
@@ -1042,12 +1089,166 @@ public class InterfazAdministrador {
 	}
 
 
-	private void agregarVenta() {
+	public void mostrarCatalogoConVenta() throws SQLException, DBException {
+		// Crear un panel principal
+		JPanel panel = new JPanel(new BorderLayout());
+
+		// Crear un JTextArea para mostrar el catálogo
+		JTextArea textArea = new JTextArea(10, 30);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setText(this.interfaz.getConexion().catalogoToString());
+		textArea.setEditable(false);
+		textArea.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+		// Crear un JScrollPane para el JTextArea
+		JScrollPane catalogoScrollPane = new JScrollPane(textArea);
+		catalogoScrollPane.setPreferredSize(new Dimension(500, 600));
+
+		// Crear un JPanel para las celdas y los JComboBox
+		JPanel ventaPanel = new JPanel();
+		JLabel labelNumArt = new JLabel("Número de artículos");
+
+		// Crear un JComboBox con opciones del 1 al 9
+		JComboBox<String> choice = new JComboBox<>();
+		for (int i = 1; i <= 9; i++) {
+			choice.addItem(String.valueOf(i));
+		}
+
+		ventaPanel.setLayout(new BoxLayout(ventaPanel, BoxLayout.Y_AXIS));
+		ventaPanel.add(Box.createVerticalGlue()); // Espacio en la parte superior
+
+		// Centrar verticalmente las etiquetas y el JComboBox
+		JPanel labelPanel = new JPanel();
+		labelPanel.add(labelNumArt);
+		ventaPanel.add(labelPanel);
+
+		JPanel choicePanel = new JPanel();
+		choicePanel.add(choice);
+		ventaPanel.add(choicePanel);
+
+		// Añadir un ActionListener al JComboBox para manejar cambios de selección
+		choice.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Obtener el número seleccionado
+				int numeroCeldas = Integer.parseInt((String) choice.getSelectedItem());
+
+				// Limpiar la lista de celdas y la lista de JComboBox
+				celdas.clear();
+				choices.clear();
+
+				// Limpiar los componentes existentes en el ventaPanel
+				ventaPanel.removeAll();
+
+				// Agregar nuevas celdas y JComboBox al panel y las listas
+				for (int i = 0; i < numeroCeldas; i++) {
+					JTextField textField = new JTextField(20);
+					celdas.add(textField);
+
+					JComboBox<String> comboBox = new JComboBox<>();
+					comboBox.addItem("Articulo");
+					comboBox.addItem("Servicio");
+					choices.add(comboBox);
+
+					JPanel celdaPanel = new JPanel();
+					celdaPanel.add(comboBox);
+					celdaPanel.add(textField);
+
+					ventaPanel.add(celdaPanel);
+				}
+
+				JTextArea textAreaDesc = new JTextArea("", 1, 10);
+				textArea.setLineWrap(true);
+				textArea.setWrapStyleWord(true);
+				textArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+				textArea.setAlignmentY(Component.TOP_ALIGNMENT);
+				ventaPanel.add(textAreaDesc);
+				
+				System.out.println(textAreaDesc.getText());
+				
+				// Ajustar el tamaño de la ventana al contenido
+				Window window = SwingUtilities.getWindowAncestor(ventaPanel);
+				if (window instanceof JDialog) {
+					JDialog dialog = (JDialog) window;
+					dialog.pack();
+				}
+
+				// Centrar verticalmente las etiquetas y el JComboBox
+				ventaPanel.revalidate();
+				ventaPanel.repaint();
+				
+				System.out.println(textAreaDesc.getText());
+
+			}
+		});
+
+		// Crear un JSplitPane para dividir el espacio entre el catálogo y las celdas/Choices
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, catalogoScrollPane, ventaPanel);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(500);
+
+		// Mostrar el JOptionPane con el JSplitPane como componente padre
+		int result = JOptionPane.showConfirmDialog(panel, splitPane, "Catálogo de productos y Nueva venta", JOptionPane.OK_CANCEL_OPTION);
+
+		// Verificar si se hizo clic en OK
+		if (result == JOptionPane.OK_OPTION) {
+			//TODO COnseguir descripcion de alguna manera
+			descripcionAux = textAreaDesc.getText();
+			imprimirContenidoCeldasYChoices();
+			procesarVentas();
+		}
+	}
+
+	// Método complementario para imprimir el contenido de las celdas y los Choices
+	public void imprimirContenidoCeldasYChoices() {
+		StringBuilder contenido = new StringBuilder();
+
+		for (int i = 0; i < celdas.size(); i++) {
+
+			idsParaVentas.add(celdas.get(i).getText());
+			tiposParaVentas.add(String.valueOf(choices.get(i).getSelectedItem()));
+
+			contenido.append("Celda ").append(i + 1).append(": ");
+			contenido.append(celdas.get(i).getText());
+			contenido.append(", Tipo: ").append(choices.get(i).getSelectedItem());
+			contenido.append("\n");
+		}
+
+		//		System.out.println(idsParaVentas.toString());
+		//		System.out.println(tiposParaVentas.toString());
+
+		//		System.out.println(contenido.toString());
+	}
 
 
+	public void procesarVentas() throws DBException {
 
+		for (int i = 0; i < idsParaVentas.size();i++) {
 
+			LocalDate fechaActual = LocalDate.now();
 
+			// Imprimir la fecha actual en un formato específico
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String fechaFormateada = fechaActual.format(formatter);
+
+			int maximo = buscarMaximo("Venta");
+
+			Map<String, Object> valores = new HashMap<>();
+
+			valores.put("idVenta", maximo+1);
+			valores.put("idMismaVenta", 1);
+			valores.put("idUsuario", this.interfaz.getConexion().obtenerDatoDeTabla("Usuario", "idUsuario", "nombreUsuario", textUserBuscar.getText()));
+			valores.put("tipo", tiposParaVentas.get(i));
+			valores.put("idArtServ", idsParaVentas.get(i));
+			valores.put("descripcionVenta", descripcionAux);
+			valores.put("fechaVenta",  java.sql.Date.valueOf(fechaFormateada));
+
+			System.out.println("Valores procesar: " + valores.toString());
+
+			this.interfaz.getConexion().agregarFilaATabla("Venta", valores);
+		}
 
 	}
+
 }
