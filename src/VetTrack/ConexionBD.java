@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -117,55 +118,55 @@ public class ConexionBD {
 	}
 
 	public String obtenerDatoDeTablaConDosCondiciones(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar1, Object condicion1, String nombreColumnaComparar2, Object condicion2) throws DBException { 	    
-		
+
 		String resultado = null;
 
-	try {
-		// Construir la consulta SQL con dos condiciones
-		String query = "SELECT " + nombreColumnaExtraer + " FROM " + nombreTabla + 
-				" WHERE " + nombreColumnaComparar1 + " = ? AND " + nombreColumnaComparar2 + " = ?";
+		try {
+			// Construir la consulta SQL con dos condiciones
+			String query = "SELECT " + nombreColumnaExtraer + " FROM " + nombreTabla + 
+					" WHERE " + nombreColumnaComparar1 + " = ? AND " + nombreColumnaComparar2 + " = ?";
 
-		// Preparar la declaración SQL
-		try (PreparedStatement st = this.getConexion().prepareStatement(query)) {
-			// Configurar los valores de los parámetros en la consulta
-			if (condicion1 instanceof Integer) {
-				st.setInt(1, (Integer) condicion1);
-			} else if (condicion1 instanceof String) {
-				st.setString(1, (String) condicion1);
-			} else {
-				throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion1");
-			}
-
-			if (condicion2 instanceof Integer) {
-				st.setInt(2, (Integer) condicion2);
-			} else if (condicion2 instanceof String) {
-				st.setString(2, (String) condicion2);
-			} else {
-				throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion2");
-			}
-
-			// Imprimir la consulta SQL para verificar
-			//			System.out.println(st.toString());
-
-			// Ejecutar la consulta
-			try (ResultSet rs = st.executeQuery()) {
-				// Verificar si hay resultados
-				if (rs.next()) {
-					// Obtener el resultado de la columna
-					resultado = rs.getString(nombreColumnaExtraer);
-					//					System.out.println(nombreColumnaExtraer + ": " + resultado);
+			// Preparar la declaración SQL
+			try (PreparedStatement st = this.getConexion().prepareStatement(query)) {
+				// Configurar los valores de los parámetros en la consulta
+				if (condicion1 instanceof Integer) {
+					st.setInt(1, (Integer) condicion1);
+				} else if (condicion1 instanceof String) {
+					st.setString(1, (String) condicion1);
 				} else {
-					// No se encontró la fila con las condiciones proporcionadas
-					throw new DBException("No se encontró la fila con las condiciones proporcionadas.");
+					throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion1");
+				}
+
+				if (condicion2 instanceof Integer) {
+					st.setInt(2, (Integer) condicion2);
+				} else if (condicion2 instanceof String) {
+					st.setString(2, (String) condicion2);
+				} else {
+					throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion2");
+				}
+
+				// Imprimir la consulta SQL para verificar
+				//			System.out.println(st.toString());
+
+				// Ejecutar la consulta
+				try (ResultSet rs = st.executeQuery()) {
+					// Verificar si hay resultados
+					if (rs.next()) {
+						// Obtener el resultado de la columna
+						resultado = rs.getString(nombreColumnaExtraer);
+						//					System.out.println(nombreColumnaExtraer + ": " + resultado);
+					} else {
+						// No se encontró la fila con las condiciones proporcionadas
+						throw new DBException("No se encontró la fila con las condiciones proporcionadas.");
+					}
 				}
 			}
+		} catch (Exception e) {
+			// Capturar cualquier excepción y lanzarla hacia arriba
+			throw new DBException("Error al obtener dato de la tabla");
 		}
-	} catch (Exception e) {
-		// Capturar cualquier excepción y lanzarla hacia arriba
-		throw new DBException("Error al obtener dato de la tabla");
-	}
 
-	return resultado;
+		return resultado;
 	}
 
 
@@ -302,12 +303,12 @@ public class ConexionBD {
 				} else if (valor instanceof String) {
 					st.setString(index, (String) valor);
 				}  else if (valor instanceof java.sql.Date) {
-	                st.setDate(index, (java.sql.Date) valor);
-	            } else if (valor instanceof java.sql.Time) {
-	                st.setTime(index, (java.sql.Time) valor);
-	            } else if (valor instanceof Float) {
-	                st.setFloat(index, (Float) valor);
-	            } else {
+					st.setDate(index, (java.sql.Date) valor);
+				} else if (valor instanceof java.sql.Time) {
+					st.setTime(index, (java.sql.Time) valor);
+				} else if (valor instanceof Float) {
+					st.setFloat(index, (Float) valor);
+				} else {
 					throw new IllegalArgumentException("Tipo de entidad no compatible para la inserción");
 				}
 				index++;
@@ -520,24 +521,24 @@ public class ConexionBD {
 
 	public List<Map<String, Object>> obtenerTodasLasFilasDeTabla(String nombreTabla, List<String> columnas) throws SQLException {
 
-	    List<Map<String, Object>> resultados = new ArrayList<>();
+		List<Map<String, Object>> resultados = new ArrayList<>();
 
-	    try (PreparedStatement statement = construirConsulta(nombreTabla, columnas, null)) {
-	        try (ResultSet resultSet = statement.executeQuery()) {
-	            while (resultSet.next()) {
-	                Map<String, Object> fila = new HashMap<>();
-	                for (String columna : columnas) {
-	                    fila.put(columna, resultSet.getObject(columna));
-	                }
-	                resultados.add(fila);
-	            }
-	        }
-	    }
+		try (PreparedStatement statement = construirConsulta(nombreTabla, columnas, null)) {
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					Map<String, Object> fila = new HashMap<>();
+					for (String columna : columnas) {
+						fila.put(columna, resultSet.getObject(columna));
+					}
+					resultados.add(fila);
+				}
+			}
+		}
 
-	    return resultados;
+		return resultados;
 	}
 
-	
+
 	private PreparedStatement construirConsulta(String nombreTabla, List<String> columnas, String condicion) throws SQLException {
 		String columnasStr = String.join(", ", columnas);
 		String query = "SELECT " + columnasStr + " FROM " + nombreTabla;
@@ -557,53 +558,69 @@ public class ConexionBD {
 
 
 	public boolean actualizarFila(String nombreTabla, String nombreColumna, Object nuevoValor, String columnaCondicion, Object valorCondicion) {
-	    try {
-	        // Construir la consulta SQL
-	        String sql = "UPDATE " + nombreTabla +
-	                     " SET " + nombreColumna + " = ?" +
-	                     " WHERE " + columnaCondicion + " = ?";
-
-	        // Preparar la declaración SQL
-	        try (PreparedStatement preparedStatement = this.getConexion().prepareStatement(sql)) {
-	            // Establecer los parámetros en la consulta SQL
-	            preparedStatement.setObject(1, nuevoValor);
-	            preparedStatement.setObject(2, valorCondicion);
-
-	            // Ejecutar la consulta SQL
-	            int filasAfectadas = preparedStatement.executeUpdate();
-
-	            if (filasAfectadas > 0) {
-	                System.out.println("La fila ha sido actualizada exitosamente.");
-	                return true;
-	            } 
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return false;
-	}
-
-
-
-	/*
-	 * 
-
-
-	public void eliminar(Articulo articulo) throws Exception {
 		try {
-			this.abrirConexion();
-			String query = "DELETE FROM Articulo"
-					+ "ios WHERE id = ?";
-			PreparedStatement st = this.getConexion().prepareStatement(query);
-			st.setInt(1, articulo.getIdArticulo());
-			st.executeUpdate();
-		} catch (Exception e) {
-			throw new Exception("Error al eliminar un articulo: " + e.getMessage());
-		} finally {
-			this.cerrarConexion();
-		}
-	}
-	 * 
-	 */
+			// Construir la consulta SQL
+			String sql = "UPDATE " + nombreTabla +
+					" SET " + nombreColumna + " = ?" +
+					" WHERE " + columnaCondicion + " = ?";
 
+			// Preparar la declaración SQL
+			try (PreparedStatement preparedStatement = this.getConexion().prepareStatement(sql)) {
+				// Establecer los parámetros en la consulta SQL
+				preparedStatement.setObject(1, nuevoValor);
+				preparedStatement.setObject(2, valorCondicion);
+
+				// Ejecutar la consulta SQL
+				int filasAfectadas = preparedStatement.executeUpdate();
+
+				if (filasAfectadas > 0) {
+					System.out.println("La fila ha sido actualizada exitosamente.");
+					return true;
+				} 
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public String catalogoToString() throws SQLException {
+		List<Map<String, Object>> resultadosArticulo = obtenerTodasLasFilasDeTabla("Articulo", Arrays.asList("idArticulo", "nombre", "marca", "precio", "descripcionArticulo"));
+
+		StringBuilder catalogo = new StringBuilder();
+
+		for (Map<String, Object> fila : resultadosArticulo) {
+			
+			StringBuilder aux = new StringBuilder();
+			
+			for (Map.Entry<String, Object> entry : fila.entrySet()) {
+
+				String columna = entry.getKey();
+				Object valor = entry.getValue();
+
+				switch (columna) {
+				case "idArticulo":
+					catalogo.append(" ID del Artículo").append(": ").append(valor).append("\n");
+					break;
+				case "marca":
+					aux.append(" Marca").append(": ").append(valor).append("\n");
+					break;	
+				case "precio":
+					aux.append(" Precio").append(": ").append(valor).append("€\n");
+					break;
+				case "descripcionArticulo":
+					aux.append(" Descripción").append(": ").append(valor).append("\n");
+					break;	
+				case "nombre":
+					catalogo.append(" Nombre").append(": ").append(valor).append("\n").append(aux.toString());
+					break;
+
+				}
+
+			}
+	        catalogo.append("==============================================\n"); // Separador horizontal
+		}
+
+		return catalogo.toString();
+	}
 }

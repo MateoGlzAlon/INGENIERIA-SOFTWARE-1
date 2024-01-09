@@ -2,12 +2,14 @@ package VetTrack;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,7 +47,7 @@ public class InterfazCliente {
 	private JTextField textFieldIdUsuarioMascota;
 	private JTextPane textPaneCitasPrevias;
 	private JTextPane textPaneCitasFuturas;
-	private JTextPane textPaneComprasRealizadas;
+	private JTextArea textPaneComprasRealizadas;
 	private JButton botonActualizarCitas;
 
 	/**
@@ -79,12 +81,12 @@ public class InterfazCliente {
 		frmInterfazDelCliente.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frmInterfazDelCliente.getContentPane().setLayout(null);
 
-		JButton botCerrarSesion = new JButton("Cerrar Sesion");
+		JButton botCerrarSesion = new JButton("Cerrar Sesión");
 		botCerrarSesion.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				int confirmacion = JOptionPane.showConfirmDialog(frmInterfazDelCliente, "Quieres cerrar sesion?", "Confirmar", JOptionPane.YES_NO_OPTION);
+				int confirmacion = JOptionPane.showConfirmDialog(frmInterfazDelCliente, "Quieres cerrar sesión?", "Confirmar", JOptionPane.YES_NO_OPTION);
 
 				if (confirmacion == JOptionPane.YES_OPTION) {
 					interfaz.frame.setVisible(true);
@@ -265,7 +267,8 @@ public class InterfazCliente {
 		scrollPaneComprasRealizadas.setBounds(30, 335, 550, 500);
 		frmInterfazDelCliente.getContentPane().add(scrollPaneComprasRealizadas);
 
-		textPaneComprasRealizadas = new JTextPane();
+		textPaneComprasRealizadas = new JTextArea();
+		
 		textPaneComprasRealizadas.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textPaneComprasRealizadas.setEditable(false);
 		textPaneComprasRealizadas.setBorder(new LineBorder(Color.BLACK, 1));
@@ -292,17 +295,13 @@ public class InterfazCliente {
 		frmInterfazDelCliente.getContentPane().add(botonActualizarCompras);
 
 
-
 		ImageIcon icon = new ImageIcon("etc/IMAGENES/logo_VetTrack.png");
-
 		Image image = icon.getImage();
 		Image scaledImage = image.getScaledInstance(175, 175, Image.SCALE_SMOOTH);
-
 		ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-
 		JLabel labelIcono = new JLabel(scaledIcon);
-		labelIcono.setBounds(42, 73, 175, 175);
+		labelIcono.setBounds(30, 111, 175, 175);
 		frmInterfazDelCliente.getContentPane().add(labelIcono);
 
 		botonActualizarCitas = new JButton("ACTUALIZAR");
@@ -324,6 +323,28 @@ public class InterfazCliente {
 		});
 		botonActualizarCitas.setBounds(975, 97, 180, 23);
 		frmInterfazDelCliente.getContentPane().add(botonActualizarCitas);
+		
+		JToggleButton botonCatalogo = new JToggleButton("Ver catálogo");
+		botonCatalogo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		botonCatalogo.setBounds(400, 208, 180, 60);
+		frmInterfazDelCliente.getContentPane().add(botonCatalogo);
+		
+		botonCatalogo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				try {
+					mostrarCatalogo();
+				} catch (DBException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
 
 		choiceMascotas.add("");
 		establecerMascotas();
@@ -619,4 +640,23 @@ public class InterfazCliente {
 
 		textPaneComprasRealizadas.setText(comprasPrevias.toString());
 	}	
+	
+    public void mostrarCatalogo() throws DBException, SQLException {
+        // Crea un JTextArea que será colocado en el JOptionPane
+        JTextArea textArea = new JTextArea(10, 30);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+
+        // Establece un texto predeterminado
+        textArea.setText(conexion.catalogoToString());
+        textArea.setEditable(false);
+		textArea.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+        // Crea un JScrollPane para el JTextArea
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(500, 600));
+
+        // Muestra el JOptionPane con el JScrollPane
+        JOptionPane.showMessageDialog(null, scrollPane, "Catálogo de productos", JOptionPane.PLAIN_MESSAGE);
+    }
 }
