@@ -72,6 +72,7 @@ public class InterfazAdministrador {
 	private JTextPane panelTextUser;
 	private JTextArea textAreaArticulo;
 	private JTextPane panelDescrCita;
+	private JTextArea textAreaDescripcionServicio;
 
 	private List<JTextField> celdas;
 	private List<JComboBox<String>> choices;
@@ -81,8 +82,10 @@ public class InterfazAdministrador {
 	private List<String> tiposParaVentas;
 
 	private JTextArea textAreaDesc;
-	private String descripcionAux; 
-
+	private String descripcionAux;
+	private List<JTextArea> descripAux;
+	private JTextField textFieldNombreServicio;
+	private JTextField textFieldPrecioServicio;
 
 
 	/**
@@ -234,39 +237,39 @@ public class InterfazAdministrador {
 		frame.getContentPane().add(labUserBuscar);
 
 		JLabel lblNewLabel = new JLabel("Añadir artículo");
-		lblNewLabel.setBounds(161, 150, 203, 31);
+		lblNewLabel.setBounds(159, 90, 203, 31);
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 		frame.getContentPane().add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("Nombre:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_1.setBounds(15, 195, 80, 14);
+		lblNewLabel_1.setBounds(10, 127, 80, 14);
 		frame.getContentPane().add(lblNewLabel_1);
 
 		textNombreArticulo = new JTextField();
-		textNombreArticulo.setBounds(100, 192, 296, 20);
+		textNombreArticulo.setBounds(95, 124, 296, 20);
 		frame.getContentPane().add(textNombreArticulo);
 		textNombreArticulo.setColumns(10);
 
 		JLabel lblNewLabel_2 = new JLabel("Precio:");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_2.setBounds(15, 229, 70, 14);
+		lblNewLabel_2.setBounds(10, 161, 70, 14);
 		frame.getContentPane().add(lblNewLabel_2);
 
 		textPrecioArticulo = new JTextField();
-		textPrecioArticulo.setBounds(100, 226, 296, 20);
+		textPrecioArticulo.setBounds(95, 158, 296, 20);
 		frame.getContentPane().add(textPrecioArticulo);
 		textPrecioArticulo.setColumns(10);
 
 		textAreaArticulo = new JTextArea();
 		textAreaArticulo.setBorder(new LineBorder(Color.BLACK, 1));
-		textAreaArticulo.setBounds(100, 302, 296, 119);
+		textAreaArticulo.setBounds(95, 234, 296, 64);
 
 		frame.getContentPane().add(textAreaArticulo);
 
 		JLabel lblNewLabel_3 = new JLabel("Descripción:");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_3.setBounds(15, 307, 80, 14);
+		lblNewLabel_3.setBounds(10, 239, 80, 14);
 		frame.getContentPane().add(lblNewLabel_3);
 
 		JButton botCrearArticulo = new JButton("Crear");
@@ -278,11 +281,11 @@ public class InterfazAdministrador {
 
 			}
 		});
-		botCrearArticulo.setBounds(308, 432, 89, 23);
+		botCrearArticulo.setBounds(302, 308, 89, 23);
 		frame.getContentPane().add(botCrearArticulo);
 
 		JLabel lblNewLabel_4 = new JLabel("Crear cita");
-		lblNewLabel_4.setBounds(180, 522, 211, 39);
+		lblNewLabel_4.setBounds(180, 522, 145, 39);
 
 		lblNewLabel_4.setFont(new Font("Arial", Font.PLAIN, 20));
 
@@ -360,11 +363,11 @@ public class InterfazAdministrador {
 
 		JLabel lblNewLabel_11 = new JLabel("Marca:");
 		lblNewLabel_11.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_11.setBounds(15, 264, 70, 14);
+		lblNewLabel_11.setBounds(10, 196, 70, 14);
 		frame.getContentPane().add(lblNewLabel_11);
 
 		textMarcaArticulo = new JTextField();
-		textMarcaArticulo.setBounds(100, 261, 296, 20);
+		textMarcaArticulo.setBounds(95, 193, 296, 20);
 		frame.getContentPane().add(textMarcaArticulo);
 		textMarcaArticulo.setColumns(10);
 
@@ -417,8 +420,55 @@ public class InterfazAdministrador {
 		ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
 		JLabel labelIcono = new JLabel(scaledIcon);
-		labelIcono.setBounds(30, 75, 100, 100);
+		labelIcono.setBounds(440, 72, 100, 100);
 		frame.getContentPane().add(labelIcono);
+
+		JLabel lblAadirServicio = new JLabel("Añadir servicio");
+		lblAadirServicio.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblAadirServicio.setBounds(159, 332, 203, 31);
+		frame.getContentPane().add(lblAadirServicio);
+
+		JLabel lblNewLabel_1_1 = new JLabel("Nombre:");
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_1_1.setBounds(10, 369, 80, 14);
+		frame.getContentPane().add(lblNewLabel_1_1);
+
+		textFieldNombreServicio = new JTextField();
+		textFieldNombreServicio.setColumns(10);
+		textFieldNombreServicio.setBounds(95, 366, 296, 20);
+		frame.getContentPane().add(textFieldNombreServicio);
+
+		JLabel lblNewLabel_2_1 = new JLabel("Precio:");
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_2_1.setBounds(10, 403, 70, 14);
+		frame.getContentPane().add(lblNewLabel_2_1);
+
+		textFieldPrecioServicio = new JTextField();
+		textFieldPrecioServicio.setColumns(10);
+		textFieldPrecioServicio.setBounds(95, 400, 296, 20);
+		frame.getContentPane().add(textFieldPrecioServicio);
+
+		JLabel lblNewLabel_3_1 = new JLabel("Descripción:");
+		lblNewLabel_3_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_3_1.setBounds(10, 436, 80, 14);
+		frame.getContentPane().add(lblNewLabel_3_1);
+
+		textAreaDescripcionServicio = new JTextArea();
+		textAreaDescripcionServicio.setBorder(new LineBorder(Color.BLACK, 1));
+		textAreaDescripcionServicio.setBounds(95, 436, 296, 64);
+		frame.getContentPane().add(textAreaDescripcionServicio);
+
+		JButton botCrearServicio = new JButton("Crear");
+		botCrearServicio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				crearServicio();
+
+			}
+		});
+		botCrearServicio.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		botCrearServicio.setBounds(302, 513, 89, 23);
+		frame.getContentPane().add(botCrearServicio);
 
 
 		celdas = new ArrayList<>();
@@ -426,6 +476,7 @@ public class InterfazAdministrador {
 		idsParaVentas = new ArrayList<>();
 		tiposParaVentas = new ArrayList<>();
 		textAreaDesc = new JTextArea();
+		descripAux = new ArrayList<>();
 
 
 		botAddMasc.addActionListener(new ActionListener() {
@@ -932,7 +983,7 @@ public class InterfazAdministrador {
 
 				Map<String, Object> valores = new HashMap<>();
 
-				valores.put("idArticulo", maximo+1);
+				valores.put("idArticulo", maximo);
 				valores.put("nombre", textNombreArticulo.getText().intern());
 				valores.put("marca", textMarcaArticulo.getText().intern());
 				valores.put("precio", Float.parseFloat(textPrecioArticulo.getText().intern()));
@@ -1007,7 +1058,7 @@ public class InterfazAdministrador {
 
 						Map<String, Object> valores = new HashMap<>();
 
-						valores.put("idCita", maximo + 1);
+						valores.put("idCita", maximo);
 						valores.put("idUsuario", Integer.parseInt(user.get(0).toString()));
 						valores.put("fechaCita", java.sql.Date.valueOf(fechaFinal));
 
@@ -1163,10 +1214,12 @@ public class InterfazAdministrador {
 				textArea.setWrapStyleWord(true);
 				textArea.setAlignmentX(Component.LEFT_ALIGNMENT);
 				textArea.setAlignmentY(Component.TOP_ALIGNMENT);
+
+				descripAux.add(textAreaDesc);
 				ventaPanel.add(textAreaDesc);
-				
+
 				System.out.println(textAreaDesc.getText());
-				
+
 				// Ajustar el tamaño de la ventana al contenido
 				Window window = SwingUtilities.getWindowAncestor(ventaPanel);
 				if (window instanceof JDialog) {
@@ -1177,7 +1230,7 @@ public class InterfazAdministrador {
 				// Centrar verticalmente las etiquetas y el JComboBox
 				ventaPanel.revalidate();
 				ventaPanel.repaint();
-				
+
 				System.out.println(textAreaDesc.getText());
 
 			}
@@ -1194,9 +1247,11 @@ public class InterfazAdministrador {
 		// Verificar si se hizo clic en OK
 		if (result == JOptionPane.OK_OPTION) {
 			//TODO COnseguir descripcion de alguna manera
-			descripcionAux = textAreaDesc.getText();
+			descripcionAux = descripAux.get(0).getText();
+			System.out.println("descAux" + descripcionAux);
 			imprimirContenidoCeldasYChoices();
 			procesarVentas();
+			descripAux.clear();
 		}
 	}
 
@@ -1215,10 +1270,10 @@ public class InterfazAdministrador {
 			contenido.append("\n");
 		}
 
-		//		System.out.println(idsParaVentas.toString());
-		//		System.out.println(tiposParaVentas.toString());
+		System.out.println(idsParaVentas.toString());
+		System.out.println(tiposParaVentas.toString());
 
-		//		System.out.println(contenido.toString());
+		System.out.println(contenido.toString());
 	}
 
 
@@ -1236,7 +1291,7 @@ public class InterfazAdministrador {
 
 			Map<String, Object> valores = new HashMap<>();
 
-			valores.put("idVenta", maximo+1);
+			valores.put("idVenta", maximo);
 			valores.put("idMismaVenta", 1);
 			valores.put("idUsuario", this.interfaz.getConexion().obtenerDatoDeTabla("Usuario", "idUsuario", "nombreUsuario", textUserBuscar.getText()));
 			valores.put("tipo", tiposParaVentas.get(i));
@@ -1251,4 +1306,40 @@ public class InterfazAdministrador {
 
 	}
 
+
+	public void crearServicio() {
+
+		if (textFieldNombreServicio .getText().intern() != "" && textFieldPrecioServicio.getText().intern() != "" && textAreaDescripcionServicio.getText().intern() != "" 
+				&& Float.parseFloat(textFieldPrecioServicio.getText().intern())>0) {
+
+			try {
+				int maximo = buscarMaximo("Servicio");
+
+				Map<String, Object> valores = new HashMap<>();
+
+				valores.put("idServicio", maximo+1);
+				valores.put("nombre", textFieldNombreServicio.getText().intern());
+				valores.put("precio", Float.parseFloat(textFieldPrecioServicio.getText().intern()));
+				valores.put("descripcionServicio", textAreaDescripcionServicio.getText().intern());
+
+				System.out.println(valores.toString());
+				
+				interfaz.getConexion().agregarFilaATabla("Servicio", valores);
+
+				JOptionPane.showMessageDialog(null, "El servicio se ha añadido correctamente");
+
+				//Para borrar parametros
+				textFieldNombreServicio.setText("");
+				textFieldPrecioServicio.setText("");
+				textAreaDescripcionServicio.setText("");
+
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(null, "No puede haber un campo vacio ni precio menor de 0");
+		}
+
+	}
 }
