@@ -1,7 +1,7 @@
 -- Eliminar tablas si existen
 -- DROP TABLE IF EXISTS Usuario, Articulo, Venta, Cliente, Mascota, Administrador, HistorialCompra, Cita;
 
--- DROP TABLE IF EXISTS Venta;
+-- DROP TABLE IF EXISTS HistorialCompra;
 
 -- Crear la tabla Usuario
 CREATE TABLE IF NOT EXISTS Usuario(
@@ -75,14 +75,6 @@ CREATE TABLE IF NOT EXISTS Mascota (
     idUsuario INT,
     FOREIGN KEY (idUsuario) REFERENCES Cliente (idUsuario) ON DELETE CASCADE,
     PRIMARY KEY (idMascota)
-);
-
--- Crear la tabla HistorialCompra
-CREATE TABLE IF NOT EXISTS HistorialCompra (
-    idUsuario INT,
-    nombreArticulo VARCHAR(30) NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario) ON DELETE CASCADE,
-    PRIMARY KEY (idUsuario)
 );
 
 -- Crear la tabla Cita
