@@ -12,10 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,8 +43,6 @@ import javax.swing.JSplitPane;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-
-import java.time.format.DateTimeFormatter;
 
 import Exceptions.DBException;
 
@@ -103,7 +98,7 @@ public class InterfazAdministrador {
 		
 		frame = new JFrame();
 
-		frame.setTitle("Panel de control de " + this.interfaz.getUser().getNombreUsuario());
+		frame.setTitle("Panel de control de Administrador");
 
 		frame.setBounds(300, 300, 1200, 900);
 		frame.setVisible(true);
@@ -124,7 +119,7 @@ public class InterfazAdministrador {
 				if (confirmacion == JOptionPane.YES_OPTION) {
 					interfaz.frame.setVisible(true);
 					interfaz.setText();
-					frame.dispose(); //Lo que hace el dispose es que borra en memoria todo el frame
+					frame.dispose(); 
 				}
 			}
 		});
@@ -137,7 +132,7 @@ public class InterfazAdministrador {
 		JToggleButton botModoNoct = new JToggleButton("Modo Nocturno");
 		botModoNoct.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
-		botModoNoct.setBounds(897, 29, 131, 23);
+		botModoNoct.setBounds(897, 11, 131, 59);
 		frame.getContentPane().add(botModoNoct);
 
 		JButton botVerPerfil = new JButton("Ver Perfil");
@@ -222,7 +217,7 @@ public class InterfazAdministrador {
 		botBuscarUser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				buscarUsuario();
+				manejAdm.buscarUsuario(textUserBuscar, panelTextUser, textPaneCitasPrevias, textPaneCitasFuturas);
 			}
 		});
 
@@ -278,7 +273,16 @@ public class InterfazAdministrador {
 		botCrearArticulo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				crearArticulo();
+				if (textAreaArticulo.getText().intern() != "" && textPrecioArticulo.getText().intern() != "" && textNombreArticulo.getText().intern() != "" 
+						&& textMarcaArticulo.getText().intern() != "" && Float.parseFloat(textPrecioArticulo.getText().intern())>0) {
+					
+					manejAdm.crearArticulo(textNombreArticulo, textPrecioArticulo, textMarcaArticulo, textAreaArticulo);
+					
+				}else {
+					JOptionPane.showMessageDialog(null, "No puede haber un campo vacio ni precio menor de 0");
+				}
+				
+				
 
 			}
 		});
@@ -462,7 +466,14 @@ public class InterfazAdministrador {
 		botCrearServicio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				crearServicio();
+				if (textFieldNombreServicio .getText().intern() != "" && textFieldPrecioServicio.getText().intern() != "" && textAreaDescripcionServicio.getText().intern() != "" 
+						&& Float.parseFloat(textFieldPrecioServicio.getText().intern())>0) {
+
+					manejAdm.crearServicio(textFieldNombreServicio,textFieldPrecioServicio, textAreaDescripcionServicio);
+
+				} else {
+					JOptionPane.showMessageDialog(null, "No puede haber un campo vacio ni precio menor de 0");
+				}
 
 			}
 		});
@@ -482,14 +493,19 @@ public class InterfazAdministrador {
 		botAddMasc.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				agregarMascota();
+				
+				if(textUserBuscar.getText().intern() != "") {
+					manejAdm.agregarMascota(textUserBuscar, panelTextUser);
+				} else {
+					JOptionPane.showMessageDialog(null, "No hay un usuario seleccionado");
+				}
 			}
 		});
 
 		botActualizarUserBuscar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				buscarUsuario();
+				manejAdm.buscarUsuario(textUserBuscar, panelTextUser, textPaneCitasPrevias, textPaneCitasFuturas);
 			}
 		});
 
@@ -554,72 +570,7 @@ public class InterfazAdministrador {
 
 	
 
-	private void addMascotaCliente(int idUsuario) {
-
-		JPanel panel = new JPanel(new GridLayout(0, 2));
-
-		JTextField campoNombre = new JTextField();
-		JTextField campoEspecie = new JTextField();
-		JTextField campoRaza = new JTextField();
-		JTextField campofecha = new JTextField();
-
-		panel.add(new JLabel("Nombre:"));
-		panel.add(campoNombre);
-		panel.add(new JLabel("Especie:"));
-		panel.add(campoEspecie);
-		panel.add(new JLabel("Raza:"));
-		panel.add(campoRaza);
-		panel.add(new JLabel("FechaNacimiento:"));
-		panel.add(campofecha);
-
-
-
-		int resultado = JOptionPane.showConfirmDialog(null, panel, "Ingrese Informacion", JOptionPane.OK_CANCEL_OPTION);
-
-		if (resultado == JOptionPane.OK_OPTION) {
-
-			if (campoEspecie.getText().intern()!="" && campofecha.getText().intern() != "" && campoRaza.getText().intern() != "" && campoNombre.getText().intern() != "") {
-				String fechaCita = campofecha.getText();
-
-				String[] partesFecha = fechaCita.split("/");
-
-				String anio = partesFecha[2];
-				String mes = partesFecha[1];
-				String dia = partesFecha[0];
-
-				String fechaFinal = anio + "-" + mes + "-" + dia;
-
-				try {
-					int maximo = this.manejAdm.buscarMaximo("Mascota");
-
-
-					Map<String, Object> valores = new HashMap<>();
-
-					valores.put("idMascota", maximo);
-					valores.put("nombre", campoNombre.getText().intern());
-					valores.put("especie", campoEspecie.getText().intern());
-					valores.put("raza", campoRaza.getText().intern());
-					valores.put("fechaNacimiento", java.sql.Date.valueOf(fechaFinal));
-					valores.put("idUsuario", idUsuario);
-
-					conexion.agregarFilaATabla("Mascota", valores);
-
-					List<Map<String, Object>> filaCliente = conexion.obtenerFilasDeTabla("Cliente", Arrays.asList("numMascotas"), "idUsuario = ?", idUsuario);
-
-					int nuevoNumMascotas = (int) filaCliente.get(0).get("numMascotas") + 1;
-
-					conexion.actualizarFila("Cliente", "numMascotas", nuevoNumMascotas, "idUsuario", idUsuario);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}else {
-				JOptionPane.showMessageDialog(null, "Hay campos vacios");
-			}
-
-
-		}
-	}
+	
 
 	private void modoNocturno(JToggleButton botModoNoct) {
 
@@ -653,87 +604,9 @@ public class InterfazAdministrador {
 		}
 	}
 
-	private void buscarUsuario() {
-		try {
 
-			List<Object> cadena = interfaz.cogerDatosBorrar(textUserBuscar.getText().intern());
+	
 
-			if (cadena == null) {
-				textUserBuscar.setText("");
-				panelTextUser.setText("");
-				JOptionPane.showMessageDialog(null, "No se ha encontrado ningun usuario con ese nombre");
-			} else {
-				String datosUser = " ID del Cliente: "+ cadena.get(0).toString() + 
-						"\n Username: "+cadena.get(1).toString()+
-						"\n Rol: "+cadena.get(3).toString();
-				String mascClient = "";
-
-				if (cadena.get(3).toString().intern() != "Administrador") {
-					mascClient = "\n Mascotas que tiene el cliente:\n" + 
-							"______________________________________________________\n";
-
-					List<String> mascotas = recTodasMascotas((int) cadena.get(0));
-
-					for (String masc : mascotas) {
-						mascClient += mascRecDatos(masc, (int) cadena.get(0));
-					}
-
-				}
-
-				panelTextUser.setText(datosUser + mascClient);
-
-				textPaneCitasPrevias.setText(recCitasUsuario(Integer.parseInt(cadena.get(0).toString()), "<"));
-				textPaneCitasFuturas.setText(recCitasUsuario(Integer.parseInt(cadena.get(0).toString()), ">"));
-			}
-
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}
-
-	//este
-	private String mascRecDatos(String nombreMascota, int idUsuario) throws Exception {
-
-		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
-		String condicion = "nombre = ? AND idUsuario = ?";
-
-		Object[] parametros = {nombreMascota, idUsuario};
-
-		List<Map<String, Object>> resultados = this.conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
-
-		if (!resultados.isEmpty()) {
-			Map<String, Object> datosMascota = resultados.get(0);
-
-			return    " ID de la mascota: " + String.valueOf(datosMascota.get("idMascota")) + 
-					"\n Nombre: "+ nombreMascota +
-					"\n Especie: " + String.valueOf(datosMascota.get("especie")) +
-					"\n Raza: " +  String.valueOf(datosMascota.get("raza")) + 
-					"\n Fecha de nacimiento: " + String.valueOf(new SimpleDateFormat("dd / MM / yyyy").format(datosMascota.get("fechaNacimiento"))) + 
-					"\n=============================================\n";
-
-		}
-
-		return "";
-	}
-
-	//este
-	private ArrayList<String> recTodasMascotas(int id) throws NumberFormatException, Exception {
-
-		int numMascotas = Integer.parseInt(this.conexion.obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", id));
-
-		List<String> lista = this.conexion.obtenerDatosDeTablaLista("Mascota", "nombre", "idUsuario", id);
-
-		ArrayList<String> mascotasLista = new ArrayList<String>();
-
-		for(int i = 0; i < numMascotas; i++) {
-
-			mascotasLista.add(lista.get(i).toString().intern());
-
-		}
-
-		return mascotasLista;
-
-	}
 
 	private void createUser() {
 
@@ -885,7 +758,7 @@ public class InterfazAdministrador {
 
 			try {
 
-				List<Object> cadena = interfaz.cogerDatosBorrar(txtNombre.getText().toString().intern());
+				List<Object> cadena = this.manejAdm.cogerDatosBorrar(txtNombre.getText().toString().intern());
 
 				if (cadena == null) {
 					JOptionPane.showMessageDialog(null, "No se ha encontrado ningun usuario con ese nombre");
@@ -918,74 +791,6 @@ public class InterfazAdministrador {
 
 
 	}
-	
-	
-	//este
-	//Puede haber solamente 2, > y <
-	//	">" ---> es para mayor
-	//	"<" ---> es para menor
-	private String recCitasUsuario(int id, String caracter) throws Exception{
-
-		List<Map<String, Object>> citas = this.conexion.obtenerFilasDeTabla( "Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita", "idMascota"), "idUsuario = ? AND fechaCita "+caracter+" ?", id, Date.valueOf(LocalDate.now()));
-
-		StringBuffer stringBuffer = new StringBuffer("");
-		int i = 1;
-
-		for(Map<String, Object> unaCita : citas) {
-
-			String nombreMascota = this.conexion.obtenerDatoDeTabla("Mascota", "nombre", "idMascota", unaCita.get("idMascota"));
-
-			stringBuffer.append(" Cita #"+i);
-
-			stringBuffer.append("\n IdCita: " + unaCita.get("idCita"));
-			stringBuffer.append("\n Fecha de la cita: " + new SimpleDateFormat("dd / MM / yyyy").format(unaCita.get("fechaCita")));
-			stringBuffer.append("\n Hora de la cita: " + new SimpleDateFormat("HH:mm").format(unaCita.get("horaCita")));
-			stringBuffer.append("\n Nombre de la mascota: " + nombreMascota );
-			stringBuffer.append("\n Descripcion:\n " + unaCita.get("descripcionCita"));
-			stringBuffer.append("\n===============================================\n");
-
-			i++;
-
-		}
-
-		return stringBuffer.toString();
-
-	}
-
-
-	private void crearArticulo() {
-		if (textAreaArticulo.getText().intern() != "" && textPrecioArticulo.getText().intern() != "" && textNombreArticulo.getText().intern() != "" 
-				&& textMarcaArticulo.getText().intern() != "" && Float.parseFloat(textPrecioArticulo.getText().intern())>0) {
-
-			try {
-				int maximo = this.manejAdm.buscarMaximo("Articulo");
-
-				Map<String, Object> valores = new HashMap<>();
-
-				valores.put("idArticulo", maximo);
-				valores.put("nombre", textNombreArticulo.getText().intern());
-				valores.put("marca", textMarcaArticulo.getText().intern());
-				valores.put("precio", Float.parseFloat(textPrecioArticulo.getText().intern()));
-				valores.put("descripcionArticulo", textAreaArticulo.getText().intern());
-
-				conexion.agregarFilaATabla("Articulo", valores);
-
-				JOptionPane.showMessageDialog(null, "El articulo se ha añadido correctamente");
-
-				//Para borrar parametros
-				textNombreArticulo.setText("");
-				textMarcaArticulo.setText("");
-				textPrecioArticulo.setText("");
-				textAreaArticulo.setText("");
-
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-
-		}else {
-			JOptionPane.showMessageDialog(null, "No puede haber un campo vacio ni precio menor de 0");
-		}
-	}
 
 
 	private void crearCita() {
@@ -1009,7 +814,7 @@ public class InterfazAdministrador {
 				&& !textHoraCita.getText().isEmpty() && !panelDescrCita.getText().isEmpty()) {
 
 			try {
-				List<Object> user = interfaz.cogerDatosBorrar(textUserCita.getText().intern());
+				List<Object> user = this.manejAdm.cogerDatosBorrar(textUserCita.getText().intern());
 
 				int idMascota = -1;
 
@@ -1017,7 +822,7 @@ public class InterfazAdministrador {
 
 					boolean compr = false;
 
-					ArrayList<String> listaMasc = recTodasMascotas(Integer.parseInt(user.get(0).toString()));
+					ArrayList<String> listaMasc = this.manejAdm.recTodasMascotas(Integer.parseInt(user.get(0).toString()));
 
 					for (String mascota : listaMasc) {
 
@@ -1025,7 +830,7 @@ public class InterfazAdministrador {
 
 							compr = true;
 
-							idMascota = idMascotaRecuperar(mascota, Integer.parseInt(user.get(0).toString()));
+							idMascota = this.manejAdm.idMascotaRecuperar(mascota, Integer.parseInt(user.get(0).toString()));
 
 						}
 
@@ -1068,58 +873,8 @@ public class InterfazAdministrador {
 		}
 	}
 
-	//este
-	private int idMascotaRecuperar(String nombreMascota, int idUsuario) throws Exception{
 
-		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
-		String condicion = "nombre = ? AND idUsuario = ?";
-
-		Object[] parametros = {nombreMascota, idUsuario};
-
-		List<Map<String, Object>> resultados = this.conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
-
-		if (!resultados.isEmpty()) {
-			Map<String, Object> datosMascota = resultados.get(0);
-
-			return (int) datosMascota.get("idMascota");
-		}
-
-		return -1;
-	}
-
-	private void agregarMascota() {
-		try {
-
-			if(textUserBuscar.getText().intern() != "") {
-
-				List<Object> cadena = interfaz.cogerDatosBorrar(textUserBuscar.getText().intern());
-
-				if (cadena == null) {
-					textUserBuscar.setText("");
-					panelTextUser.setText("");
-					JOptionPane.showMessageDialog(null, "No se ha encontrado ningun usuario con ese nombre");
-				} else {
-
-					if (cadena.get(3).toString().intern() == "Cliente") {
-
-						addMascotaCliente(Integer.parseInt(cadena.get(0).toString().intern()));
-
-					} else {
-						JOptionPane.showMessageDialog(null, "Estas seleccionando un Administrador");
-					}
-
-				}
-
-			} else {
-				JOptionPane.showMessageDialog(null, "No hay un usuario seleccionado");
-			}
-
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}
-
-
+	//Este no lo muevo porque es parte de la interfaz
 	public void mostrarCatalogoConVenta() throws SQLException, DBException {
 		// Crear un panel principal
 		JPanel panel = new JPanel(new BorderLayout());
@@ -1220,63 +975,10 @@ public class InterfazAdministrador {
 		if (result == JOptionPane.OK_OPTION) {
 			//TODO COnseguir descripcion de alguna manera
 			descripcionAux = descripAux.get(0).getText();
-			imprimirContenidoCeldasYChoices();
+			this.manejAdm.imprimirContenidoCeldasYChoices(celdas, idsParaVentas, choices, tiposParaVentas);
 			this.manejAdm.procesarVentas(idsParaVentas, tiposParaVentas , descripcionAux, textUserBuscar);
 			descripAux.clear();
 		}
 	}
 
-	//este
-	public void imprimirContenidoCeldasYChoices() {
-		StringBuilder contenido = new StringBuilder();
-
-		for (int i = 0; i < celdas.size(); i++) {
-
-			idsParaVentas.add(celdas.get(i).getText());
-			tiposParaVentas.add(String.valueOf(choices.get(i).getSelectedItem()));
-
-			contenido.append("Celda ").append(i + 1).append(": ");
-			contenido.append(celdas.get(i).getText());
-			contenido.append(", Tipo: ").append(choices.get(i).getSelectedItem());
-			contenido.append("\n");
-		}
-
-	}
-
-
-
-	public void crearServicio() {
-
-		if (textFieldNombreServicio .getText().intern() != "" && textFieldPrecioServicio.getText().intern() != "" && textAreaDescripcionServicio.getText().intern() != "" 
-				&& Float.parseFloat(textFieldPrecioServicio.getText().intern())>0) {
-
-			try {
-				int maximo = this.manejAdm.buscarMaximo("Servicio");
-
-				Map<String, Object> valores = new HashMap<>();
-
-				valores.put("idServicio", maximo+1);
-				valores.put("nombre", textFieldNombreServicio.getText().intern());
-				valores.put("precio", Float.parseFloat(textFieldPrecioServicio.getText().intern()));
-				valores.put("descripcionServicio", textAreaDescripcionServicio.getText().intern());
-
-				
-				conexion.agregarFilaATabla("Servicio", valores);
-
-				JOptionPane.showMessageDialog(null, "El servicio se ha añadido correctamente");
-
-				//Para borrar parametros
-				textFieldNombreServicio.setText("");
-				textFieldPrecioServicio.setText("");
-				textAreaDescripcionServicio.setText("");
-
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-
-		} else {
-			JOptionPane.showMessageDialog(null, "No puede haber un campo vacio ni precio menor de 0");
-		}
-
-	}
 }

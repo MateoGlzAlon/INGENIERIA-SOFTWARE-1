@@ -203,24 +203,6 @@ public class Interfaz {
 
 	}*/
 
-	public List<Object> cogerDatosBorrar(String username) throws Exception {
-
-		if (username.equals("")) {
-			return null;
-		}
-
-		List<List<Object>> userList = conexion.listar("Usuario");
-
-		for (List<Object> user : userList) {
-			if (user.get(1).toString().equals(username)) {
-				return user;
-			}
-		}
-
-		return null;
-
-	}
-
 	private void confirmarSalir(JFrame frame) throws Exception {
 		int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar",
 				JOptionPane.YES_NO_OPTION);
