@@ -150,32 +150,38 @@ public class InterfazCliente {
 
 		// JTextFields no editables y con 15 columnas
 		textFieldIdMascota = new JTextField();
+		textFieldIdMascota.setBackground(new Color(255, 255, 255));
 		textFieldIdMascota.setHorizontalAlignment(SwingConstants.LEFT);
 		textFieldIdMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldIdMascota.setEditable(false);
 		textFieldIdMascota.setColumns(15);
 
 		textFieldNombreMascota = new JTextField();
+		textFieldNombreMascota.setBackground(new Color(255, 255, 255));
 		textFieldNombreMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldNombreMascota.setEditable(false);
 		textFieldNombreMascota.setColumns(15);
 
 		textFieldEspecieMascota = new JTextField();
+		textFieldEspecieMascota.setBackground(new Color(255, 255, 255));
 		textFieldEspecieMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldEspecieMascota.setEditable(false);
 		textFieldEspecieMascota.setColumns(15);
 
 		textFieldRazaMascota = new JTextField();
+		textFieldRazaMascota.setBackground(new Color(255, 255, 255));
 		textFieldRazaMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldRazaMascota.setEditable(false);
 		textFieldRazaMascota.setColumns(15);
 
 		textFieldFechaNacimientoMascota = new JTextField();
+		textFieldFechaNacimientoMascota.setBackground(new Color(255, 255, 255));
 		textFieldFechaNacimientoMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldFechaNacimientoMascota.setEditable(false);
 		textFieldFechaNacimientoMascota.setColumns(15);
 
 		textFieldIdUsuarioMascota = new JTextField();
+		textFieldIdUsuarioMascota.setBackground(new Color(255, 255, 255));
 		textFieldIdUsuarioMascota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldIdUsuarioMascota.setEditable(false);
 		textFieldIdUsuarioMascota.setColumns(15);
