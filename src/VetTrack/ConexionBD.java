@@ -18,7 +18,7 @@ import Exceptions.DBException;
 
 public class ConexionBD {
 
-	private static ConexionBD instancia; // Instancia única para el Singleton
+	private static ConexionBD instancia; 
 	private String dataBaseURL;
 	private String driverName;
 	private String user;
@@ -42,24 +42,20 @@ public class ConexionBD {
 	}
 
 	public void abrirConexion() throws DBException {
-		if (dataBaseURL.isEmpty() || user.isEmpty() || pass.isEmpty() || driverName.isEmpty()) {
-			System.out.println("Error al crear la conexión (¿están inicializados?) con estos valores:");
-			this.mostrarValoresConexion();
-		} else {
+		if (!dataBaseURL.isEmpty() && !user.isEmpty() && !pass.isEmpty() && !driverName.isEmpty()) {
 			try {
 				Class.forName(this.driverName);
 				this.conexion = DriverManager.getConnection(this.dataBaseURL, this.user, this.pass);
 			} catch (Exception e) {
 				throw new DBException("Al abrir la base de datos " + e.getMessage());
 			}
-		}
+		} 
 	}
 
 	public void cerrarConexion() throws DBException {
 		try {
 			if (this.conexion != null && !this.conexion.isClosed()) {
 				this.conexion.close();
-				System.out.println("Cierre correcto de la conexión con la base de datos");
 			}
 		} catch (Exception e) {
 			throw new DBException("Al cerrar la conexión de la base de datos. " + e.getMessage());
@@ -70,9 +66,6 @@ public class ConexionBD {
 		return this.conexion;
 	}
 
-	private void mostrarValoresConexion() {
-		// Implementa el método para mostrar los valores de la conexión si es necesario
-	}
 
 	public String obtenerDatoDeTabla(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws DBException {
 		String resultado = null;
@@ -83,7 +76,7 @@ public class ConexionBD {
 
 			// Preparar la declaración SQL
 			try (PreparedStatement st = this.getConexion().prepareStatement(query)) {
-				// Configurar el valor del parámetro en la consulta
+
 				if (condicion instanceof Integer) {
 					st.setInt(1, (Integer) condicion);
 				} else if (condicion instanceof String) {
@@ -93,8 +86,6 @@ public class ConexionBD {
 					throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion");
 				}
 
-				// Imprimir la consulta SQL para verificar
-//								System.out.println(st.toString());
 
 				// Ejecutar la consulta
 				try (ResultSet rs = st.executeQuery()) {
@@ -102,7 +93,6 @@ public class ConexionBD {
 					if (rs.next()) {
 						// Obtener el resultado de la columna
 						resultado = rs.getString(nombreColumnaExtraer);
-						//						System.out.println(nombreColumnaExtraer + ": " + resultado);
 					} else {
 						// No se encontró la fila con la condición proporcionada
 						throw new DBException("No se encontró la fila con la condición proporcionada.");
@@ -110,7 +100,6 @@ public class ConexionBD {
 				}
 			}
 		} catch (Exception e) {
-			// Capturar cualquier excepción y lanzarla hacia arriba
 			throw new DBException("Error al obtener dato de la tabla: ");
 		}
 
@@ -128,7 +117,7 @@ public class ConexionBD {
 
 			// Preparar la declaración SQL
 			try (PreparedStatement st = this.getConexion().prepareStatement(query)) {
-				// Configurar los valores de los parámetros en la consulta
+
 				if (condicion1 instanceof Integer) {
 					st.setInt(1, (Integer) condicion1);
 				} else if (condicion1 instanceof String) {
@@ -145,16 +134,12 @@ public class ConexionBD {
 					throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion2");
 				}
 
-				// Imprimir la consulta SQL para verificar
-				//			System.out.println(st.toString());
-
 				// Ejecutar la consulta
 				try (ResultSet rs = st.executeQuery()) {
 					// Verificar si hay resultados
 					if (rs.next()) {
 						// Obtener el resultado de la columna
 						resultado = rs.getString(nombreColumnaExtraer);
-						//					System.out.println(nombreColumnaExtraer + ": " + resultado);
 					} else {
 						// No se encontró la fila con las condiciones proporcionadas
 						throw new DBException("No se encontró la fila con las condiciones proporcionadas.");
@@ -168,9 +153,6 @@ public class ConexionBD {
 
 		return resultado;
 	}
-
-
-
 
 
 	public List<String> obtenerDatosDeTablaLista(String nombreTabla, String nombreColumnaExtraer, String nombreColumnaComparar, Object condicion) throws DBException {
@@ -192,9 +174,6 @@ public class ConexionBD {
 					throw new IllegalArgumentException("Tipo de dato no compatible para el parámetro condicion");
 				}
 
-				// Imprimir la consulta SQL para verificar
-				//				System.out.println(st.toString());
-
 				// Ejecutar la consulta
 				try (ResultSet rs = st.executeQuery()) {
 					// Recorrer los resultados y agregarlos a la lista
@@ -204,7 +183,6 @@ public class ConexionBD {
 				}
 			}
 		} catch (Exception e) {
-			// Capturar cualquier excepción y lanzarla hacia arriba
 			throw new DBException("Error al obtener datos de la tabla");
 		}
 
@@ -255,47 +233,25 @@ public class ConexionBD {
 		return resultados;
 	}
 
-
-
-	/*
-	 *  // Crear un Map con los valores de la nueva fila
-        Map<String, Object> valoresNuevaFila = new HashMap<>();
-        valoresNuevaFila.put("Nombre", "Nuevo Articulo");
-        valoresNuevaFila.put("Descripcion", "Descripción del Nuevo Articulo");
-        valoresNuevaFila.put("Marca", "Nueva Marca");
-
-        // Llamar al método para agregar la nueva fila
-        conexion.agregarFilaATabla("Articulo", valoresNuevaFila);
-
-        // Mostrar mensaje de éxito
-        System.out.println("Nueva fila agregada correctamente a la tabla 'Articulo'")
-	 * 
-	 */
-
 	public void agregarFilaATabla(String nombreTabla, Map<String, Object> valores) throws DBException {
 		try {
-			// Construir la consulta INSERT
 			StringBuilder queryBuilder = new StringBuilder("INSERT INTO ");
 			queryBuilder.append(nombreTabla).append(" (");
 
-			// Agregar los nombres de las columnas
 			for (String columna : valores.keySet()) {
 				queryBuilder.append(columna).append(", ");
 			}
 			queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length()); // Eliminar la coma final
 			queryBuilder.append(") VALUES (");
 
-			// Agregar los valores
 			for (int i = 0; i < valores.size(); i++) {
 				queryBuilder.append("?, ");
 			}
 			queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length()); // Eliminar la coma final
 			queryBuilder.append(")");
 
-			// Preparar la consulta
 			PreparedStatement st = this.getConexion().prepareStatement(queryBuilder.toString());
 
-			// Establecer los valores de los parámetros
 			int index = 1;
 			for (Object valor : valores.values()) {
 				if (valor instanceof Integer) {
@@ -318,8 +274,6 @@ public class ConexionBD {
 			st.executeUpdate();
 		} catch (Exception e) {
 			throw new DBException("Error al agregar fila: " + e.getMessage());
-		} finally {
-			// Cerrar recursos si es necesario
 		}
 	}
 
@@ -345,9 +299,7 @@ public class ConexionBD {
 			}
 		} catch (Exception e) {
 			throw new DBException("Error al eliminar: " + e.getMessage());
-		} finally {
-
-		}
+		} 
 	}
 
 
@@ -355,7 +307,6 @@ public class ConexionBD {
 		List<List<Object>> listaRegistros = new ArrayList<>();
 
 		try {
-			// Abrir la conexión antes de realizar la operación en la base de datos
 
 			String query = "SELECT * FROM " + nombreTabla;
 			PreparedStatement st = this.getConexion().prepareStatement(query);
@@ -373,9 +324,6 @@ public class ConexionBD {
 			}
 		} catch (Exception e) {
 			throw new DBException("Error al listar registros: " + e.getMessage());
-		} finally {
-			// Asegúrate de cerrar la conexión, independientemente de si hubo una excepción o no
-
 		}
 
 		return listaRegistros;
@@ -405,7 +353,7 @@ public class ConexionBD {
 			e.printStackTrace();
 		}
 
-		return false; // Si hay un error o no se encuentra, se devuelve false por defecto
+		return false; 
 	}
 
 
@@ -446,7 +394,6 @@ public class ConexionBD {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// Manejar la excepción según tus necesidades
 		}
 
 		return citasPasadas;
@@ -466,7 +413,6 @@ public class ConexionBD {
 
 			// Preparar la declaración SQL
 			try (PreparedStatement st = conexion.prepareStatement(query)) {
-				// Establecer la fecha actual como parámetro en la consulta
 				st.setDate(1, fechaActual);
 				st.setInt(2, idMascota);
 
@@ -480,8 +426,6 @@ public class ConexionBD {
 						Time horaCita = rs.getTime("horaCita");
 						String descripcion = rs.getString("descripcionCita");
 
-
-						// Crear un objeto Cita y agregarlo a la lista
 						Cita cita = new Cita(idCita, idUsuario, fechaCita, horaCita, idMascota, descripcion);
 						citasPasadas.add(cita);	
 					}
@@ -489,7 +433,6 @@ public class ConexionBD {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// Manejar la excepción según tus necesidades
 		}
 
 		return citasPasadas;
@@ -502,7 +445,6 @@ public class ConexionBD {
 		List<Map<String, Object>> resultados = new ArrayList<>();
 
 		try (PreparedStatement statement = construirConsulta(nombreTabla, columnas, condicion)) {
-			// Configurar los parámetros en la consulta
 			configurarParametros(statement, parametros);
 
 			try (ResultSet resultSet = statement.executeQuery()) {
@@ -574,7 +516,6 @@ public class ConexionBD {
 				int filasAfectadas = preparedStatement.executeUpdate();
 
 				if (filasAfectadas > 0) {
-//					System.out.println("La fila ha sido actualizada exitosamente.");
 					return true;
 				} 
 			}

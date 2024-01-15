@@ -209,7 +209,7 @@ public class InterfazAdministrador {
 		textPaneCitasFuturas.setBorder(new LineBorder(Color.BLACK, 1));
 
 		JScrollPane scrollPaneCitasFuturas = new JScrollPane(textPaneCitasFuturas);
-		scrollPaneCitasFuturas.setBounds(440, 548, 351, 303); // Ajustado el tamaño del JScrollPane
+		scrollPaneCitasFuturas.setBounds(440, 548, 351, 303);
 		scrollPaneCitasFuturas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneCitasFuturas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		frame.getContentPane().add(scrollPaneCitasFuturas);
@@ -392,7 +392,6 @@ public class InterfazAdministrador {
 			public void actionPerformed(ActionEvent e) {
 
 				try {
-					//					System.out.println("aa" + textUserBuscar.getText());
 					if(!textUserBuscar.getText().equals("")){
 						mostrarCatalogoConVenta();
 					} else {
@@ -552,6 +551,7 @@ public class InterfazAdministrador {
 
 	}
 
+	//este
 	private String getAsteriscos(String passwd) {
 
 		int ast = passwd.length();
@@ -659,8 +659,10 @@ public class InterfazAdministrador {
 				boton.setBackground(botModoNoct.isSelected() ? new Color(150, 150, 150) : this.colorOriginalBton);
 
 			} else if (component instanceof JLabel) {
+				
 				JLabel labl = (JLabel) component;
 				labl.setForeground(botModoNoct.isSelected() ? Color.white : Color.black);
+				
 			}
 		}
 		frame.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
@@ -1218,37 +1220,28 @@ public class InterfazAdministrador {
 				descripAux.add(textAreaDesc);
 				ventaPanel.add(textAreaDesc);
 
-				System.out.println(textAreaDesc.getText());
-
-				// Ajustar el tamaño de la ventana al contenido
 				Window window = SwingUtilities.getWindowAncestor(ventaPanel);
 				if (window instanceof JDialog) {
 					JDialog dialog = (JDialog) window;
 					dialog.pack();
 				}
 
-				// Centrar verticalmente las etiquetas y el JComboBox
 				ventaPanel.revalidate();
 				ventaPanel.repaint();
-
-				System.out.println(textAreaDesc.getText());
 
 			}
 		});
 
-		// Crear un JSplitPane para dividir el espacio entre el catálogo y las celdas/Choices
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, catalogoScrollPane, ventaPanel);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(500);
 
-		// Mostrar el JOptionPane con el JSplitPane como componente padre
 		int result = JOptionPane.showConfirmDialog(panel, splitPane, "Catálogo de productos y Nueva venta", JOptionPane.OK_CANCEL_OPTION);
 
 		// Verificar si se hizo clic en OK
 		if (result == JOptionPane.OK_OPTION) {
 			//TODO COnseguir descripcion de alguna manera
 			descripcionAux = descripAux.get(0).getText();
-			System.out.println("descAux" + descripcionAux);
 			imprimirContenidoCeldasYChoices();
 			procesarVentas();
 			descripAux.clear();
@@ -1270,10 +1263,6 @@ public class InterfazAdministrador {
 			contenido.append("\n");
 		}
 
-		System.out.println(idsParaVentas.toString());
-		System.out.println(tiposParaVentas.toString());
-
-		System.out.println(contenido.toString());
 	}
 
 
@@ -1299,7 +1288,6 @@ public class InterfazAdministrador {
 			valores.put("descripcionVenta", descripcionAux);
 			valores.put("fechaVenta",  java.sql.Date.valueOf(fechaFormateada));
 
-			System.out.println("Valores procesar: " + valores.toString());
 
 			this.interfaz.getConexion().agregarFilaATabla("Venta", valores);
 		}
@@ -1322,7 +1310,6 @@ public class InterfazAdministrador {
 				valores.put("precio", Float.parseFloat(textFieldPrecioServicio.getText().intern()));
 				valores.put("descripcionServicio", textAreaDescripcionServicio.getText().intern());
 
-				System.out.println(valores.toString());
 				
 				interfaz.getConexion().agregarFilaATabla("Servicio", valores);
 
