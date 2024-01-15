@@ -149,8 +149,12 @@ public class Interfaz {
 
 				if (rolUsuario.equals("Cliente")) {
 					frame.setVisible(false);
+					InterfazCliente frameImp = new InterfazCliente(this);
+
 				} else if (rolUsuario.equals("Administrador")) {
 					frame.setVisible(false);
+					InterfazAdministrador frameImp = new InterfazAdministrador(this);
+
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Las credenciales son incorrectas");

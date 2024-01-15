@@ -4,8 +4,6 @@ package VetTrack.Controlador;
  * Clase que representa a un Usuario en el sistema de 	VetTrack.
  */
 
-
-
 public class Usuario {
 
 	private int idUsuario;         // Identificador único del usuario. LATER: PODEMOS QUITAR ESTO Y USAR SOLO EL NOMBRE DE USUARIO
