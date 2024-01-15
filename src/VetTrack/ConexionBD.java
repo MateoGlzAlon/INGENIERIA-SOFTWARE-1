@@ -530,7 +530,7 @@ public class ConexionBD {
 
 		StringBuilder catalogoArticulos = new StringBuilder();
 		
-		catalogoArticulos.append("**ARTICULOS**\n");
+		catalogoArticulos.append("<<ARTICULOS>>\n\n");
 
 		for (Map<String, Object> fila : resultadosArticulo) {
 			
@@ -570,7 +570,7 @@ public class ConexionBD {
 
 		StringBuilder catalogoServicios = new StringBuilder();
 		
-		catalogoServicios.append("**SERVICIOS**\n");
+		catalogoServicios.append("<<SERVICIOS>>\n\n");
 
 		for (Map<String, Object> fila : resultadosServicio) {
 			
