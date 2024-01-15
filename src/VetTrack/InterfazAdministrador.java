@@ -84,7 +84,8 @@ public class InterfazAdministrador {
 	private List<JTextArea> descripAux;
 	private JTextField textFieldNombreServicio;
 	private JTextField textFieldPrecioServicio;
-
+	
+	private ManejadorAdministrador manejAdm;
 
 	/**
 	 * Create the application.
@@ -98,6 +99,8 @@ public class InterfazAdministrador {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize_admin() {
+		this.manejAdm = new ManejadorAdministrador();
+		
 		frame = new JFrame();
 
 		frame.setTitle("Panel de control de " + this.interfaz.getUser().getNombreUsuario());
@@ -533,7 +536,7 @@ public class InterfazAdministrador {
 		});
 
 		JLabel labelUsername = new JLabel("Username: " +this.interfaz.getUser().getNombreUsuario());
-		JLabel labelPasswd = new JLabel("Password: " + getAsteriscos(this.interfaz.getUser().getContrasena()));
+		JLabel labelPasswd = new JLabel("Password: " + this.manejAdm.getAsteriscos(this.interfaz.getUser().getContrasena()));
 		JLabel labelRol = new JLabel("Rol: Administrador");
 
 		panelInfo.add(labelUsername);
@@ -549,20 +552,7 @@ public class InterfazAdministrador {
 
 	}
 
-	//este
-	private String getAsteriscos(String passwd) {
-
-		int ast = passwd.length();
-
-		StringBuffer cadena = new StringBuffer("");
-
-		for(int i = 0; i<ast; i++) {
-			cadena.append("*");
-		}
-
-		return cadena.toString();
-
-	}
+	
 
 	private void addMascotaCliente(int idUsuario) {
 
@@ -600,7 +590,7 @@ public class InterfazAdministrador {
 				String fechaFinal = anio + "-" + mes + "-" + dia;
 
 				try {
-					int maximo = buscarMaximo("Mascota");
+					int maximo = this.manejAdm.buscarMaximo("Mascota");
 
 
 					Map<String, Object> valores = new HashMap<>();
@@ -629,22 +619,6 @@ public class InterfazAdministrador {
 
 
 		}
-	}
-
-	//este
-	private int buscarMaximo(String tabla) throws DBException {
-
-		List<List<Object>> mascotaTotal = conexion.listar(tabla);
-		int maximo = 0;
-
-		for (List<Object> user : mascotaTotal) {
-			if ((int) user.get(0) > maximo) {
-				maximo = (int) user.get(0);
-			}
-		}
-
-		return maximo;
-
 	}
 
 	private void modoNocturno(JToggleButton botModoNoct) {
@@ -830,7 +804,7 @@ public class InterfazAdministrador {
 							JOptionPane.showMessageDialog(null, "ERROR: El telefono o DNI deben de tener de maximo 9 caracteres");
 						} else {
 
-							int maximo = buscarMaximo("Usuario");
+							int maximo = this.manejAdm.buscarMaximo("Usuario");
 
 							Map<String, Object> valores = new HashMap<>();
 
@@ -860,7 +834,7 @@ public class InterfazAdministrador {
 
 					} else if (cboTipoUsuario.getSelectedItem().toString().intern()== "Administrador") {
 
-						int maximo = buscarMaximo("Usuario");
+						int maximo = this.manejAdm.buscarMaximo("Usuario");
 
 						Map<String, Object> valores = new HashMap<>();
 
@@ -984,7 +958,7 @@ public class InterfazAdministrador {
 				&& textMarcaArticulo.getText().intern() != "" && Float.parseFloat(textPrecioArticulo.getText().intern())>0) {
 
 			try {
-				int maximo = buscarMaximo("Articulo");
+				int maximo = this.manejAdm.buscarMaximo("Articulo");
 
 				Map<String, Object> valores = new HashMap<>();
 
@@ -1059,7 +1033,7 @@ public class InterfazAdministrador {
 
 					if (compr) {
 
-						int maximo = buscarMaximo("Cita");
+						int maximo = this.manejAdm.buscarMaximo("Cita");
 
 						Map<String, Object> valores = new HashMap<>();
 
@@ -1247,7 +1221,7 @@ public class InterfazAdministrador {
 			//TODO COnseguir descripcion de alguna manera
 			descripcionAux = descripAux.get(0).getText();
 			imprimirContenidoCeldasYChoices();
-			procesarVentas();
+			this.manejAdm.procesarVentas(idsParaVentas, tiposParaVentas , descripcionAux, textUserBuscar);
 			descripAux.clear();
 		}
 	}
@@ -1270,34 +1244,6 @@ public class InterfazAdministrador {
 	}
 
 
-	public void procesarVentas() throws DBException {
-
-		for (int i = 0; i < idsParaVentas.size();i++) {
-
-			LocalDate fechaActual = LocalDate.now();
-
-			// Imprimir la fecha actual en un formato específico
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String fechaFormateada = fechaActual.format(formatter);
-
-			int maximo = buscarMaximo("Venta");
-
-			Map<String, Object> valores = new HashMap<>();
-
-			valores.put("idVenta", maximo);
-			valores.put("idMismaVenta", 1);
-			valores.put("idUsuario", this.conexion.obtenerDatoDeTabla("Usuario", "idUsuario", "nombreUsuario", textUserBuscar.getText()));
-			valores.put("tipo", tiposParaVentas.get(i));
-			valores.put("idArtServ", idsParaVentas.get(i));
-			valores.put("descripcionVenta", descripcionAux);
-			valores.put("fechaVenta",  java.sql.Date.valueOf(fechaFormateada));
-
-
-			this.conexion.agregarFilaATabla("Venta", valores);
-		}
-
-	}
-
 
 	public void crearServicio() {
 
@@ -1305,7 +1251,7 @@ public class InterfazAdministrador {
 				&& Float.parseFloat(textFieldPrecioServicio.getText().intern())>0) {
 
 			try {
-				int maximo = buscarMaximo("Servicio");
+				int maximo = this.manejAdm.buscarMaximo("Servicio");
 
 				Map<String, Object> valores = new HashMap<>();
 
