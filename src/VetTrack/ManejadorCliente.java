@@ -5,6 +5,7 @@ import java.awt.Choice;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -113,7 +114,7 @@ public class ManejadorCliente {
 		panelImagen.add(labelImagen);
 		
 		JLabel labelUsername = new JLabel("Username: " + interfaz.getUser().getNombreUsuario());
-		JLabel labelPasswd = new JLabel("Password: " + getAsteriscos(interfaz.getUser().getContrasena()));
+		JLabel labelPasswd = new JLabel("Password: " + getAsteriscos(conexion.obtenerDatoDeTabla("Usuario", "contraseña", "nombreUsuario", interfaz.getUser().getNombreUsuario())));
 		JLabel labelRol = new JLabel("Rol: Administrador");
 
 		JLabel labelNombre = new JLabel("Nombre: " + nombre);
@@ -127,8 +128,12 @@ public class ManejadorCliente {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-                JOptionPane.showMessageDialog(null, interfaz.getUser().getContrasena().toString(), "Ver Contraseña", JOptionPane.INFORMATION_MESSAGE);
-            }
+            	try {
+					JOptionPane.showMessageDialog(null, conexion.obtenerDatoDeTabla("Usuario", "contraseña", "nombreUsuario", interfaz.getUser().getNombreUsuario()), "Ver Contraseña", JOptionPane.INFORMATION_MESSAGE);
+				} catch (HeadlessException | DBException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}            }
         });
 		
 		panelInfo.add(labelUsername);

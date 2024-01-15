@@ -330,7 +330,7 @@ public class ConexionBD {
 	}
 
 
-	public boolean existeEnLaTabla(String nombreTabla, String nombreColumnaComparar, String nombreUsuario) {
+	public boolean existeEnLaTabla(String nombreTabla, String nombreColumnaComparar, String comparacion) {
 		try {
 			// Construir la consulta SQL
 			String query = "SELECT COUNT(*) FROM " + nombreTabla + " WHERE " + nombreColumnaComparar + " = ?";
@@ -339,7 +339,7 @@ public class ConexionBD {
 			PreparedStatement st = conexion.prepareStatement(query);
 
 			// Establecer el valor del parámetro en la consulta
-			st.setString(1, nombreUsuario);
+			st.setString(1, comparacion);
 
 			// Ejecutar la consulta
 			ResultSet rs = st.executeQuery();
@@ -529,13 +529,13 @@ public class ConexionBD {
 		List<Map<String, Object>> resultadosArticulo = obtenerTodasLasFilasDeTabla("Articulo", Arrays.asList("idArticulo", "nombre", "marca", "precio", "descripcionArticulo"));
 
 		StringBuilder catalogoArticulos = new StringBuilder();
-		
+
 		catalogoArticulos.append("<<ARTICULOS>>\n\n");
 
 		for (Map<String, Object> fila : resultadosArticulo) {
-			
+
 			StringBuilder aux = new StringBuilder();
-			
+
 			for (Map.Entry<String, Object> entry : fila.entrySet()) {
 
 				String columna = entry.getKey();
@@ -563,19 +563,19 @@ public class ConexionBD {
 			}
 			catalogoArticulos.append("==============================================\n"); // Separador horizontal
 		}
-		
-		
-		
+
+
+
 		List<Map<String, Object>> resultadosServicio = obtenerTodasLasFilasDeTabla("Servicio", Arrays.asList("idServicio", "nombre", "precio", "descripcionServicio"));
 
 		StringBuilder catalogoServicios = new StringBuilder();
-		
+
 		catalogoServicios.append("<<SERVICIOS>>\n\n");
 
 		for (Map<String, Object> fila : resultadosServicio) {
-			
+
 			StringBuilder aux = new StringBuilder();
-			
+
 			for (Map.Entry<String, Object> entry : fila.entrySet()) {
 
 				String columna = entry.getKey();
@@ -603,5 +603,21 @@ public class ConexionBD {
 
 
 		return catalogoServicios.toString() + catalogoArticulos.toString();
+	}
+
+
+	public void actualizarDatoEnTabla(String nombreTabla, String columna, String nuevoValor, String columnaCondicion, String valorCondicion) throws SQLException {
+
+		// Consulta SQL para actualizar el dato
+		String sql = "UPDATE " + nombreTabla + " SET " + columna + " = ?" + " WHERE " + columnaCondicion + " = ?";
+
+		try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+			// Establecer los parámetros
+			statement.setString(1, nuevoValor);
+			statement.setString(2, valorCondicion);
+
+			// Ejecutar la actualización
+			statement.executeUpdate();
+		}
 	}
 }
