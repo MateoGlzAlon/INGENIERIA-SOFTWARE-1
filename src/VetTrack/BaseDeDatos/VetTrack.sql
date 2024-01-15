@@ -1,5 +1,5 @@
 -- Eliminar tablas si existen
--- DROP TABLE IF EXISTS Usuario, Articulo, Venta, Cliente, Mascota, Administrador, HistorialCompra, Cita;
+-- DROP TABLE IF EXISTS Usuario, Articulo, Venta, Cliente, Mascota, Administrador, Cita;
 
 -- DROP TABLE IF EXISTS HistorialCompra;
 

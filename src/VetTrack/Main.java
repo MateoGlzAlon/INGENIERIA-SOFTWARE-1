@@ -5,9 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
+
+import VetTrack.Modelo.ConexionBD;
+import VetTrack.Vista.Interfaz;
 
 public class Main {
 
@@ -31,36 +32,6 @@ public class Main {
 			}
 			
 			sentencia.close();
-
-			
-			//ZONA DE PRUEBAS
-			//================================================================================================================================
-			
-//			System.out.println(conexion.listar("Articulo").toString());
-//			
-//			System.out.println("El dato es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 2));
-//			
-//	        Map<String, Object> valoresNuevaFila = new HashMap<>();
-//	        valoresNuevaFila.put("idArticulo", 1);
-//	        valoresNuevaFila.put("nombre", "Articulo1");
-//	        valoresNuevaFila.put("descripcionArticulo", "descArt1");
-//			
-//			conexion.agregarFilaATabla("Articulo", valoresNuevaFila);
-//			
-//			System.out.println(conexion.listar("Articulo").toString());
-//
-//			
-//			System.out.println("El dato es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 1));
-//			
-//			conexion.eliminarFilaDeTabla("Articulo", "idArticulo", 1);
-//			
-//			System.out.println(conexion.listar("Articulo").toString());
-//			
-//			System.out.println("El dato 2 es: " + conexion.obtenerDatoDeTabla("Articulo", "Nombre", "idArticulo", 1));
-//
-//			
-			
-			//================================================================================================================================
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("Archivo no encontrado: " + e.getMessage());

@@ -1,4 +1,4 @@
-package VetTrack;
+package VetTrack.Controlador;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -31,6 +31,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 import Exceptions.DBException;
+import VetTrack.Modelo.ConexionBD;
+import VetTrack.Vista.Interfaz;
 
 public class ManejadorAdministrador {
 
@@ -446,7 +448,6 @@ public class ManejadorAdministrador {
 				try {
 					JOptionPane.showMessageDialog(null, conexion.obtenerDatoDeTabla("Usuario", "contraseña", "nombreUsuario", interfaz.getUser().getNombreUsuario()), "Ver Contraseña", JOptionPane.INFORMATION_MESSAGE);
 				} catch (HeadlessException | DBException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				

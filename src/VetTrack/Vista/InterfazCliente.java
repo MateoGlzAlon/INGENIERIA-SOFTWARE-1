@@ -1,8 +1,7 @@
-package VetTrack;
+package VetTrack.Vista;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -10,32 +9,23 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.text.SimpleDateFormat;
 import java.awt.Font;
 
 import Exceptions.DBException;
+import VetTrack.Controlador.ManejadorCliente;
 
 public class InterfazCliente {
 
 	public JFrame frmInterfazDelCliente;
 	private Interfaz interfaz;
 	private Color colorOriginalBton;
-
-	private ConexionBD conexion = ConexionBD.getInstance();
 
 	private Choice choiceMascotas;
 
@@ -118,7 +108,6 @@ public class InterfazCliente {
 				try {
 					manejadorCliente.mostrarPerfil(interfaz);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -215,7 +204,6 @@ public class InterfazCliente {
 							manejadorCliente.rellenarCitasPasadas(interfaz, choiceMascotas, textPaneCitasPrevias);
 							manejadorCliente.rellenarCitasFuturas(interfaz, choiceMascotas, textPaneCitasFuturas);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					} else {
@@ -297,7 +285,6 @@ public class InterfazCliente {
 				try {
 					manejadorCliente.rellenarComprasPrevias(interfaz, textPaneComprasRealizadas);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -326,7 +313,6 @@ public class InterfazCliente {
 					}
 
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -347,10 +333,8 @@ public class InterfazCliente {
 				try {
 					manejadorCliente.mostrarCatalogo();
 				} catch (DBException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 

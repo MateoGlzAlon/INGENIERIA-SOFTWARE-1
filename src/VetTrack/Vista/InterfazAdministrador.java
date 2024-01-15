@@ -1,11 +1,10 @@
-package VetTrack;
+package VetTrack.Vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -14,10 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,11 +29,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.JTextField;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 
-import java.util.Base64;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.Box;
@@ -45,6 +39,8 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 import Exceptions.DBException;
+import VetTrack.Controlador.ManejadorAdministrador;
+import VetTrack.Modelo.ConexionBD;
 
 public class InterfazAdministrador {
 
@@ -74,7 +70,6 @@ public class InterfazAdministrador {
 	private List<String> idsParaVentas;
 	private List<String> tiposParaVentas;
 
-	private JTextArea textAreaDesc;
 	private String descripcionAux;
 	private List<JTextArea> descripAux;
 	private JTextField textFieldNombreServicio;
@@ -143,7 +138,6 @@ public class InterfazAdministrador {
 				try {
 					manejAdm.verPerfil(interfaz);
 				} catch (DBException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -409,10 +403,8 @@ public class InterfazAdministrador {
 						JOptionPane.showMessageDialog(null, "No has seleccionado un usuario", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (DBException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -494,7 +486,6 @@ public class InterfazAdministrador {
 				try {
 					manejAdm.modificarContraseña(frame);
 				} catch (DBException | SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
@@ -509,9 +500,7 @@ public class InterfazAdministrador {
 		choices = new ArrayList<>();
 		idsParaVentas = new ArrayList<>();
 		tiposParaVentas = new ArrayList<>();
-		textAreaDesc = new JTextArea();
 		descripAux = new ArrayList<>();
-
 
 		botAddMasc.addActionListener(new ActionListener() {
 			@Override
@@ -548,11 +537,6 @@ public class InterfazAdministrador {
 
 	}
 
-	
-
-	
-
-	
 
 	private void modoNocturno(JToggleButton botModoNoct) {
 
@@ -571,6 +555,7 @@ public class InterfazAdministrador {
 				
 			}
 		}
+		
 		frame.getContentPane().setBackground(botModoNoct.isSelected() ? new Color(50, 50, 50) : this.colorOriginalBton);
 
 	}
@@ -600,15 +585,12 @@ public class InterfazAdministrador {
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-		// Crear un JScrollPane para el JTextArea
 		JScrollPane catalogoScrollPane = new JScrollPane(textArea);
 		catalogoScrollPane.setPreferredSize(new Dimension(500, 600));
 
-		// Crear un JPanel para las celdas y los JComboBox
 		JPanel ventaPanel = new JPanel();
 		JLabel labelNumArt = new JLabel("Número de artículos");
 
-		// Crear un JComboBox con opciones del 1 al 9
 		JComboBox<String> choice = new JComboBox<>();
 		for (int i = 1; i <= 9; i++) {
 			choice.addItem(String.valueOf(i));
@@ -617,7 +599,6 @@ public class InterfazAdministrador {
 		ventaPanel.setLayout(new BoxLayout(ventaPanel, BoxLayout.Y_AXIS));
 		ventaPanel.add(Box.createVerticalGlue()); // Espacio en la parte superior
 
-		// Centrar verticalmente las etiquetas y el JComboBox
 		JPanel labelPanel = new JPanel();
 		labelPanel.add(labelNumArt);
 		ventaPanel.add(labelPanel);
@@ -626,21 +607,16 @@ public class InterfazAdministrador {
 		choicePanel.add(choice);
 		ventaPanel.add(choicePanel);
 
-		// Añadir un ActionListener al JComboBox para manejar cambios de selección
 		choice.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Obtener el número seleccionado
 				int numeroCeldas = Integer.parseInt((String) choice.getSelectedItem());
 
-				// Limpiar la lista de celdas y la lista de JComboBox
 				celdas.clear();
 				choices.clear();
 
-				// Limpiar los componentes existentes en el ventaPanel
 				ventaPanel.removeAll();
 
-				// Agregar nuevas celdas y JComboBox al panel y las listas
 				for (int i = 0; i < numeroCeldas; i++) {
 					JTextField textField = new JTextField(20);
 					celdas.add(textField);
@@ -684,9 +660,7 @@ public class InterfazAdministrador {
 
 		int result = JOptionPane.showConfirmDialog(panel, splitPane, "Catálogo de productos y Nueva venta", JOptionPane.OK_CANCEL_OPTION);
 
-		// Verificar si se hizo clic en OK
 		if (result == JOptionPane.OK_OPTION) {
-			//TODO COnseguir descripcion de alguna manera
 			descripcionAux = descripAux.get(0).getText();
 			this.manejAdm.imprimirContenidoCeldasYChoices(celdas, idsParaVentas, choices, tiposParaVentas);
 			this.manejAdm.procesarVentas(idsParaVentas, tiposParaVentas , descripcionAux, textUserBuscar);

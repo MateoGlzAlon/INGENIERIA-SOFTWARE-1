@@ -1,4 +1,4 @@
-package VetTrack;
+package VetTrack.Controlador;
 
 /**
  * Clase que representa a un Usuario en el sistema de 	VetTrack.

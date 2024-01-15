@@ -1,4 +1,4 @@
-package VetTrack;
+package VetTrack.Vista;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,11 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,7 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.SwingConstants;
 
-import Exceptions.DBException;
+import VetTrack.Controlador.Usuario;
+import VetTrack.Modelo.ConexionBD;
 
 public class Interfaz {
 
@@ -152,14 +149,8 @@ public class Interfaz {
 
 				if (rolUsuario.equals("Cliente")) {
 					frame.setVisible(false);
-
-					InterfazCliente frameImp = new InterfazCliente(this);
-
 				} else if (rolUsuario.equals("Administrador")) {
 					frame.setVisible(false);
-
-					InterfazAdministrador frameImp = new InterfazAdministrador(this);
-
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Las credenciales son incorrectas");
@@ -175,7 +166,6 @@ public class Interfaz {
 		// Obtener lista de usuarios
 		List<List<Object>> userList = conexion.listar("Usuario");
 
-		// Buscar el usuario por usuario y contraseña
 		for (List<Object> user : userList) {
 			if (user.get(1).toString().equals(usuario) && user.get(2).toString().equals(passwd)) {
 				return (int) user.get(0);
@@ -185,23 +175,6 @@ public class Interfaz {
 		return -1;
 	}
 	
-	/*
-	public List<Object> recupPosTablaCorrespondiente(String rolUsuario, int idUsuarioEncontrado) throws Exception {
-
-		List<List<Object>> userDataList = conexion.listar(rolUsuario);
-
-		int posTablaDatos = 0;
-
-		for (int i = 0; i < userDataList.size(); i++) {
-			if (userDataList.get(i).get(0).toString().equals(String.valueOf(idUsuarioEncontrado))) {
-				posTablaDatos = i;
-				break;
-			}
-		}
-
-		return conexion.listar(rolUsuario).get(posTablaDatos);
-
-	}*/
 
 	private void confirmarSalir(JFrame frame) throws Exception {
 		int confirmacion = JOptionPane.showConfirmDialog(frame, "Quieres salir de la aplicacion?", "Confirmar",

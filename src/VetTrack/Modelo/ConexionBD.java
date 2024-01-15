@@ -1,4 +1,4 @@
-package VetTrack;
+package VetTrack.Modelo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import Exceptions.DBException;
+import VetTrack.Controlador.Cita;
 
 public class ConexionBD {
 
