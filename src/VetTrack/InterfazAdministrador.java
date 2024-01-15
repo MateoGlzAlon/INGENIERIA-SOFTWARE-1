@@ -633,6 +633,7 @@ public class InterfazAdministrador {
 		}
 	}
 
+	//este
 	private int buscarMaximo(String tabla) throws DBException {
 
 		List<List<Object>> mascotaTotal = interfaz.getConexion().listar(tabla);
@@ -718,6 +719,7 @@ public class InterfazAdministrador {
 		}
 	}
 
+	//este
 	private String mascRecDatos(String nombreMascota, int idUsuario) throws Exception {
 
 		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
@@ -742,6 +744,7 @@ public class InterfazAdministrador {
 		return "";
 	}
 
+	//este
 	private ArrayList<String> recTodasMascotas(int id) throws NumberFormatException, Exception {
 
 		int numMascotas = Integer.parseInt(this.interfaz.getConexion().obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", id));
@@ -943,7 +946,9 @@ public class InterfazAdministrador {
 
 
 	}
-
+	
+	
+	//este
 	//Puede haber solamente 2, > y <
 	//	">" ---> es para mayor
 	//	"<" ---> es para menor
@@ -1091,6 +1096,7 @@ public class InterfazAdministrador {
 		}
 	}
 
+	//este
 	private int idMascotaRecuperar(String nombreMascota, int idUsuario) throws Exception{
 
 		List<String> columnas = Arrays.asList("idMascota", "especie", "raza", "fechaNacimiento");
@@ -1248,7 +1254,7 @@ public class InterfazAdministrador {
 		}
 	}
 
-	// Método complementario para imprimir el contenido de las celdas y los Choices
+	//este
 	public void imprimirContenidoCeldasYChoices() {
 		StringBuilder contenido = new StringBuilder();
 
