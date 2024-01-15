@@ -1,7 +1,6 @@
 package VetTrack;
 
 import java.awt.BorderLayout;
-import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -35,7 +34,6 @@ import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.JTextField;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -49,7 +47,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import Exceptions.DBException;
@@ -77,6 +74,7 @@ public class InterfazAdministrador {
 	private List<JTextField> celdas;
 	private List<JComboBox<String>> choices;
 
+	private ConexionBD conexion = ConexionBD.getInstance();
 
 	private List<String> idsParaVentas;
 	private List<String> tiposParaVentas;
@@ -614,13 +612,13 @@ public class InterfazAdministrador {
 					valores.put("fechaNacimiento", java.sql.Date.valueOf(fechaFinal));
 					valores.put("idUsuario", idUsuario);
 
-					interfaz.getConexion().agregarFilaATabla("Mascota", valores);
+					conexion.agregarFilaATabla("Mascota", valores);
 
-					List<Map<String, Object>> filaCliente = interfaz.getConexion().obtenerFilasDeTabla("Cliente", Arrays.asList("numMascotas"), "idUsuario = ?", idUsuario);
+					List<Map<String, Object>> filaCliente = conexion.obtenerFilasDeTabla("Cliente", Arrays.asList("numMascotas"), "idUsuario = ?", idUsuario);
 
 					int nuevoNumMascotas = (int) filaCliente.get(0).get("numMascotas") + 1;
 
-					interfaz.getConexion().actualizarFila("Cliente", "numMascotas", nuevoNumMascotas, "idUsuario", idUsuario);
+					conexion.actualizarFila("Cliente", "numMascotas", nuevoNumMascotas, "idUsuario", idUsuario);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -636,7 +634,7 @@ public class InterfazAdministrador {
 	//este
 	private int buscarMaximo(String tabla) throws DBException {
 
-		List<List<Object>> mascotaTotal = interfaz.getConexion().listar(tabla);
+		List<List<Object>> mascotaTotal = conexion.listar(tabla);
 		int maximo = 0;
 
 		for (List<Object> user : mascotaTotal) {
@@ -727,7 +725,7 @@ public class InterfazAdministrador {
 
 		Object[] parametros = {nombreMascota, idUsuario};
 
-		List<Map<String, Object>> resultados = this.interfaz.getConexion().obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
+		List<Map<String, Object>> resultados = this.conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
 
 		if (!resultados.isEmpty()) {
 			Map<String, Object> datosMascota = resultados.get(0);
@@ -747,9 +745,9 @@ public class InterfazAdministrador {
 	//este
 	private ArrayList<String> recTodasMascotas(int id) throws NumberFormatException, Exception {
 
-		int numMascotas = Integer.parseInt(this.interfaz.getConexion().obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", id));
+		int numMascotas = Integer.parseInt(this.conexion.obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", id));
 
-		List<String> lista = this.interfaz.getConexion().obtenerDatosDeTablaLista("Mascota", "nombre", "idUsuario", id);
+		List<String> lista = this.conexion.obtenerDatosDeTablaLista("Mascota", "nombre", "idUsuario", id);
 
 		ArrayList<String> mascotasLista = new ArrayList<String>();
 
@@ -840,7 +838,7 @@ public class InterfazAdministrador {
 							valores.put("nombreUsuario", txtUsuario.getText().intern());
 							valores.put("contraseña", new String(txtPassword.getPassword()).intern());
 							valores.put("rol", cboTipoUsuario.getSelectedItem().toString().intern());
-							interfaz.getConexion().agregarFilaATabla("Usuario", valores);
+							conexion.agregarFilaATabla("Usuario", valores);
 
 							Map<String, Object> valoresCliente = new HashMap<>();
 
@@ -854,7 +852,7 @@ public class InterfazAdministrador {
 							valoresCliente.put("apellidos", String.join(" ", Arrays.copyOfRange(cadenasep, 1, cadenasep.length)));
 							valoresCliente.put("numMascotas", 0);
 
-							interfaz.getConexion().agregarFilaATabla("Cliente", valoresCliente);
+							conexion.agregarFilaATabla("Cliente", valoresCliente);
 
 							JOptionPane.showMessageDialog(null, "Se ha añadido al cliente correctamente");
 
@@ -870,14 +868,14 @@ public class InterfazAdministrador {
 						valores.put("nombreUsuario", txtUsuario.getText().intern());
 						valores.put("contraseña", new String(txtPassword.getPassword()).intern());
 						valores.put("rol", cboTipoUsuario.getSelectedItem().toString().intern());
-						interfaz.getConexion().agregarFilaATabla("Usuario", valores);
+						conexion.agregarFilaATabla("Usuario", valores);
 
 						Map<String, Object> valoresAdministrador = new HashMap<>();
 
 						valoresAdministrador.put("idUsuario", maximo);
 						valoresAdministrador.put("cadenaInicioSesion", new String(Base64.getEncoder().encode(txtUsuario.getText().intern().getBytes())));
 
-						interfaz.getConexion().agregarFilaATabla("Administrador", valoresAdministrador);
+						conexion.agregarFilaATabla("Administrador", valoresAdministrador);
 
 						JOptionPane.showMessageDialog(null, "Se ha añadido al administrador correctamente");
 
@@ -925,14 +923,14 @@ public class InterfazAdministrador {
 
 						if (cadena.get(3).toString().intern()=="Cliente") {
 							//comprobar si tiene mascotas
-							if (Integer.parseInt(interfaz.getConexion().obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", Integer.parseInt(cadena.get(0).toString()))) != 0) {
-								interfaz.getConexion().eliminarFilaDeTabla("Mascota", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
+							if (Integer.parseInt(conexion.obtenerDatoDeTabla("Cliente", "numMascotas", "idUsuario", Integer.parseInt(cadena.get(0).toString()))) != 0) {
+								conexion.eliminarFilaDeTabla("Mascota", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
 							}
 
 						}
 
-						interfaz.getConexion().eliminarFilaDeTabla(cadena.get(3).toString().intern(), "idUsuario", Integer.parseInt(cadena.get(0).toString()));
-						interfaz.getConexion().eliminarFilaDeTabla("Usuario", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
+						conexion.eliminarFilaDeTabla(cadena.get(3).toString().intern(), "idUsuario", Integer.parseInt(cadena.get(0).toString()));
+						conexion.eliminarFilaDeTabla("Usuario", "idUsuario", Integer.parseInt(cadena.get(0).toString()));
 						JOptionPane.showMessageDialog(null, "El usuario "+cadena.get(1).toString()+" se ha eliminado correctamente");
 					}
 				}
@@ -954,14 +952,14 @@ public class InterfazAdministrador {
 	//	"<" ---> es para menor
 	private String recCitasUsuario(int id, String caracter) throws Exception{
 
-		List<Map<String, Object>> citas = this.interfaz.getConexion().obtenerFilasDeTabla( "Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita", "idMascota"), "idUsuario = ? AND fechaCita "+caracter+" ?", id, Date.valueOf(LocalDate.now()));
+		List<Map<String, Object>> citas = this.conexion.obtenerFilasDeTabla( "Cita", Arrays.asList("idCita", "fechaCita", "horaCita", "descripcionCita", "idMascota"), "idUsuario = ? AND fechaCita "+caracter+" ?", id, Date.valueOf(LocalDate.now()));
 
 		StringBuffer stringBuffer = new StringBuffer("");
 		int i = 1;
 
 		for(Map<String, Object> unaCita : citas) {
 
-			String nombreMascota = this.interfaz.getConexion().obtenerDatoDeTabla("Mascota", "nombre", "idMascota", unaCita.get("idMascota"));
+			String nombreMascota = this.conexion.obtenerDatoDeTabla("Mascota", "nombre", "idMascota", unaCita.get("idMascota"));
 
 			stringBuffer.append(" Cita #"+i);
 
@@ -996,7 +994,7 @@ public class InterfazAdministrador {
 				valores.put("precio", Float.parseFloat(textPrecioArticulo.getText().intern()));
 				valores.put("descripcionArticulo", textAreaArticulo.getText().intern());
 
-				interfaz.getConexion().agregarFilaATabla("Articulo", valores);
+				conexion.agregarFilaATabla("Articulo", valores);
 
 				JOptionPane.showMessageDialog(null, "El articulo se ha añadido correctamente");
 
@@ -1075,7 +1073,7 @@ public class InterfazAdministrador {
 						valores.put("idMascota", idMascota);
 						valores.put("descripcionCita", panelDescrCita.getText());
 
-						interfaz.getConexion().agregarFilaATabla("Cita", valores);
+						conexion.agregarFilaATabla("Cita", valores);
 
 						JOptionPane.showMessageDialog(null, "La cita se ha añadido correctamente");
 
@@ -1104,7 +1102,7 @@ public class InterfazAdministrador {
 
 		Object[] parametros = {nombreMascota, idUsuario};
 
-		List<Map<String, Object>> resultados = this.interfaz.getConexion().obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
+		List<Map<String, Object>> resultados = this.conexion.obtenerFilasDeTabla("Mascota", columnas, condicion, parametros);
 
 		if (!resultados.isEmpty()) {
 			Map<String, Object> datosMascota = resultados.get(0);
@@ -1156,7 +1154,7 @@ public class InterfazAdministrador {
 		JTextArea textArea = new JTextArea(10, 30);
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
-		textArea.setText(this.interfaz.getConexion().catalogoToString());
+		textArea.setText(this.conexion.catalogoToString());
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
@@ -1288,14 +1286,14 @@ public class InterfazAdministrador {
 
 			valores.put("idVenta", maximo);
 			valores.put("idMismaVenta", 1);
-			valores.put("idUsuario", this.interfaz.getConexion().obtenerDatoDeTabla("Usuario", "idUsuario", "nombreUsuario", textUserBuscar.getText()));
+			valores.put("idUsuario", this.conexion.obtenerDatoDeTabla("Usuario", "idUsuario", "nombreUsuario", textUserBuscar.getText()));
 			valores.put("tipo", tiposParaVentas.get(i));
 			valores.put("idArtServ", idsParaVentas.get(i));
 			valores.put("descripcionVenta", descripcionAux);
 			valores.put("fechaVenta",  java.sql.Date.valueOf(fechaFormateada));
 
 
-			this.interfaz.getConexion().agregarFilaATabla("Venta", valores);
+			this.conexion.agregarFilaATabla("Venta", valores);
 		}
 
 	}
@@ -1317,7 +1315,7 @@ public class InterfazAdministrador {
 				valores.put("descripcionServicio", textAreaDescripcionServicio.getText().intern());
 
 				
-				interfaz.getConexion().agregarFilaATabla("Servicio", valores);
+				conexion.agregarFilaATabla("Servicio", valores);
 
 				JOptionPane.showMessageDialog(null, "El servicio se ha añadido correctamente");
 
